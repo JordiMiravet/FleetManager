@@ -1,7 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Vehicle, VehicleDocument } from './vehicle.schema';
+import { Vehicle, VehicleDocument } from './schemas/vehicle.schema';
 import { CreateVehicleDto } from './dtos/create-vehicle.dto';
 import { UpdateVehicleDto } from './dtos/update-vehicle.dto';
 import { Event } from '../events/schemas/event.schema';

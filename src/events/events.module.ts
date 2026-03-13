@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { EventsController } from './events.controller';
 import { EventsService } from './events.service';
 import { Event, EventSchema } from './schemas/event.schema';
-import { Vehicle, VehicleSchema } from '../vehicle/vehicle.schema';
+import { Vehicle, VehicleSchema } from '../vehicle/schemas/vehicle.schema';
 
 @Module({
   imports: [
