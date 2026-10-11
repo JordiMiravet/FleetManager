@@ -6,7 +6,7 @@ import { HoursByWeekdayVehicleChartComponent } from './hours-by-weekday-vehicle-
 
 import { TimePeriod } from '../../enums/time-period.enum';
 import { GraphicsService } from '../../data-access/graphics-service';
-import { GraphicsMessagesService } from '../../i18n/graphics-messages';
+import { GraphicsMessagesService } from '../../i18n/graphics-messages-service';
 import { VehicleService } from '../../../vehicle/data-access/vehicle-service';
 
 export const authMock = {

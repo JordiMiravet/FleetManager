@@ -8,7 +8,7 @@ import { VehicleInterface } from '../../../vehicle/models/vehicle';
 import { VehicleSelectorComponent } from '../../../vehicle/components/vehicle-selector/vehicle-selector';
 import { DetailsPanelComponent } from "../details-panel/details-panel";
 import { ConfirmModalComponent } from "../../../../shared/ui/modals/confirm-modal/confirm-modal";
-import { MapMessagesService } from '../../i18n/map-messages';
+import { MapMessagesService } from '../../i18n/map-messages-service';
 import { VehicleMarkerManager } from '../../data-access/vehicle-marker-manager';
 import { VehicleAccessService } from '../../../../core/services/vehicle-access/vehicle-access-service';
 
