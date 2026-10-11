@@ -5,7 +5,7 @@ import { TimePeriod } from '../../enums/time-period.enum';
 
 import { VehicleService } from '../../../vehicle/data-access/vehicle-service';
 import { EventService } from '../../../calendar/data-access/event-service';
-import { GraphicsMessagesService } from '../../i18n/graphics-messages';
+import { GraphicsMessagesService } from '../../i18n/graphics-messages-service';
 
 import { VehicleUsageHoursChartComponent } from "../vehicle-usage-hours-chart/vehicle-usage-hours-chart";
 import { MostUsedVehicleChartComponent } from "../most-used-vehicle-chart/most-used-vehicle-chart";
