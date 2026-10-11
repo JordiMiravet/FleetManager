@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, input, output } from '@angular/core';
 
 import { VehicleInvitation } from '../../models/invitation';
-import { InvitationMessagesService } from '../../i18n/invitation-messages';
+import { InvitationMessagesService } from '../../i18n/invitation-messages-service';
 
 @Component({
   selector: 'app-invitation-card',
