@@ -80,6 +80,14 @@ describe('GraphicsServices', () => {
       expect(result[0].totalHours).toBe(2);
     });
 
+    it('should return vehicle name', () => {
+      mockEvents([{ _id: '1', vehicleId: 'ferrari-1', date: thisMonth, hourStart: '09:00', hourEnd: '11:00' }]);
+
+      const result = service.getVehicleUsageHours(TimePeriod.Month);
+
+      expect(result[0].vehicleName).toBe('Ferrari Roma');
+    });
+
     it('should return vehicle usage hours for current year', () => {
       mockEvents([{ _id: '1', vehicleId: 'ferrari-1', date: thisMonth, hourStart: '09:00', hourEnd: '11:00' }]);
       const result = service.getVehicleUsageHours(TimePeriod.Year);
@@ -110,11 +118,28 @@ describe('GraphicsServices', () => {
       expect(result).toHaveSize(0);
     });
 
+    it('should ignore events outside the selected period', () => {
+      mockEvents([{ _id: '1', vehicleId: 'ferrari-1', date: lastYear, hourStart: '09:00', hourEnd: '11:00' }]);
+
+      const result = service.getVehicleUsageHours(TimePeriod.Month);
+
+      expect(result).toEqual([]);
+    });
+
     it('should return empty array when no vehicle has usage', () => {
       mockEvents([]);
       const result = service.getVehicleUsageHours(TimePeriod.Month);
 
       expect(result).toEqual([]);
+    });
+
+    it('should not include vehicles with zero usage', () => {
+      mockEvents([{ _id: '1', vehicleId: 'ferrari-1', date: thisMonth, hourStart: '09:00', hourEnd: '11:00' }]);
+
+      const result = service.getVehicleUsageHours(TimePeriod.Month);
+
+      expect(result).toHaveSize(1);
+      expect(result.some(vehicle => vehicle.vehicleId === 'pagani-1')).toBeFalse();
     });
 
     it('should accumulate hours from multiple events of same vehicle', () => {
@@ -184,6 +209,18 @@ describe('GraphicsServices', () => {
       const result = service.getMostUsedVehicle(TimePeriod.Month);
 
       expect(result).toHaveSize(3);
+    });
+
+    it('should return the vehicles in descending order of usage', () => {
+      mockEvents([
+        { _id: '1', vehicleId: 'ferrari-1', date: thisMonth, hourStart: '09:00', hourEnd: '10:00' },
+        { _id: '2', vehicleId: 'pagani-1', date: thisMonth, hourStart: '09:00', hourEnd: '12:00' },
+        { _id: '3', vehicleId: 'mclaren-1', date: thisMonth, hourStart: '09:00', hourEnd: '13:00' },
+      ]);
+
+      const result = service.getMostUsedVehicle(TimePeriod.Month);
+
+      expect(result.map(vehicle => vehicle.totalHours)).toEqual([4, 3, 1]);
     });
 
   });
@@ -258,6 +295,36 @@ describe('GraphicsServices', () => {
       expect(vehicles[0].hours.every((h: number) => h === 0)).toBeTrue();
     });
 
+    it('should ignore events without vehicleId', () => {
+      mockEvents([
+        { _id: '1', date: thisMonth, hourStart: '09:00', hourEnd: '11:00' }
+      ]);
+
+      const { vehicles } = service.getHoursByWeekdayPerVehicle(TimePeriod.Month);
+
+      expect(vehicles[0].hours.every((h: number) => h === 0)).toBeTrue();
+    });
+
+    it('should ignore events without date', () => {
+      mockEvents([
+        { _id: '1', vehicleId: 'ferrari-1', hourStart: '09:00', hourEnd: '11:00' }
+      ]);
+
+      const { vehicles } = service.getHoursByWeekdayPerVehicle(TimePeriod.Month);
+
+      expect(vehicles[0].hours.every((h: number) => h === 0)).toBeTrue();
+    });
+
+    it('should ignore events belonging to unknown vehicles', () => {
+      mockEvents([
+        { _id: '1', vehicleId: 'unknown-vehicle', date: thisMonth, hourStart: '09:00', hourEnd: '11:00' }
+      ]);
+
+      const { vehicles } = service.getHoursByWeekdayPerVehicle(TimePeriod.Month);
+
+      expect(vehicles[0].hours).toEqual([0,0,0,0,0,0,0]);
+    });
+
     it('should return empty hours when there are no events', () => {
       mockEvents([]);
       const { vehicles } = service.getHoursByWeekdayPerVehicle(TimePeriod.Month);
@@ -297,6 +364,10 @@ describe('GraphicsServices', () => {
       expect(service['isInPeriod'](lastYear, TimePeriod.Month)).toBeFalse();
     });
 
+    it('should return true for an unsupported period', () => {
+      expect(service['isInPeriod'](thisMonth, 'unsupported' as TimePeriod)).toBeTrue();
+    });
+
   });
 
   describe('calculateEventHours', () => {
@@ -315,6 +386,10 @@ describe('GraphicsServices', () => {
 
     it('should return negative value when end time is before start time', () => {
       expect(service['calculateEventHours']('12:00', '10:00')).toBe(-2);
+    });
+
+    it('should calculate hours when both times include minutes', () => {
+      expect(service['calculateEventHours']('09:15', '10:45')).toBe(1.5);
     });
 
   });
