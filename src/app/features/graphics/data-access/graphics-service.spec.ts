@@ -81,7 +81,11 @@ describe('GraphicsServices', () => {
     });
 
     it('should return vehicle name', () => {
+      mockEvents([{ _id: '1', vehicleId: 'ferrari-1', date: thisMonth, hourStart: '09:00', hourEnd: '11:00' }]);
 
+      const result = service.getVehicleUsageHours(TimePeriod.Month);
+
+      expect(result[0].vehicleName).toBe('Ferrari Roma');
     });
 
     it('should return vehicle usage hours for current year', () => {
@@ -101,7 +105,10 @@ describe('GraphicsServices', () => {
     });
 
     it('should ignore events without valid hours', () => {
+      mockEvents([{ _id: '1', vehicleId: 'ferrari-1', date: thisMonth, hourStart: null, hourEnd: null }]);
+      const result = service.getVehicleUsageHours(TimePeriod.Month);
 
+      expect(result).toHaveSize(0);
     });
 
     it('should ignore events from other vehicles', () => {
@@ -112,7 +119,11 @@ describe('GraphicsServices', () => {
     });
 
     it('should ignore events outside the selected period', () => {
+      mockEvents([{ _id: '1', vehicleId: 'ferrari-1', date: lastYear, hourStart: '09:00', hourEnd: '11:00' }]);
 
+      const result = service.getVehicleUsageHours(TimePeriod.Month);
+
+      expect(result).toEqual([]);
     });
 
     it('should return empty array when no vehicle has usage', () => {
@@ -123,7 +134,12 @@ describe('GraphicsServices', () => {
     });
 
     it('should not include vehicles with zero usage', () => {
+      mockEvents([{ _id: '1', vehicleId: 'ferrari-1', date: thisMonth, hourStart: '09:00', hourEnd: '11:00' }]);
 
+      const result = service.getVehicleUsageHours(TimePeriod.Month);
+
+      expect(result).toHaveSize(1);
+      expect(result.some(vehicle => vehicle.vehicleId === 'pagani-1')).toBeFalse();
     });
 
     it('should accumulate hours from multiple events of same vehicle', () => {
