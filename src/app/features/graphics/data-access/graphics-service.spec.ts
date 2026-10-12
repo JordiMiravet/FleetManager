@@ -211,6 +211,10 @@ describe('GraphicsServices', () => {
       expect(result).toHaveSize(3);
     });
 
+    it('should return the vehicles in descending order of usage', () => {
+
+    });
+
   });
 
   describe('getHoursByWeekdayPerVehicle', () => {
@@ -283,11 +287,27 @@ describe('GraphicsServices', () => {
       expect(vehicles[0].hours.every((h: number) => h === 0)).toBeTrue();
     });
 
+    it('should ignore events without vehicleId', () => {
+
+    });
+
+    it('should ignore events without date', () => {
+
+    });
+
+    it('should ignore events belonging to unknown vehicles', () => {
+
+    });
+
     it('should return empty hours when there are no events', () => {
       mockEvents([]);
       const { vehicles } = service.getHoursByWeekdayPerVehicle(TimePeriod.Month);
 
       expect(vehicles[0].hours).toEqual([0,0,0,0,0,0,0]);
+    });
+
+    it('should return an empty vehicles array when there are no vehicles', () => {
+
     });
 
   });
