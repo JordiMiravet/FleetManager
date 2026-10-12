@@ -212,7 +212,15 @@ describe('GraphicsServices', () => {
     });
 
     it('should return the vehicles in descending order of usage', () => {
+      mockEvents([
+        { _id: '1', vehicleId: 'ferrari-1', date: thisMonth, hourStart: '09:00', hourEnd: '10:00' },
+        { _id: '2', vehicleId: 'pagani-1', date: thisMonth, hourStart: '09:00', hourEnd: '12:00' },
+        { _id: '3', vehicleId: 'mclaren-1', date: thisMonth, hourStart: '09:00', hourEnd: '13:00' },
+      ]);
 
+      const result = service.getMostUsedVehicle(TimePeriod.Month);
+
+      expect(result.map(vehicle => vehicle.totalHours)).toEqual([4, 3, 1]);
     });
 
   });
@@ -288,15 +296,33 @@ describe('GraphicsServices', () => {
     });
 
     it('should ignore events without vehicleId', () => {
+      mockEvents([
+        { _id: '1', date: thisMonth, hourStart: '09:00', hourEnd: '11:00' }
+      ]);
 
+      const { vehicles } = service.getHoursByWeekdayPerVehicle(TimePeriod.Month);
+
+      expect(vehicles[0].hours.every((h: number) => h === 0)).toBeTrue();
     });
 
     it('should ignore events without date', () => {
+      mockEvents([
+        { _id: '1', vehicleId: 'ferrari-1', hourStart: '09:00', hourEnd: '11:00' }
+      ]);
 
+      const { vehicles } = service.getHoursByWeekdayPerVehicle(TimePeriod.Month);
+
+      expect(vehicles[0].hours.every((h: number) => h === 0)).toBeTrue();
     });
 
     it('should ignore events belonging to unknown vehicles', () => {
+      mockEvents([
+        { _id: '1', vehicleId: 'unknown-vehicle', date: thisMonth, hourStart: '09:00', hourEnd: '11:00' }
+      ]);
 
+      const { vehicles } = service.getHoursByWeekdayPerVehicle(TimePeriod.Month);
+
+      expect(vehicles[0].hours).toEqual([0,0,0,0,0,0,0]);
     });
 
     it('should return empty hours when there are no events', () => {
@@ -307,7 +333,12 @@ describe('GraphicsServices', () => {
     });
 
     it('should return an empty vehicles array when there are no vehicles', () => {
+      mockVehicles([]);
+      mockEvents([]);
 
+      const { vehicles } = service.getHoursByWeekdayPerVehicle(TimePeriod.Month);
+
+      expect(vehicles).toEqual([]);
     });
 
   });
