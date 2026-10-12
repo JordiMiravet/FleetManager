@@ -373,6 +373,10 @@ describe('GraphicsServices', () => {
       expect(service['isInPeriod'](lastYear, TimePeriod.Month)).toBeFalse();
     });
 
+    it('should return true for an unsupported period', () => {
+
+    });
+
   });
 
   describe('calculateEventHours', () => {
