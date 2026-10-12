@@ -397,6 +397,10 @@ describe('GraphicsServices', () => {
       expect(service['calculateEventHours']('12:00', '10:00')).toBe(-2);
     });
 
+    it('should calculate hours when both times include minutes', () => {
+
+    });
+
   });
 
 });
