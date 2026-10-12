@@ -374,7 +374,7 @@ describe('GraphicsServices', () => {
     });
 
     it('should return true for an unsupported period', () => {
-
+      expect(service['isInPeriod'](thisMonth, 'unsupported' as TimePeriod)).toBeTrue();
     });
 
   });
