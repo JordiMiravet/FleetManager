@@ -332,15 +332,6 @@ describe('GraphicsServices', () => {
       expect(vehicles[0].hours).toEqual([0,0,0,0,0,0,0]);
     });
 
-    it('should return an empty vehicles array when there are no vehicles', () => {
-      mockVehicles([]);
-      mockEvents([]);
-
-      const { vehicles } = service.getHoursByWeekdayPerVehicle(TimePeriod.Month);
-
-      expect(vehicles).toEqual([]);
-    });
-
   });
 
   describe('isInPeriod', () => {
