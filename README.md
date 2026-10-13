@@ -422,9 +422,9 @@ When your work is ready:
 This project is continuously evolving to improve its scalability, maintainability, and production readiness. The following roadmap outlines planned features and architectural improvements that will be introduced progressively.
 
 ### 1. Notification & Invitation System (In Progress)
-- Replace the current direct vehicle sharing workflow with an invitation-based system.
-- Add notification management with pending invitations and accept/reject actions.
-- Introduce reusable notification infrastructure for future application events.
+- Frontend implementation of the invitation and notification interfaces is complete.
+- Integrate the invitation and notification system with the backend API.
+- Ensure invitation statuses and notification data are managed and synchronized through the backend.
 
 ### 2. Internationalization (i18n)
 - Add multi-language support starting with English and Spanish.
