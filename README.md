@@ -34,7 +34,7 @@
 
 ## Application Overview
 
-Fleet Manager is an Angular 20 application designed to help users manage their personal vehicle garage. It allows each user to organize their vehicles, track their locations, schedule vehicle usage through an interactive calendar, and visualize detailed usage statistics.
+Fleet Manager is an Angular 20 application designed to help users manage their personal vehicle garage. It allows users to organize their vehicles, share access with other users through an invitation system, track vehicle locations, schedule vehicle usage through an interactive calendar, and visualize detailed usage statistics.
 
 The application follows a modular architecture based on reusable components and integrates user authentication, route guards, API communication, state management, reactive forms with validation, and data persistence.
 
@@ -43,6 +43,7 @@ The application follows a modular architecture based on reusable components and 
 - **User Authentication:** Register and sign in using an email address and password. Each user has an independent account with their own personal data.
 - **Vehicle Management (CRUD):** Create, view, update, and delete vehicles within your personal garage. The vehicle table includes search and sorting capabilities to quickly find and organize vehicles. Vehicle owners have full control over their vehicles and their configuration.
 - **Vehicle Sharing and Permissions:** Share vehicles with other users and manage access levels. Users with granted access can view vehicle information, update locations, create and manage usage events, and access statistics, while owner-only actions such as editing or deleting the vehicle remain restricted to the owner.
+- **Invitations and Notifications:** Manage vehicle access through an invitation system with invitation status tracking. View notifications and access relevant information through the notification interface.
 - **Interactive Map:** View all registered vehicles on an interactive map. Vehicle locations can be updated by dragging and dropping markers or by using the geolocation feature to automatically set a vehicle's location based on the user's current position. The map also supports filtering vehicles to display a specific vehicle.
 - **Vehicle Usage Calendar:** Schedule vehicle usage events with specific start and end dates and times.
 - **Event Management (CRUD):** Create, view, update, and delete usage events directly from the calendar.
@@ -96,9 +97,9 @@ The `core` folder contains application-wide infrastructure that is shared across
 
 Examples include:
 
-- Global layout components such as the header, navigation and account drawer.
-- Route guards.
-- Cross-cutting services such as authorization, geolocation and theme management.
+- Global layout components such as the header, navigation, account drawer and notification interface.
+- Route guards for authentication and guest access.
+- Cross-cutting services such as authorization, data source management, geolocation, theme management and layout messages.
 
 ### Features
 
@@ -117,9 +118,12 @@ For example:
 
 - `auth` manages authentication and registration.
 - `vehicle` contains vehicle management functionality.
+- `invitations` manages vehicle access invitations and their statuses.
 - `map` provides the interactive map experience.
 - `calendar` manages vehicle usage scheduling.
 - `graphics` contains the statistics dashboard.
+
+Internationalization message services are also organized within individual features to keep their messages close to the functionality they support.
 
 Keeping these resources together allows each feature to evolve independently while reducing coupling between different parts of the application.
 
@@ -129,11 +133,8 @@ The `shared` folder contains reusable building blocks that are not specific to a
 
 This includes:
 
-- Reusable UI components.
+- Reusable UI components, such as buttons.
 - Generic modal components.
-- Pipes.
-- Directives.
-- Shared models and utilities when required.
 
 Resources placed in `shared` are intended to be reused across multiple features without containing business-specific logic.
 
@@ -145,27 +146,26 @@ Resources placed in `shared` are intended to be reused across multiple features 
 src/
 ├─ app/
 │  ├─ core/                         # Global application infrastructure
-│  │  ├─ guards/
-│  │  ├─ layout/                    # Header, navigation, global UI components
-│  │  └─ services/                  # Global services (auth, data-source, geolocation, theme)
+│  │  ├─ guards/                    # Authentication and guest guards
+│  │  ├─ layout/                    # Header, navigation, account drawer, notifications
+│  │  └─ services/                  # Shared application services
 │  │
 │  ├─ features/                     # Main application features
-│  │  ├─ auth/                      # Login, registration, interceptors
-│  │  ├─ vehicle/                   # Vehicle management (CRUD, state, modals)
-│  │  ├─ map/                       # Interactive map (Leaflet)
+│  │  ├─ auth/                      # Login, registration and authentication
 │  │  ├─ calendar/                  # Events and scheduling (FullCalendar)
-│  │  └─ graphics/                  # Statistics and data visualization (Chart.js)
+│  │  ├─ graphics/                  # Statistics and data visualization (Chart.js)
+│  │  ├─ invitations/               # Vehicle access invitations
+│  │  ├─ map/                       # Interactive map (Leaflet)
+│  │  └─ vehicle/                   # Vehicle management, access and permissions
 │  │
-│  ├─ shared/                       # Reusable components
-│  │  ├─ ui/                        # Buttons, modals, generic UI components
-│  │  ├─ pipes/
-│  │  ├─ directives/
-│  │  └─ models/
+│  ├─ shared/                       # Reusable UI components
+│  │  └─ ui/                        # Buttons and generic modals
 │  │
 │  ├─ app.config.ts
 │  ├─ app.routes.ts
-│  ├─ main.ts
-│  └─ app.html / app.scss / app.ts
+│  ├─ app.html
+│  ├─ app.scss
+│  └─ app.ts
 │
 ├─ assets/
 │  ├─ icons/
@@ -175,12 +175,14 @@ src/
 │
 ├─ styles/                          # Global SCSS styling system
 │  ├─ abstracts/                    # Variables and mixins
-│  ├─ base/                         # Reset and base typography
-│  ├─ themes/                       # Light / dark themes
-│  ├─ tokens/                       # Design system (spacing, colors, radius, etc.)
+│  ├─ base/                         # Base styles and typography
+│  ├─ themes/                       # Light and dark themes
+│  ├─ tokens/                       # Design tokens
 │  └─ utilities/                    # SCSS helpers
 │
-└─ index.html
+├─ index.html
+├─ main.ts
+└─ styles.scss
 ```
 
 ---
@@ -191,7 +193,7 @@ The application is divided into two repositories:
 - Frontend → Angular 20 https://github.com/JordiMiravet/FleetManager-Frontend.git
 - Backend → NestJS https://github.com/JordiMiravet/FleetManager-Backend.git
 
-Both repositories need to be running for the application to work correctly.
+Both repositories need to be running to use the application with the real backend API. The frontend can also run independently using mock data by setting dataSource to 'mock'. When configured to use the API, the application automatically falls back to mock data if the backend becomes unavailable.
 
 #### Prerequisites
 
@@ -391,19 +393,23 @@ When your work is ready:
    - Create, edit, and delete vehicles.
    - Search and sort vehicles using the table controls.
    - Share vehicles with other users and manage access permissions.
-5. View and manage vehicles on the interactive map (Map):
+5. Manage invitations and notifications:
+   - View notifications through the notification interface.
+   - View vehicle access invitations and check their statuses.
+   - Accept or reject invitations when applicable.
+6. View and manage vehicles on the interactive map (Map):
    - All registered vehicles are displayed by default.
    - Filter vehicles to display a specific vehicle on the map.
    - Update vehicle locations by dragging and dropping map markers.
    - Update a vehicle location automatically using the geolocation feature to set it to the user's current position.
-6. Schedule and manage vehicle usage events through the calendar (Calendar):
+7. Schedule and manage vehicle usage events through the calendar (Calendar):
    - Create, edit, and delete usage events for each vehicle.
    - Define specific start and end dates and times for each event.
    - The application prevents overlapping usage events for the same vehicle.
    - The application validates that event time ranges are consistent, preventing invalid schedules where the end time occurs before the start time.
    - Events can be filtered by vehicle or displayed for the entire garage.
    - Add comments to scheduled events.
-7. View vehicle statistics in the dashboard (Graphics):
+8. View vehicle statistics in the dashboard (Graphics):
    - Analyze total accumulated usage hours per vehicle.
    - Identify the most-used vehicle.
    - View usage hour distribution by day of the week.
@@ -416,39 +422,40 @@ When your work is ready:
 This project is continuously evolving to improve its scalability, maintainability, and production readiness. The following roadmap outlines planned features and architectural improvements that will be introduced progressively.
 
 ### 1. Notification & Invitation System (In Progress)
-- Replace the current direct vehicle sharing workflow with an invitation-based system.
-- Add notification management with pending invitations and accept/reject actions.
-- Introduce reusable notification infrastructure for future application events.
+- Frontend implementation of the invitation and notification interfaces is complete.
+- Integrate the invitation and notification system with the backend API.
+- Ensure invitation statuses and notification data are managed and synchronized through the backend.
 
-### 2. Internationalization (i18n)
-- Add multi-language support starting with English and Spanish.
-- Move static application messages into translation resources.
-- Prepare the application architecture for future language extensions.
+### 2. Internationalization (i18n) (In Progress)
+- Complete and standardize the existing message services across the application.
+- Refactor the current approach to support a more scalable internationalization system.
+- Implement language selection and apply the selected language consistently across the application.
+- Prepare the application for additional languages in the future.
 
 ### 3. Design System and Theme Improvements
-- Improve the existing SCSS architecture with a more complete design system.
-- Expand design tokens for colors, spacing, typography, and component consistency.
-- Implement persistent light/dark mode preferences.
+- Refine the existing design system as the application evolves.
+- Review design tokens and component styling following future visual redesigns.
+- Evaluate improvements to theme consistency and user preferences.
 
 ### 4. State Management Improvements
-- Review current state handling patterns across features.
-- Introduce clearer state ownership and separation of responsibilities.
-- Improve scalability as new application features are added.
+- Review state management patterns as the application grows.
+- Improve state consistency and separation of responsibilities where needed.
+- Evaluate opportunities to simplify state handling across features.
 
 ### 5. Backend and Data Architecture Improvements
-- Review current data models and persistence strategy.
-- Evaluate database evolution strategies depending on future scalability and application requirements.
-- Improve API contracts, validation and domain separation.
+- Improve API contracts and data validation as the application evolves.
+- Review data models and persistence strategies when new requirements arise.
+- Maintain clear separation of responsibilities between frontend and backend.
 
-### 6. Testing Improvements
-- Increase test coverage for feature workflows and complex user interactions.
-- Add more integration-focused tests where multiple application layers interact.
-- Continue improving test maintainability and readability.
+### 6. Testing and Code Quality
+- Maintain test coverage above 90% as the application evolves.
+- Ensure new features and bug fixes include appropriate tests.
+- Continue improving test quality, readability, and maintainability.
 
 ### 7. Deployment and CI/CD
+- Review and improve the existing GitHub Actions workflows.
+- Evaluate opportunities to automate testing, build validation, and releases.
 - Deploy the application to a production environment.
-- Introduce automated checks for testing, linting, and build validation.
-- Configure a continuous integration workflow for future contributions.
 
 ---
 
@@ -494,16 +501,9 @@ The following section shows a preview of the application in operation:
 
 ### Testing Strategy
 
-The project uses unit testing with Jasmine and Karma to verify the behavior of the application's components and services.
+The project uses Jasmine and Karma for unit testing Angular components and services.
 
-The testing strategy focuses on validating the main application workflows and ensuring that individual parts of the system behave correctly in different scenarios.
-
-Tests cover:
-
-- **Component rendering:** Verify that components display the correct content depending on the application state, including populated and empty states.
-- **User interactions:** Ensure that user actions such as opening modals, updating data, filtering information, and interacting with UI elements trigger the expected behavior.
-- **Business logic:** Validate application rules handled by components and services, such as data processing, validations, and error handling.
-- **Fallback and edge cases:** Verify that the application behaves correctly when unexpected situations occur, such as failed geolocation requests or missing data.
+Tests cover component rendering, user interactions, business logic, validation rules, error handling, and fallback scenarios. The goal is to ensure reliable behavior across the application's main features.
 
 ### Running Tests
 
@@ -513,36 +513,19 @@ Run all unit tests:
     ng test
 ```
 
-Run tests for a specific file or feature:
+Run tests for a specific feature:
 
 ```bash
     ng test --include "src/app/features/<feature>/**/*.spec.ts"
 ```
 
-This allows running tests for a specific feature or set of files without executing the complete test suite.
-
-### Tested Components and Services
-
-The main tested components and services include:
-
-**Components:**
-- `VehicleTableComponent`
-- `CalendarViewComponent`
-- `MapViewComponent`
-- `GraphicsViewComponent`
-
-**Services:**
-- `VehicleService`
-- `EventService`
-- `MapService`
-- `GraphicsService`
-
+This allows running tests for a specific feature without executing the complete test suite.
 
 ### Coverage
 
 Current test coverage:
 
-```markdown
+```text
 =============================== Coverage summary ===============================
 Statements   : 98.37% ( 1087/1105 )
 Branches     : 92.55% ( 199/215 )
@@ -553,68 +536,6 @@ Lines        : 98.59% ( 981/995 )
 TOTAL: 988 SUCCESS
 ```
 
-### Testing Examples
-
-#### Business Logic and Error Handling
-
-The following test verifies that the `saveVehicle` method correctly handles a geolocation failure by using a fallback location. This scenario covers asynchronous operations, error handling and fallback behavior.
-
-```typescript
-it('should use fallback location when geolocation fails', async () => {
-
-    // 1. Mock vehicle to be saved
-    const vehicle = {
-        name: 'Mercedes GLC Coupe',
-        model: 'GLC Coupe',
-        plate: '3447VHZ',
-    };
-
-    // 2. Set modal mode to 'create'
-    vehicleModalStateServiceMock.mode.set('create');
-
-    // 3. Simulate geolocation failure
-    geolocationServiceMock.getCurrentLocation.and.rejectWith(new Error('geolocation failed'));
-
-    // 4. Reset addVehicles spies
-    vehicleServiceMock.addVehicles.calls.reset();
-
-    // 5. Call saveVehicle
-    await component.saveVehicle(vehicle as any);
-
-    // 6. Verify that geolocation was requested
-    expect(geolocationServiceMock.getCurrentLocation).toHaveBeenCalled();
-
-    // 7. Verify that the vehicle was added using the fallback location
-    expect(vehicleServiceMock.addVehicles).toHaveBeenCalled();
-    const addedVehicle = vehicleServiceMock.addVehicles.calls.mostRecent().args[0];
-    expect(addedVehicle.location).toEqual({ lat: 41.478, lng: 2.310 });
-
-    // 8. Verify that the modal was closed after completion
-    expect(vehicleModalStateServiceMock.close).toHaveBeenCalled();
-});
-```
-
-#### Component Rendering
-
-This test ensures that the map component is rendered correctly when vehicles are available.
-
-```Typescript
-it('should render map view when vehicle list is not empty', () => {
-    vehicleServiceMock.vehicles.set([{
-        name: 'Mercedes GLC Coupe',
-        model: 'GLC Coupe',
-        plate: '3447VHZ',
-        location: { lat: 41.486, lng: 2.311 }
-    }]);
-    fixture.detectChanges();
-
-    const mapView = fixture.nativeElement.querySelector('app-map-view');
-    expect(mapView).toBeTruthy();
-});
-```
-
-Empty state scenarios, modal opening/closing interactions and data update flows are also tested to ensure correct user interface behavior.
-
 ---
 
 ## Contribution
@@ -623,15 +544,13 @@ Contributions are welcome.
 
 To contribute:
 
-1. Fork both repositories:
+1. Fork the repository you want to contribute to:
    - Frontend: https://github.com/JordiMiravet/FleetManager-Frontend.git
    - Backend: https://github.com/JordiMiravet/FleetManager-Backend.git
 2. Create a branch following the **Branch naming** convention described in the [Development Workflow](#development-workflow).
 3. Commit your changes following the **Commit messages** convention described in the [Development Workflow](#development-workflow).
 4. Push your branch and open a Pull Request targeting the `main` branch.
 5. Follow the Pull Request expectations described in the [Development Workflow](#development-workflow).
-
-For complete contribution guidelines, including branch naming, commit messages and pull request expectations, see the [Development Workflow](#development-workflow) section above.
 
 ---
 
