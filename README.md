@@ -544,15 +544,13 @@ Contributions are welcome.
 
 To contribute:
 
-1. Fork both repositories:
+1. Fork the repository you want to contribute to:
    - Frontend: https://github.com/JordiMiravet/FleetManager-Frontend.git
    - Backend: https://github.com/JordiMiravet/FleetManager-Backend.git
 2. Create a branch following the **Branch naming** convention described in the [Development Workflow](#development-workflow).
 3. Commit your changes following the **Commit messages** convention described in the [Development Workflow](#development-workflow).
 4. Push your branch and open a Pull Request targeting the `main` branch.
 5. Follow the Pull Request expectations described in the [Development Workflow](#development-workflow).
-
-For complete contribution guidelines, including branch naming, commit messages and pull request expectations, see the [Development Workflow](#development-workflow) section above.
 
 ---
 
