@@ -34,7 +34,7 @@
 
 ## Application Overview
 
-Fleet Manager is an Angular 20 application designed to help users manage their personal vehicle garage. It allows each user to organize their vehicles, track their locations, schedule vehicle usage through an interactive calendar, and visualize detailed usage statistics.
+Fleet Manager is an Angular 20 application designed to help users manage their vehicles. It allows users to organize their vehicles, share access with other users through an invitation system, track vehicle locations, schedule vehicle usage through an interactive calendar, and visualize detailed usage statistics.
 
 The application follows a modular architecture based on reusable components and integrates user authentication, route guards, API communication, state management, reactive forms with validation, and data persistence.
 
