@@ -433,9 +433,9 @@ This project is continuously evolving to improve its scalability, maintainabilit
 - Prepare the application for additional languages in the future.
 
 ### 3. Design System and Theme Improvements
-- Improve the existing SCSS architecture with a more complete design system.
-- Expand design tokens for colors, spacing, typography, and component consistency.
-- Implement persistent light/dark mode preferences.
+- Refine the existing design system as the application evolves.
+- Review design tokens and component styling following future visual redesigns.
+- Evaluate improvements to theme consistency and user preferences.
 
 ### 4. State Management Improvements
 - Review current state handling patterns across features.
