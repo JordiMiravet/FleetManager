@@ -447,10 +447,10 @@ This project is continuously evolving to improve its scalability, maintainabilit
 - Review data models and persistence strategies when new requirements arise.
 - Maintain clear separation of responsibilities between frontend and backend.
 
-### 6. Testing Improvements
-- Increase test coverage for feature workflows and complex user interactions.
-- Add more integration-focused tests where multiple application layers interact.
-- Continue improving test maintainability and readability.
+### 6. Testing and Code Quality
+- Maintain test coverage above 90% as the application evolves.
+- Ensure new features and bug fixes include appropriate tests.
+- Continue improving test quality, readability, and maintainability.
 
 ### 7. Deployment and CI/CD
 - Deploy the application to a production environment.
