@@ -501,16 +501,9 @@ The following section shows a preview of the application in operation:
 
 ### Testing Strategy
 
-The project uses unit testing with Jasmine and Karma to verify the behavior of the application's components and services.
+The project uses Jasmine and Karma for unit testing Angular components and services.
 
-The testing strategy focuses on validating the main application workflows and ensuring that individual parts of the system behave correctly in different scenarios.
-
-Tests cover:
-
-- **Component rendering:** Verify that components display the correct content depending on the application state, including populated and empty states.
-- **User interactions:** Ensure that user actions such as opening modals, updating data, filtering information, and interacting with UI elements trigger the expected behavior.
-- **Business logic:** Validate application rules handled by components and services, such as data processing, validations, and error handling.
-- **Fallback and edge cases:** Verify that the application behaves correctly when unexpected situations occur, such as failed geolocation requests or missing data.
+Tests cover component rendering, user interactions, business logic, validation rules, error handling, and fallback scenarios. The goal is to ensure reliable behavior across the application's main features.
 
 ### Running Tests
 
@@ -520,36 +513,19 @@ Run all unit tests:
     ng test
 ```
 
-Run tests for a specific file or feature:
+Run tests for a specific feature:
 
 ```bash
     ng test --include "src/app/features/<feature>/**/*.spec.ts"
 ```
 
-This allows running tests for a specific feature or set of files without executing the complete test suite.
-
-### Tested Components and Services
-
-The main tested components and services include:
-
-**Components:**
-- `VehicleTableComponent`
-- `CalendarViewComponent`
-- `MapViewComponent`
-- `GraphicsViewComponent`
-
-**Services:**
-- `VehicleService`
-- `EventService`
-- `MapService`
-- `GraphicsService`
-
+This allows running tests for a specific feature without executing the complete test suite.
 
 ### Coverage
 
 Current test coverage:
 
-```markdown
+```text
 =============================== Coverage summary ===============================
 Statements   : 98.37% ( 1087/1105 )
 Branches     : 92.55% ( 199/215 )
@@ -559,68 +535,6 @@ Lines        : 98.59% ( 981/995 )
 
 TOTAL: 988 SUCCESS
 ```
-
-### Testing Examples
-
-#### Business Logic and Error Handling
-
-The following test verifies that the `saveVehicle` method correctly handles a geolocation failure by using a fallback location. This scenario covers asynchronous operations, error handling and fallback behavior.
-
-```typescript
-it('should use fallback location when geolocation fails', async () => {
-
-    // 1. Mock vehicle to be saved
-    const vehicle = {
-        name: 'Mercedes GLC Coupe',
-        model: 'GLC Coupe',
-        plate: '3447VHZ',
-    };
-
-    // 2. Set modal mode to 'create'
-    vehicleModalStateServiceMock.mode.set('create');
-
-    // 3. Simulate geolocation failure
-    geolocationServiceMock.getCurrentLocation.and.rejectWith(new Error('geolocation failed'));
-
-    // 4. Reset addVehicles spies
-    vehicleServiceMock.addVehicles.calls.reset();
-
-    // 5. Call saveVehicle
-    await component.saveVehicle(vehicle as any);
-
-    // 6. Verify that geolocation was requested
-    expect(geolocationServiceMock.getCurrentLocation).toHaveBeenCalled();
-
-    // 7. Verify that the vehicle was added using the fallback location
-    expect(vehicleServiceMock.addVehicles).toHaveBeenCalled();
-    const addedVehicle = vehicleServiceMock.addVehicles.calls.mostRecent().args[0];
-    expect(addedVehicle.location).toEqual({ lat: 41.478, lng: 2.310 });
-
-    // 8. Verify that the modal was closed after completion
-    expect(vehicleModalStateServiceMock.close).toHaveBeenCalled();
-});
-```
-
-#### Component Rendering
-
-This test ensures that the map component is rendered correctly when vehicles are available.
-
-```Typescript
-it('should render map view when vehicle list is not empty', () => {
-    vehicleServiceMock.vehicles.set([{
-        name: 'Mercedes GLC Coupe',
-        model: 'GLC Coupe',
-        plate: '3447VHZ',
-        location: { lat: 41.486, lng: 2.311 }
-    }]);
-    fixture.detectChanges();
-
-    const mapView = fixture.nativeElement.querySelector('app-map-view');
-    expect(mapView).toBeTruthy();
-});
-```
-
-Empty state scenarios, modal opening/closing interactions and data update flows are also tested to ensure correct user interface behavior.
 
 ---
 
