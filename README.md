@@ -443,9 +443,9 @@ This project is continuously evolving to improve its scalability, maintainabilit
 - Evaluate opportunities to simplify state handling across features.
 
 ### 5. Backend and Data Architecture Improvements
-- Review current data models and persistence strategy.
-- Evaluate database evolution strategies depending on future scalability and application requirements.
-- Improve API contracts, validation and domain separation.
+- Improve API contracts and data validation as the application evolves.
+- Review data models and persistence strategies when new requirements arise.
+- Maintain clear separation of responsibilities between frontend and backend.
 
 ### 6. Testing Improvements
 - Increase test coverage for feature workflows and complex user interactions.
