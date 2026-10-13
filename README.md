@@ -453,9 +453,9 @@ This project is continuously evolving to improve its scalability, maintainabilit
 - Continue improving test quality, readability, and maintainability.
 
 ### 7. Deployment and CI/CD
+- Review and improve the existing GitHub Actions workflows.
+- Evaluate opportunities to automate testing, build validation, and releases.
 - Deploy the application to a production environment.
-- Introduce automated checks for testing, linting, and build validation.
-- Configure a continuous integration workflow for future contributions.
 
 ---
 
