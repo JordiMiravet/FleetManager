@@ -97,9 +97,9 @@ The `core` folder contains application-wide infrastructure that is shared across
 
 Examples include:
 
-- Global layout components such as the header, navigation and account drawer.
-- Route guards.
-- Cross-cutting services such as authorization, geolocation and theme management.
+- Global layout components such as the header, navigation, account drawer and notification interface.
+- Route guards for authentication and guest access.
+- Cross-cutting services such as authorization, data source management, geolocation, theme management and layout messages.
 
 ### Features
 
@@ -118,9 +118,12 @@ For example:
 
 - `auth` manages authentication and registration.
 - `vehicle` contains vehicle management functionality.
+- `invitations` manages vehicle access invitations and their statuses.
 - `map` provides the interactive map experience.
 - `calendar` manages vehicle usage scheduling.
 - `graphics` contains the statistics dashboard.
+
+Internationalization message services are also organized within individual features to keep their messages close to the functionality they support.
 
 Keeping these resources together allows each feature to evolve independently while reducing coupling between different parts of the application.
 
@@ -130,11 +133,8 @@ The `shared` folder contains reusable building blocks that are not specific to a
 
 This includes:
 
-- Reusable UI components.
+- Reusable UI components, such as buttons.
 - Generic modal components.
-- Pipes.
-- Directives.
-- Shared models and utilities when required.
 
 Resources placed in `shared` are intended to be reused across multiple features without containing business-specific logic.
 
