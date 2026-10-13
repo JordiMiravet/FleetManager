@@ -146,27 +146,26 @@ Resources placed in `shared` are intended to be reused across multiple features 
 src/
 ├─ app/
 │  ├─ core/                         # Global application infrastructure
-│  │  ├─ guards/
-│  │  ├─ layout/                    # Header, navigation, global UI components
-│  │  └─ services/                  # Global services (auth, data-source, geolocation, theme)
+│  │  ├─ guards/                    # Authentication and guest guards
+│  │  ├─ layout/                    # Header, navigation, account drawer, notifications
+│  │  └─ services/                  # Shared application services
 │  │
 │  ├─ features/                     # Main application features
-│  │  ├─ auth/                      # Login, registration, interceptors
-│  │  ├─ vehicle/                   # Vehicle management (CRUD, state, modals)
-│  │  ├─ map/                       # Interactive map (Leaflet)
+│  │  ├─ auth/                      # Login, registration and authentication
 │  │  ├─ calendar/                  # Events and scheduling (FullCalendar)
-│  │  └─ graphics/                  # Statistics and data visualization (Chart.js)
+│  │  ├─ graphics/                  # Statistics and data visualization (Chart.js)
+│  │  ├─ invitations/               # Vehicle access invitations
+│  │  ├─ map/                       # Interactive map (Leaflet)
+│  │  └─ vehicle/                   # Vehicle management, access and permissions
 │  │
-│  ├─ shared/                       # Reusable components
-│  │  ├─ ui/                        # Buttons, modals, generic UI components
-│  │  ├─ pipes/
-│  │  ├─ directives/
-│  │  └─ models/
+│  ├─ shared/                       # Reusable UI components
+│  │  └─ ui/                        # Buttons and generic modals
 │  │
 │  ├─ app.config.ts
 │  ├─ app.routes.ts
-│  ├─ main.ts
-│  └─ app.html / app.scss / app.ts
+│  ├─ app.html
+│  ├─ app.scss
+│  └─ app.ts
 │
 ├─ assets/
 │  ├─ icons/
@@ -176,12 +175,14 @@ src/
 │
 ├─ styles/                          # Global SCSS styling system
 │  ├─ abstracts/                    # Variables and mixins
-│  ├─ base/                         # Reset and base typography
-│  ├─ themes/                       # Light / dark themes
-│  ├─ tokens/                       # Design system (spacing, colors, radius, etc.)
+│  ├─ base/                         # Base styles and typography
+│  ├─ themes/                       # Light and dark themes
+│  ├─ tokens/                       # Design tokens
 │  └─ utilities/                    # SCSS helpers
 │
-└─ index.html
+├─ index.html
+├─ main.ts
+└─ styles.scss
 ```
 
 ---
