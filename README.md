@@ -426,10 +426,11 @@ This project is continuously evolving to improve its scalability, maintainabilit
 - Integrate the invitation and notification system with the backend API.
 - Ensure invitation statuses and notification data are managed and synchronized through the backend.
 
-### 2. Internationalization (i18n)
-- Add multi-language support starting with English and Spanish.
-- Move static application messages into translation resources.
-- Prepare the application architecture for future language extensions.
+### 2. Internationalization (i18n) (In Progress)
+- Complete and standardize the existing message services across the application.
+- Refactor the current approach to support a more scalable internationalization system.
+- Implement language selection and apply the selected language consistently across the application.
+- Prepare the application for additional languages in the future.
 
 ### 3. Design System and Theme Improvements
 - Improve the existing SCSS architecture with a more complete design system.
