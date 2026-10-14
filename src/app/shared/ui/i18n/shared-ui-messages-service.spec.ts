@@ -49,10 +49,14 @@ describe('SharedUiMessagesService', () => {
   describe('deleteButton', () => {
 
     it('should expose the delete button messages', () => {
-
+      expect(service.deleteButton).toEqual({
+        aria: {
+          delete: 'Delete vehicle',
+        },
+      });
     });
 
   });
-
+  
 
 });
