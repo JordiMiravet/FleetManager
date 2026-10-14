@@ -1,4 +1,6 @@
-import { Component, output } from '@angular/core';
+import { Component, inject, output } from '@angular/core';
+
+import { SharedUiMessagesService } from '../../i18n/shared-ui-messages-service';
 
 @Component({
   selector: 'app-delete-button',
@@ -8,6 +10,8 @@ import { Component, output } from '@angular/core';
   styleUrl: './delete-button.scss',
 })
 export class DeleteButtonComponent {
+
+  readonly messages = inject(SharedUiMessagesService);
 
   readonly delete = output<void>();
 
