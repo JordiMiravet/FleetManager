@@ -14,7 +14,7 @@ import { SharedUiMessagesService } from '../../i18n/shared-ui-messages-service';
 export class DarkModeToggleComponent {
 
   theme = inject(ThemeService);
-  readonly messages = inject(SharedUiMessagesService)
+  readonly messages = inject(SharedUiMessagesService);
 
   toggle() {
     this.theme.toggle();

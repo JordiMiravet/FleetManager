@@ -29,4 +29,12 @@ export class SharedUiMessagesService {
     },
   };
 
+  // delete-button
+
+  readonly deleteButton = {
+    aria: {
+      delete: 'Delete vehicle',
+    },
+  };
+
 }
