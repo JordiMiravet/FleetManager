@@ -37,4 +37,12 @@ export class SharedUiMessagesService {
     },
   };
 
+  // edit-button
+
+  readonly editButton = {
+    aria: {
+      edit: 'Edit vehicle',
+    },
+  };
+
 }
