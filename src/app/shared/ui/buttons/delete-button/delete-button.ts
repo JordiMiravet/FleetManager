@@ -11,8 +11,10 @@ import { SharedUiMessagesService } from '../../i18n/shared-ui-messages-service';
 })
 export class DeleteButtonComponent {
 
-  readonly messages = inject(SharedUiMessagesService);
+  private readonly messagesService = inject(SharedUiMessagesService);
 
+  readonly messages = this.messagesService.deleteButton;
+  
   readonly delete = output<void>();
 
   onClick(): void {
