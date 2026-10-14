@@ -61,7 +61,11 @@ describe('SharedUiMessagesService', () => {
   describe('editButton', () => {
 
     it('should expose the edit button messages', () => {
-
+      expect(service.editButton).toEqual({
+        aria: {
+          edit: 'Edit vehicle',
+        },
+      });
     });
 
   });
