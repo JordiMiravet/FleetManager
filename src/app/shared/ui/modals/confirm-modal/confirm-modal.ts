@@ -12,10 +12,12 @@ import { SharedUiMessagesService } from '../../i18n/shared-ui-messages-service';
 })
 export class ConfirmModalComponent {
 
-  readonly messages = inject(SharedUiMessagesService)
+  readonly messagesService = inject(SharedUiMessagesService);
 
-  title = input<string>(this.messages.confirmModal.title);
-  message = input<string>(this.messages.confirmModal.message);
+  readonly messages = this.messagesService.confirmModal;
+
+  title = input<string>(this.messages.title);
+  message = input<string>(this.messages.message);
 
   confirm = output<void>();
   cancel = output<void>();

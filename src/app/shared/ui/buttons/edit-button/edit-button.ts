@@ -14,7 +14,7 @@ export class EditButtonComponent {
   private readonly messagesService = inject(SharedUiMessagesService);
 
   readonly messages = this.messagesService.editButton;
-  readonly edit = output<void>()
+  readonly edit = output<void>();
 
   onClick(): void {
     this.edit.emit();

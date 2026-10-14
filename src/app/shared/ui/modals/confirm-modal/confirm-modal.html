@@ -24,19 +24,19 @@
             <button
                 type="submit"
                 class="modal__button modal__button--confirm"
-                [attr.aria-label]="messages.confirmModal.aria.confirmButton"
+                [attr.aria-label]="messages.aria.confirmButton"
                 (click)="onConfirm()"
             >
-                {{ messages.confirmModal.buttons.confirm }}
+                {{ messages.buttons.confirm }}
             </button>
 
             <button
                 type="button"
                 class="modal__button modal__button--cancel"
                 (click)="onCancel()"
-                [attr.aria-label]="messages.confirmModal.aria.cancelButton"
+                [attr.aria-label]="messages.aria.cancelButton"
             >
-                {{ messages.confirmModal.buttons.cancel }}
+                {{ messages.buttons.cancel }}
             </button>
         </div>
 

@@ -18,7 +18,7 @@ export class DarkModeToggleComponent {
 
   readonly messages = this.messagesService.darkModeToggle;
 
-  toggle() {
+  toggle(): void {
     this.theme.toggle();
   }
 
