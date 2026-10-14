@@ -13,4 +13,13 @@ describe('SharedUiMessagesService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  describe('confirmModal', () => {
+
+    it('should expose the confirmation modal messages', () => {
+
+    });
+
+  });
+
 });
