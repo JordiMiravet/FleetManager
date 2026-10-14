@@ -33,4 +33,12 @@ describe('SharedUiMessagesService', () => {
 
   });
 
+  describe('darkModeToggle', () => {
+
+    it('should expose the dark mode toggle messages', () => {
+      
+    });
+
+  });
+
 });
