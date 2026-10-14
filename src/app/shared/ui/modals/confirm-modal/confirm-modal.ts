@@ -14,8 +14,8 @@ export class ConfirmModalComponent {
 
   readonly messages = inject(SharedUiMessagesService)
 
-  title = input<string>('Are you sure?');
-  message = input<string>('Do you really want to proceed? This action cannot be undone');
+  title = input<string>(this.messages.confirmModal.title);
+  message = input<string>(this.messages.confirmModal.message);
 
   confirm = output<void>();
   cancel = output<void>();
