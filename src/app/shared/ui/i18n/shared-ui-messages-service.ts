@@ -10,10 +10,14 @@ export class SharedUiMessagesService {
   readonly confirmModal = {
     title: 'Are you sure?',
     message: 'Do you really want to proceed? This action cannot be undone.',
-    confirm: 'Confirm',
-    cancel: 'Cancel',
-    confirmActionLabel: 'Confirm action',
-    cancelActionLabel: 'Cancel action',
+    buttons: {
+      confirm: 'Confirm',
+      cancel: 'Cancel',
+    },
+    aria: {
+      confirmButton: 'Confirm action',
+      cancelButton: 'Cancel action',
+    },
   };
 
 }
