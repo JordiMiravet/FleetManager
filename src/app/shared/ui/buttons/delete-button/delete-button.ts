@@ -14,7 +14,6 @@ export class DeleteButtonComponent {
   private readonly messagesService = inject(SharedUiMessagesService);
 
   readonly messages = this.messagesService.deleteButton;
-  
   readonly delete = output<void>();
 
   onClick(): void {
