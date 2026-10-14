@@ -73,7 +73,11 @@ describe('SharedUiMessagesService', () => {
   describe('userButton', () => {
 
     it('should expose the user button messages', () => {
-
+      expect(service.userButton).toEqual({
+        aria: {
+          manageUsers: 'Manage vehicle users',
+        },
+      });
     });
 
   });
