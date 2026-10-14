@@ -58,4 +58,12 @@ describe('SharedUiMessagesService', () => {
 
   });
 
+  describe('editButton', () => {
+
+    it('should expose the edit button messages', () => {
+
+    });
+
+  });
+
 });
