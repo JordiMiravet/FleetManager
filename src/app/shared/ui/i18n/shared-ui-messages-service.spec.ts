@@ -36,7 +36,12 @@ describe('SharedUiMessagesService', () => {
   describe('darkModeToggle', () => {
 
     it('should expose the dark mode toggle messages', () => {
-      
+      expect(service.darkModeToggle).toEqual({
+        aria: {
+          enable: 'Enable dark mode',
+          disable: 'Disable dark mode',
+        },
+      });
     });
 
   });
