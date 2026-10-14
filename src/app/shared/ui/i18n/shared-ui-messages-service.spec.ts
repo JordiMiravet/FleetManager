@@ -70,4 +70,12 @@ describe('SharedUiMessagesService', () => {
 
   });
 
+  describe('userButton', () => {
+
+    it('should expose the user button messages', () => {
+
+    });
+
+  });
+
 });
