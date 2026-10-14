@@ -1,4 +1,6 @@
-import { Component, output } from '@angular/core';
+import { Component, inject, output } from '@angular/core';
+
+import { SharedUiMessagesService } from '../../i18n/shared-ui-messages-service';
 
 @Component({
   selector: 'app-user-button',
@@ -8,6 +10,9 @@ import { Component, output } from '@angular/core';
 })
 export class UserButtonComponent {
 
+  private readonly messagesService = inject(SharedUiMessagesService);
+
+  readonly messages = this.messagesService.userButton;
   readonly user = output<void>();
 
   onClick(): void {
