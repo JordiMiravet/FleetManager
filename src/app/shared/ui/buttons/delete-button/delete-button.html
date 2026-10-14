@@ -2,7 +2,7 @@
   type="button" 
   class="delete-button" 
   (click)="onClick()" 
-  aria-label="Delete vehicle"
+  [attr.aria-label]="messages.aria.delete"
 >
   <i 
     class="pi pi-trash delete-button__icon"

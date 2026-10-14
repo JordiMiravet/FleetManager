@@ -2,7 +2,7 @@
   class="user-button"
   (click)="onClick()"
   type="button"
-  aria-label="Manage vehicle users"
+  [attr.aria-label]="messages.aria.manageUsers"
 >
   <i 
     class="fa-solid fa-user-group user-button__icon" 

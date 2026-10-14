@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, input, output } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
+
+import { SharedUiMessagesService } from '../../i18n/shared-ui-messages-service';
 
 @Component({
   selector: 'app-confirm-modal',
@@ -10,8 +12,12 @@ import { Component, input, output } from '@angular/core';
 })
 export class ConfirmModalComponent {
 
-  title = input<string>('Are you sure?');
-  message = input<string>('Do you really want to proceed? This action cannot be undone');
+  private readonly messagesService = inject(SharedUiMessagesService);
+
+  readonly messages = this.messagesService.confirmModal;
+
+  title = input<string>(this.messages.title);
+  message = input<string>(this.messages.message);
 
   confirm = output<void>();
   cancel = output<void>();

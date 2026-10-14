@@ -1,4 +1,6 @@
-import { Component, output } from '@angular/core';
+import { Component, inject, output } from '@angular/core';
+
+import { SharedUiMessagesService } from '../../i18n/shared-ui-messages-service';
 
 @Component({
   selector: 'app-edit-button',
@@ -9,7 +11,10 @@ import { Component, output } from '@angular/core';
 })
 export class EditButtonComponent {
 
-  readonly edit = output<void>()
+  private readonly messagesService = inject(SharedUiMessagesService);
+
+  readonly messages = this.messagesService.editButton;
+  readonly edit = output<void>();
 
   onClick(): void {
     this.edit.emit();

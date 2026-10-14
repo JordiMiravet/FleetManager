@@ -1,44 +1,44 @@
 <dialog
-    class="modal__backdrop"
-    (click)="onCancel()"
-    (keydown.escape)="onCancel()"
-    aria-modal="true"
-    aria-labelledby="confirm-modal__modal-title"
-    aria-describedby="confirm-modal__modal-message"
+  class="modal__backdrop"
+  (click)="onCancel()"
+  (keydown.escape)="onCancel()"
+  aria-modal="true"
+  aria-labelledby="confirm-modal__modal-title"
+  aria-describedby="confirm-modal__modal-message"
 >
-    <form 
-        class="modal__form" 
-        method="dialog" 
-        (click)="$event.stopPropagation()"
-    >
+  <form 
+    class="modal__form" 
+    method="dialog" 
+    (click)="$event.stopPropagation()"
+  >
 
-        <h2 class="modal__title" id="confirm-modal__modal-title">
-            {{ title() }}
-        </h2>
+    <h2 class="modal__title" id="confirm-modal__modal-title">
+      {{ title() }}
+    </h2>
 
-        <p class="modal__message" id="confirm-modal__modal-message">
-            {{ message() }}
-        </p>
+    <p class="modal__message" id="confirm-modal__modal-message">
+      {{ message() }}
+    </p>
 
-        <div class="modal__actions">
-            <button
-                type="submit"
-                class="modal__button modal__button--confirm"
-                aria-label="Confirm action"
-                (click)="onConfirm()"
-            >
-                Confirm
-            </button>
+    <div class="modal__actions">
+      <button
+        type="submit"
+        class="modal__button modal__button--confirm"
+        [attr.aria-label]="messages.aria.confirmButton"
+        (click)="onConfirm()"
+      >
+        {{ messages.buttons.confirm }}
+      </button>
 
-            <button
-                type="button"
-                class="modal__button modal__button--cancel"
-                (click)="onCancel()"
-                aria-label="Cancel action"
-            >
-                Cancel
-            </button>
-        </div>
+      <button
+        type="button"
+        class="modal__button modal__button--cancel"
+        (click)="onCancel()"
+        [attr.aria-label]="messages.aria.cancelButton"
+      >
+        {{ messages.buttons.cancel }}
+      </button>
+    </div>
 
-    </form>
+  </form>
 </dialog>

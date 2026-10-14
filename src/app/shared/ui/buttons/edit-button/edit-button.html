@@ -2,7 +2,7 @@
   type="button" 
   class="edit-button" 
   (click)="onClick()" 
-  aria-label="Edit vehicle"
+  [attr.aria-label]="messages.aria.edit"
 >
   <i
     class="pi pi-pen-to-square edit-button__icon"

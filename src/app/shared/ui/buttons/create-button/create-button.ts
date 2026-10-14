@@ -7,7 +7,6 @@ import { Component, input, output } from '@angular/core';
   templateUrl: './create-button.html',
   styleUrl: './create-button.scss',
 })
-
 export class CreateButtonComponent {
 
   readonly createText = input<string | null>(null);
