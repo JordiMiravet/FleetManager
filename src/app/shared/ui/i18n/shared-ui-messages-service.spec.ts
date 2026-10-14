@@ -14,32 +14,19 @@ describe('SharedUiMessagesService', () => {
     expect(service).toBeTruthy();
   });
 
-describe('confirmModal', () => {
-    it('should return the confirmation modal title', () => {
-      expect(service.confirmModal.title).toBe('Are you sure?');
-    });
+  describe('confirmModal', () => {
 
-    it('should return the confirmation modal message', () => {
-      expect(service.confirmModal.message).toBe(
-        'Do you really want to proceed? This action cannot be undone.',
-      );
+    it('should expose the confirmation modal messages', () => {
+      expect(service.confirmModal).toEqual({
+        title: 'Are you sure?',
+        message: 'Do you really want to proceed? This action cannot be undone.',
+        confirm: 'Confirm',
+        cancel: 'Cancel',
+        confirmActionLabel: 'Confirm action',
+        cancelActionLabel: 'Cancel action',
+      });
     });
-
-    it('should return the confirm button text', () => {
-      expect(service.confirmModal.confirm).toBe('Confirm');
-    });
-
-    it('should return the cancel button text', () => {
-      expect(service.confirmModal.cancel).toBe('Cancel');
-    });
-
-    it('should return the confirm action aria-label', () => {
-      expect(service.confirmModal.confirmActionLabel).toBe('Confirm action');
-    });
-
-    it('should return the cancel action aria-label', () => {
-      expect(service.confirmModal.cancelActionLabel).toBe('Cancel action');
-    });
+    
   });
 
 });
