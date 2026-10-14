@@ -20,4 +20,13 @@ export class SharedUiMessagesService {
     },
   };
 
+  // dark-mode-toggle
+
+  readonly darkModeToggle = {
+    aria: {
+      enable: 'Enable dark mode',
+      disable: 'Disable dark mode',
+    },
+  };
+
 }
