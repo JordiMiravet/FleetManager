@@ -4,6 +4,7 @@ import { SharedUiMessagesService } from '../../i18n/shared-ui-messages-service';
 
 @Component({
   selector: 'app-user-button',
+  standalone: true,
   imports: [],
   templateUrl: './user-button.html',
   styleUrl: './user-button.scss',

@@ -12,7 +12,7 @@ import { SharedUiMessagesService } from '../../i18n/shared-ui-messages-service';
 })
 export class ConfirmModalComponent {
 
-  readonly messagesService = inject(SharedUiMessagesService);
+  private readonly messagesService = inject(SharedUiMessagesService);
 
   readonly messages = this.messagesService.confirmModal;
 

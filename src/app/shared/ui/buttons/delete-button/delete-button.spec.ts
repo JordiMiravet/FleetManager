@@ -31,7 +31,7 @@ describe('DeleteButtonComponent', () => {
       expect(button).toBeTruthy();
       expect(button.getAttribute('type')).toBe('button');
       expect(button.classList.contains('delete-button')).toBeTrue();
-      expect(button.getAttribute('aria-label')).toBe('Delete vehicle');
+      expect(button.getAttribute('aria-label')).toBe(component.messages.aria.delete);
     });
 
     it('should render trash icon', () => {
