@@ -46,4 +46,13 @@ describe('SharedUiMessagesService', () => {
 
   });
 
+  describe('deleteButton', () => {
+
+    it('should expose the delete button messages', () => {
+
+    });
+
+  });
+
+
 });
