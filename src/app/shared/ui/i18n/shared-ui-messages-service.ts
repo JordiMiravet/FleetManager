@@ -45,4 +45,12 @@ export class SharedUiMessagesService {
     },
   };
 
+  // user-button
+
+  readonly userButton = {
+    aria: {
+      manageUsers: 'Manage vehicle users',
+    },
+  };
+
 }
