@@ -4,7 +4,7 @@ import { InvitationService } from '../../data-access/invitation-service';
 import { LayoutMessagesService } from '../../../../core/layout/i18n/layout-messages-service';
 
 import { InvitationCardComponent } from '../invitation-card/invitation-card';
-import { NotificationDropdownComponent } from '../../../../core/layout/notifications/notification-dropdown/notification-dropdown';
+import { NotificationDropdownComponent } from '../notification-dropdown/notification-dropdown';
 
 @Component({
   selector: 'app-notification-bell',
