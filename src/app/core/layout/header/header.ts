@@ -1,8 +1,10 @@
 import { Component, inject, Signal } from '@angular/core';
+
+import { AuthService } from '../../../features/auth/data-access/auth-service';
+
 import { NavigationComponent } from "../navigation/navigation";
 import { AuthActionsComponent } from "../auth-actions/auth-actions";
-import { NotificationBellComponent } from '../notifications/notification-bell/notification-bell';
-import { AuthService } from '../../../features/auth/data-access/auth-service';
+import { NotificationBellComponent } from '../../../features/invitations/components/notification-bell/notification-bell';
 
 @Component({
   selector: 'app-header',
