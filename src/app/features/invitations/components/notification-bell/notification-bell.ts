@@ -9,7 +9,10 @@ import { NotificationDropdownComponent } from '../notification-dropdown/notifica
 @Component({
   selector: 'app-notification-bell',
   standalone: true,
-  imports: [NotificationDropdownComponent, InvitationCardComponent],
+  imports: [
+    NotificationDropdownComponent, 
+    InvitationCardComponent
+  ],
   templateUrl: './notification-bell.html',
   styleUrl: './notification-bell.scss',
 })
