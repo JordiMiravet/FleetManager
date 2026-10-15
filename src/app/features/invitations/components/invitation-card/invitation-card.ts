@@ -7,7 +7,7 @@ import { InvitationMessagesService } from '../../i18n/invitation-messages-servic
 @Component({
   selector: 'app-invitation-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [ CommonModule ],
   templateUrl: './invitation-card.html',
   styleUrl: './invitation-card.scss',
 })
