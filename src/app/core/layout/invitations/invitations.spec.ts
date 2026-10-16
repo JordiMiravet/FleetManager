@@ -25,7 +25,7 @@ describe('InvitationsComponent', () => {
   describe('NotificationBellComponent', () => {
 
     it('should render NotificationBellComponent', () => {
-      const notificationBell = fixture.nativeElement.querySelector('app-notification-bell',);
+      const notificationBell = getNotificationBell();
 
       expect(notificationBell).toBeTruthy();
     });
