@@ -8,9 +8,8 @@ describe('InvitationsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [InvitationsComponent]
-    })
-    .compileComponents();
+      imports: [ InvitationsComponent ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(InvitationsComponent);
     component = fixture.componentInstance;
@@ -22,10 +21,12 @@ describe('InvitationsComponent', () => {
   });
 
   describe('NotificationBellComponent', () => {
+
     it('should render NotificationBellComponent', () => {
       const notificationBell = fixture.nativeElement.querySelector('app-notification-bell',);
 
       expect(notificationBell).toBeTruthy();
     });
+
   });
 });
