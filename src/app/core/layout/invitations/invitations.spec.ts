@@ -20,4 +20,10 @@ describe('InvitationsComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  describe('NotificationBellComponent', () => {
+    it('should render NotificationBellComponent', () => {
+
+    });
+  });
 });
