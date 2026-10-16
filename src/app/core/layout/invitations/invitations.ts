@@ -9,6 +9,6 @@ import { NotificationBellComponent } from '../../../features/invitations/compone
   templateUrl: './invitations.html',
   styleUrl: './invitations.css',
 })
-export class Invitations {
+export class InvitationsComponent {
 
 }

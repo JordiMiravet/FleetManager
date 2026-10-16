@@ -4,7 +4,7 @@ import { AuthService } from '../../../features/auth/data-access/auth-service';
 
 import { NavigationComponent } from "../navigation/navigation";
 import { AuthActionsComponent } from "../auth-actions/auth-actions";
-import { NotificationBellComponent } from '../../../features/invitations/components/notification-bell/notification-bell';
+import { InvitationsComponent } from '../invitations/invitations';
 
 @Component({
   selector: 'app-header',
@@ -12,7 +12,7 @@ import { NotificationBellComponent } from '../../../features/invitations/compone
   imports: [
     NavigationComponent, 
     AuthActionsComponent,
-    NotificationBellComponent
+    InvitationsComponent
   ],
   templateUrl: './header.html',
   styleUrl: './header.scss',
