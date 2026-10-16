@@ -6,7 +6,7 @@ describe('InvitationsComponent', () => {
   let component: InvitationsComponent;
   let fixture: ComponentFixture<InvitationsComponent>;
 
-  const getNotificationBell = (): HTMLElement | null => fixture.nativeElement.querySelector('app-notification-bell',);
+  const getNotificationBell = (): HTMLElement | null => fixture.nativeElement.querySelector('app-notification-bell');
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
