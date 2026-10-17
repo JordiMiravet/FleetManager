@@ -17,13 +17,13 @@ describe('InvitationMessagesService', () => {
   describe('card', () => {
 
     it('should expose the labels', () => {
-      expect(service.card.labels).toEqual({
+      expect(service.invitationCard.labels).toEqual({
         owner: 'Shared by'
       });
     });
 
     it('should expose the buttons', () => {
-      expect(service.card.buttons).toEqual({
+      expect(service.invitationCard.buttons).toEqual({
         accept: 'Accept',
         decline: 'Decline'
       });
@@ -32,11 +32,11 @@ describe('InvitationMessagesService', () => {
     describe('aria', () => {
 
       it('should return the accept message with the provided vehicle name', () => {
-        expect(service.card.aria.accept('Ford Focus')).toBe('Accept invitation for Ford Focus');
+        expect(service.invitationCard.aria.accept('Ford Focus')).toBe('Accept invitation for Ford Focus');
       });
 
       it('should return the decline message with the provided vehicle name', () => {
-        expect(service.card.aria.decline('Ford Focus')).toBe('Decline invitation for Ford Focus');
+        expect(service.invitationCard.aria.decline('Ford Focus')).toBe('Decline invitation for Ford Focus');
       });
 
     });
