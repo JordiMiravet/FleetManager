@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class InvitationMessagesService {
 
-  readonly card = {
+  readonly invitationCard = {
     labels: {
         owner: 'Shared by'
     },
@@ -17,6 +17,16 @@ export class InvitationMessagesService {
         accept: (vehicleName: string) => `Accept invitation for ${vehicleName}`,
         decline: (vehicleName: string) => `Decline invitation for ${vehicleName}`
     }
+  };
+
+  readonly notificationBell = {
+    aria: {
+      button: (pendingCount: number) =>
+        pendingCount > 0
+          ? `View notifications, ${pendingCount} pending`
+          : 'View notifications'
+    },
+    emptyState: 'No pending invitations'
   };
 
 }

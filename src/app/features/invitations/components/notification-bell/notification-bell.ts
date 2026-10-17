@@ -1,10 +1,10 @@
 import { Component, inject, signal } from '@angular/core';
 
 import { InvitationService } from '../../data-access/invitation-service';
-import { LayoutMessagesService } from '../../../../core/layout/i18n/layout-messages-service';
 
 import { InvitationCardComponent } from '../invitation-card/invitation-card';
 import { NotificationDropdownComponent } from '../notification-dropdown/notification-dropdown';
+import { InvitationMessagesService } from '../../i18n/invitation-messages-service';
 
 @Component({
   selector: 'app-notification-bell',
@@ -18,10 +18,11 @@ import { NotificationDropdownComponent } from '../notification-dropdown/notifica
 })
 export class NotificationBellComponent {
 
-  private readonly messagesService = inject(LayoutMessagesService);
+  private readonly messagesService = inject(InvitationMessagesService);
   private readonly invitationService = inject(InvitationService);
 
   public readonly notificationBellMsg = this.messagesService.notificationBell;
+
   public readonly pendingCount = this.invitationService.pendingCount;
   public readonly pendingInvitations = this.invitationService.pendingInvitations;
 

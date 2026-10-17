@@ -4,7 +4,7 @@
         <h3 class="invitation-card__vehicle-name">{{ invitation().vehicleName }}</h3>
 
         <p class="invitation-card__owner">
-            {{ cardMsg.labels.owner }} <span>{{ invitation().ownerEmail }}</span>
+            {{ invitationCardMsg.labels.owner }} <span>{{ invitation().ownerEmail }}</span>
         </p>
 
         <time
@@ -20,20 +20,20 @@
             type="button"
             class="invitation-card__button invitation-card__button--accept"
             (click)="onAccept()"
-            [attr.aria-label]="cardMsg.aria.accept(invitation().vehicleName)"
+            [attr.aria-label]="invitationCardMsg.aria.accept(invitation().vehicleName)"
         >
             <i class="pi pi-check" aria-hidden="true"></i>
-            {{ cardMsg.buttons.accept }}
+            {{ invitationCardMsg.buttons.accept }}
         </button>
 
         <button
             type="button"
             class="invitation-card__button invitation-card__button--decline"
             (click)="onDecline()"
-            [attr.aria-label]="cardMsg.aria.decline(invitation().vehicleName)"
+            [attr.aria-label]="invitationCardMsg.aria.decline(invitation().vehicleName)"
         >
             <i class="pi pi-times" aria-hidden="true"></i>
-            {{ cardMsg.buttons.decline }}
+            {{ invitationCardMsg.buttons.decline }}
         </button>
     </div>
 
