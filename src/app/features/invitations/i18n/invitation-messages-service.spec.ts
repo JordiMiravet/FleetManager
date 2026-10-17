@@ -14,7 +14,7 @@ describe('InvitationMessagesService', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('card', () => {
+  describe('invitationCard', () => {
 
     it('should expose the labels', () => {
       expect(service.invitationCard.labels).toEqual({
