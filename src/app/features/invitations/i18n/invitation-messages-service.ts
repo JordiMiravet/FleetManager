@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class InvitationMessagesService {
 
-  readonly card = {
+  readonly invitationCard = {
     labels: {
         owner: 'Shared by'
     },
