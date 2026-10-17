@@ -19,4 +19,14 @@ export class InvitationMessagesService {
     }
   };
 
+  readonly notificationBell = {
+    aria: {
+      button: (pendingCount: number) =>
+        pendingCount > 0
+          ? `View notifications, ${pendingCount} pending`
+          : 'View notifications'
+    },
+    emptyState: 'No pending invitations'
+  };
+
 }
