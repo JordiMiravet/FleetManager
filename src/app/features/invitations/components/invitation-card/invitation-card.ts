@@ -15,7 +15,7 @@ export class InvitationCardComponent {
 
   private readonly messagesService = inject(InvitationMessagesService);
 
-  public readonly cardMsg = this.messagesService.card;
+  public readonly invitationCardMsg = this.messagesService.invitationCard;
 
   invitation = input.required<VehicleInvitation>();
 
