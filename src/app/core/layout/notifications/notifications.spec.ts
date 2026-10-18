@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InvitationsComponent } from './invitations';
+import { NotificationsComponent } from './notifications';
 
-describe('InvitationsComponent', () => {
-  let component: InvitationsComponent;
-  let fixture: ComponentFixture<InvitationsComponent>;
+describe('NotificationsComponent', () => {
+  let component: NotificationsComponent;
+  let fixture: ComponentFixture<NotificationsComponent>;
 
   const getNotificationBell = (): HTMLElement | null => fixture.nativeElement.querySelector('app-notification-bell');
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ InvitationsComponent ],
+      imports: [ NotificationsComponent ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(InvitationsComponent);
+    fixture = TestBed.createComponent(NotificationsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

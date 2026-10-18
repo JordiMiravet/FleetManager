@@ -3,12 +3,12 @@ import { Component } from '@angular/core';
 import { NotificationBellComponent } from '../../../features/invitations/components/notification-bell/notification-bell';
 
 @Component({
-  selector: 'app-invitations',
+  selector: 'app-notifications',
   standalone: true,
   imports: [ NotificationBellComponent ],
-  templateUrl: './invitations.html',
-  styleUrl: './invitations.css',
+  templateUrl: './notifications.html',
+  styleUrl: './notifications.scss',
 })
-export class InvitationsComponent {
+export class NotificationsComponent {
 
 }

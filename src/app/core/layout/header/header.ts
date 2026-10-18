@@ -4,7 +4,7 @@ import { AuthService } from '../../../features/auth/data-access/auth-service';
 
 import { NavigationComponent } from "../navigation/navigation";
 import { AuthActionsComponent } from "../auth-actions/auth-actions";
-import { InvitationsComponent } from '../invitations/invitations';
+import { NotificationsComponent } from '../notifications/notifications';
 
 @Component({
   selector: 'app-header',
@@ -12,7 +12,7 @@ import { InvitationsComponent } from '../invitations/invitations';
   imports: [
     NavigationComponent, 
     AuthActionsComponent,
-    InvitationsComponent
+    NotificationsComponent
   ],
   templateUrl: './header.html',
   styleUrl: './header.scss',
