@@ -6,8 +6,8 @@ import { NotificationBellComponent } from '../../../features/invitations/compone
   selector: 'app-notifications',
   standalone: true,
   imports: [ NotificationBellComponent ],
-  templateUrl: './invitations.html',
-  styleUrl: './invitations.css',
+  templateUrl: './notifications.html',
+  styleUrl: './notifications.scss',
 })
 export class NotificationsComponent {
 
