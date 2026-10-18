@@ -13,7 +13,7 @@ describe('HeaderComponent', () => {
   const getHeader = (): HTMLElement => fixture.nativeElement.querySelector('header')!;
   const getNavigation = (): HTMLElement => fixture.nativeElement.querySelector('app-navigation')!;
   const getAuthActions = (): HTMLElement => fixture.nativeElement.querySelector('app-auth-actions')!;
-  const getInvitations = (): HTMLElement | null => fixture.nativeElement.querySelector('app-invitations');
+  const getNotifications = (): HTMLElement | null => fixture.nativeElement.querySelector('app-notifications');
   const getHeaderActions = (): HTMLElement => fixture.nativeElement.querySelector('.header__actions')!;
 
   beforeEach(async () => {
@@ -65,14 +65,14 @@ describe('HeaderComponent', () => {
     });
 
     it('should not render NotificationBellComponent when user is not logged in', () => {
-      expect(getInvitations()).toBeNull();
+      expect(getNotifications()).toBeNull();
     });
 
     it('should render NotificationBellComponent when user is logged in', () => {
       authServiceMock.isLogged.set(true);
       fixture.detectChanges();
 
-      expect(getInvitations()).toBeTruthy();
+      expect(getNotifications()).toBeTruthy();
     });
 
   });
@@ -99,7 +99,7 @@ describe('HeaderComponent', () => {
 
       const actions = getHeaderActions();
 
-      const notificationBell = getInvitations();
+      const notificationBell = getNotifications();
       const authActions = getAuthActions();
 
       expect(notificationBell).toBeTruthy();
