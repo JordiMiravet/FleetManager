@@ -75,7 +75,9 @@ describe('NotificationDropdownComponent', () => {
     });
 
     it('should hide the backdrop from assistive technologies', () => {
+      fixture.detectChanges();
 
+      expect(getBackdrop()?.getAttribute('aria-hidden')).toBe('true');
     });
 
     it('should emit close when Escape is pressed', () => {
@@ -88,7 +90,12 @@ describe('NotificationDropdownComponent', () => {
     });
 
     it('should not emit close when a key other than Escape is pressed', () => {
+      fixture.detectChanges();
+      spyOn(component.panelClose, 'emit');
 
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+
+      expect(component.panelClose.emit).not.toHaveBeenCalled();
     });
 
     it('should not emit close when clicking inside the panel content', () => {
