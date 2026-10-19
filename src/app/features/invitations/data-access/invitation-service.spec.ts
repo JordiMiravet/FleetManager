@@ -136,6 +136,10 @@ describe('InvitationService', () => {
       expect(service.invitations()).toEqual(before);
     });
 
+    it('should change a declined invitation to accepted', () => {
+
+    });
+
   });
 
   describe('declineInvitation', () => {
