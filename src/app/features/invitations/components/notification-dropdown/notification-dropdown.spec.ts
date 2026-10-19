@@ -48,11 +48,17 @@ describe('NotificationDropdownComponent', () => {
     });
 
     it('should keep rendering the panel when isEmpty is false', () => {
+      fixture.componentRef.setInput('isEmpty', false);
+      fixture.detectChanges();
 
+      expect(getPanel()).not.toBeNull();
+      expect(getPanel()?.textContent?.trim()).toBe('');
     });
 
     it('should render the empty message with role status', () => {
+      fixture.detectChanges();
 
+      expect(getEmptyMessage()?.getAttribute('role')).toBe('status');
     });
 
   });
