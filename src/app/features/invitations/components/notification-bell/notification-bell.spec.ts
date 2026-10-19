@@ -54,6 +54,10 @@ describe('NotificationBellComponent', () => {
     expect(getIcon()).not.toBeNull();
   });
 
+  it('should hide the bell icon from assistive technologies', () => {
+
+  });
+
   describe('badge', () => {
 
     it('should not render when all invitations are non-pending', () => {
