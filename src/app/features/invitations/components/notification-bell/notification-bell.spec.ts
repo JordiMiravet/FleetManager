@@ -212,6 +212,10 @@ describe('NotificationBellComponent', () => {
       expect(getEmptyMessage()?.textContent?.trim()).toBe('No pending invitations');
     });
 
+    it('should not show the dropdown empty state when there are pending invitations', () => {
+
+    });
+
   });
 
   describe('accepting an invitation', () => {
