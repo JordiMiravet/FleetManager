@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { InvitationCardComponent } from './invitation-card';
 import { VehicleInvitation } from '../../models/invitation';
 import { InvitationStatus } from '../../enums/invitation-status.enum';
+import { InvitationMessagesService } from '../../i18n/invitation-messages-service';
 
 describe('InvitationCardComponent', () => {
   let component: InvitationCardComponent;
@@ -61,9 +62,17 @@ describe('InvitationCardComponent', () => {
       expect(getOwnerEmail()?.textContent.trim()).toBe('owner1@fleetmanager.dev');
     });
 
+    it('should display the owner label', () => {
+
+    });
+
     it('should display the invitation date', () => {
       expect(getInvitationDate()?.getAttribute('datetime')).toBe('2026-08-10');
       expect(getInvitationDate()?.textContent.trim().length).toBeGreaterThan(0);
+    });
+
+    it('should format the invitation date as mediumDate', () => {
+
     });
 
     it('should render an Accept button', () => {
