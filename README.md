@@ -527,7 +527,7 @@ Current test coverage:
 
 ```text
 =============================== Coverage summary ===============================
-Statements   : 98.57% ( 1106/1122 )
+Statements   : 98.57% ( 1108/1124 )
 Branches     : 93.02% ( 200/215 )
 Functions    : 97.81% ( 314/321 )
 Lines        : 98.71% ( 998/1011 )
