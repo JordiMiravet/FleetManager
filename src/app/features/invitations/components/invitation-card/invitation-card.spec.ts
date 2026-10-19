@@ -63,7 +63,9 @@ describe('InvitationCardComponent', () => {
     });
 
     it('should display the owner label', () => {
+      const messages = TestBed.inject(InvitationMessagesService).invitationCard;
 
+      expect(getOwnerLabel()?.textContent).toContain(messages.labels.owner);
     });
 
     it('should display the invitation date', () => {
@@ -72,7 +74,7 @@ describe('InvitationCardComponent', () => {
     });
 
     it('should format the invitation date as mediumDate', () => {
-
+      expect(getInvitationDate()?.textContent.trim()).toBe('Aug 10, 2026');
     });
 
     it('should render an Accept button', () => {
