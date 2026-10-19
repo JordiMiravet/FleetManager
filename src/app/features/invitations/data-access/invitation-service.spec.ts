@@ -137,7 +137,13 @@ describe('InvitationService', () => {
     });
 
     it('should change a declined invitation to accepted', () => {
+      const target = service.pendingInvitations()[0];
+      service.declineInvitation(target._id);
 
+      service.acceptInvitation(target._id);
+
+      const updated = service.invitations().find(i => i._id === target._id);
+      expect(updated?.status).toBe(InvitationStatus.Accepted);
     });
 
   });
