@@ -47,6 +47,14 @@ describe('NotificationDropdownComponent', () => {
       expect(getEmptyMessage()).toBeNull();
     });
 
+    it('should keep rendering the panel when isEmpty is false', () => {
+
+    });
+
+    it('should render the empty message with role status', () => {
+
+    });
+
   });
 
   describe('closing behavior', () => {
