@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { InvitationCardComponent } from './invitation-card';
 import { VehicleInvitation } from '../../models/invitation';
 import { InvitationStatus } from '../../enums/invitation-status.enum';
+import { InvitationMessagesService } from '../../i18n/invitation-messages-service';
 
 describe('InvitationCardComponent', () => {
   let component: InvitationCardComponent;
@@ -29,11 +30,12 @@ describe('InvitationCardComponent', () => {
 
   const getVehicleName = (): HTMLElement | null => fixture.nativeElement.querySelector('.invitation-card__vehicle-name');
   const getOwnerEmail = (): HTMLElement | null => fixture.nativeElement.querySelector('.invitation-card__owner span');
+  const getOwnerLabel = (): HTMLElement | null => fixture.nativeElement.querySelector('.invitation-card__owner');
   const getInvitationDate = (): HTMLElement | null => fixture.nativeElement.querySelector('.invitation-card__date');
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [InvitationCardComponent],
+      imports: [ InvitationCardComponent ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(InvitationCardComponent);
@@ -60,9 +62,19 @@ describe('InvitationCardComponent', () => {
       expect(getOwnerEmail()?.textContent.trim()).toBe('owner1@fleetmanager.dev');
     });
 
+    it('should display the owner label', () => {
+      const messages = TestBed.inject(InvitationMessagesService).invitationCard;
+
+      expect(getOwnerLabel()?.textContent).toContain(messages.labels.owner);
+    });
+
     it('should display the invitation date', () => {
       expect(getInvitationDate()?.getAttribute('datetime')).toBe('2026-08-10');
       expect(getInvitationDate()?.textContent.trim().length).toBeGreaterThan(0);
+    });
+
+    it('should format the invitation date as mediumDate', () => {
+      expect(getInvitationDate()?.textContent.trim()).toBe('Aug 10, 2026');
     });
 
     it('should render an Accept button', () => {
@@ -115,16 +127,20 @@ describe('InvitationCardComponent', () => {
 
   describe('accessibility', () => {
 
-    it('should have an aria-label on Accept mentioning the vehicle name', () => {
-      expect(getButtonAccept()?.getAttribute('aria-label')).toContain('Ferrari LaFerrari');
+    it('should use the accept aria message with the vehicle name on Accept', () => {
+      const messages = TestBed.inject(InvitationMessagesService).invitationCard;
+
+      expect(getButtonAccept()?.getAttribute('aria-label')).toBe(messages.aria.accept('Ferrari LaFerrari'));
     });
 
     it('should hide the Accept icon from assistive technologies', () => {
       expect(getAcceptIcon()?.getAttribute('aria-hidden')).toBe('true');
     });
 
-    it('should have an aria-label on Decline mentioning the vehicle name', () => {
-      expect(getButtonDecline()?.getAttribute('aria-label')).toContain('Ferrari LaFerrari');
+    it('should use the decline aria message with the vehicle name on Decline', () => {
+      const messages = TestBed.inject(InvitationMessagesService).invitationCard;
+
+      expect(getButtonDecline()?.getAttribute('aria-label')).toBe(messages.aria.decline('Ferrari LaFerrari'));
     });
 
     it('should hide the Decline icon from assistive technologies', () => {

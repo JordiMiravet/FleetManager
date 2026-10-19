@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 
 import { NotificationBellComponent } from './notification-bell';
 
@@ -36,7 +37,7 @@ describe('NotificationBellComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NotificationBellComponent],
+      imports: [ NotificationBellComponent ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NotificationBellComponent);
@@ -52,6 +53,10 @@ describe('NotificationBellComponent', () => {
 
   it('should render a bell icon', () => {
     expect(getIcon()).not.toBeNull();
+  });
+
+  it('should hide the bell icon from assistive technologies', () => {
+    expect(getIcon()?.getAttribute('aria-hidden')).toBe('true');
   });
 
   describe('badge', () => {
@@ -74,6 +79,15 @@ describe('NotificationBellComponent', () => {
       fixture.detectChanges();
 
       expect(getBadge()?.textContent?.trim()).toBe('2');
+    });
+
+    it('should hide the badge from assistive technologies', () => {
+      (invitationService as any)._invitations.set([
+        buildInvitation(InvitationStatus.Pending),
+      ]);
+      fixture.detectChanges();
+
+      expect(getBadge()?.getAttribute('aria-hidden')).toBe('true');
     });
 
     it('should update reactively when an invitation is accepted', () => {
@@ -135,11 +149,12 @@ describe('NotificationBellComponent', () => {
       expect(getDropdown()).toBeNull();
     });
 
-    it('should close the dropdown when it emits close', () => {
-      component.isPanelOpen.set(true);
+    it('should close the dropdown when it emits panelClose', () => {
+      getButton().click();
       fixture.detectChanges();
 
-      component.closePanel();
+      const dropdown = fixture.debugElement.query(By.css('app-notification-dropdown'));
+      dropdown.componentInstance.panelClose.emit();
       fixture.detectChanges();
 
       expect(getDropdown()).toBeNull();
@@ -195,6 +210,18 @@ describe('NotificationBellComponent', () => {
       fixture.detectChanges();
 
       expect(getEmptyMessage()?.textContent?.trim()).toBe('No pending invitations');
+    });
+
+    it('should not show the dropdown empty state when there are pending invitations', () => {
+      (invitationService as any)._invitations.set([
+        buildInvitation(InvitationStatus.Pending),
+      ]);
+      fixture.detectChanges();
+
+      getButton().click();
+      fixture.detectChanges();
+
+      expect(getEmptyMessage()).toBeNull();
     });
 
   });
@@ -281,7 +308,7 @@ describe('NotificationBellComponent', () => {
       getDeclineButton()?.click();
       fixture.detectChanges();
 
-      expect(getCards().length).toHaveSize(0);
+      expect(getCards()).toHaveSize(0);
     });
 
     it('should update the badge count after declining', () => {

@@ -12,7 +12,7 @@ describe('NotificationDropdownComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NotificationDropdownComponent],
+      imports: [ NotificationDropdownComponent ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NotificationDropdownComponent);
@@ -47,6 +47,20 @@ describe('NotificationDropdownComponent', () => {
       expect(getEmptyMessage()).toBeNull();
     });
 
+    it('should keep rendering the panel when isEmpty is false', () => {
+      fixture.componentRef.setInput('isEmpty', false);
+      fixture.detectChanges();
+
+      expect(getPanel()).not.toBeNull();
+      expect(getPanel()?.textContent?.trim()).toBe('');
+    });
+
+    it('should render the empty message with role status', () => {
+      fixture.detectChanges();
+
+      expect(getEmptyMessage()?.getAttribute('role')).toBe('status');
+    });
+
   });
 
   describe('closing behavior', () => {
@@ -60,6 +74,12 @@ describe('NotificationDropdownComponent', () => {
       expect(component.panelClose.emit).toHaveBeenCalled();
     });
 
+    it('should hide the backdrop from assistive technologies', () => {
+      fixture.detectChanges();
+
+      expect(getBackdrop()?.getAttribute('aria-hidden')).toBe('true');
+    });
+
     it('should emit close when Escape is pressed', () => {
       fixture.detectChanges();
       spyOn(component.panelClose, 'emit');
@@ -67,6 +87,15 @@ describe('NotificationDropdownComponent', () => {
       document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
 
       expect(component.panelClose.emit).toHaveBeenCalled();
+    });
+
+    it('should not emit close when a key other than Escape is pressed', () => {
+      fixture.detectChanges();
+      spyOn(component.panelClose, 'emit');
+
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+
+      expect(component.panelClose.emit).not.toHaveBeenCalled();
     });
 
     it('should not emit close when clicking inside the panel content', () => {
