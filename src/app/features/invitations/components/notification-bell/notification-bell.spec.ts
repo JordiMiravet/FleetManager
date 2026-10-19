@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 
 import { NotificationBellComponent } from './notification-bell';
 
 import { InvitationService } from '../../../../features/invitations/data-access/invitation-service';
 import { InvitationStatus } from '../../../../features/invitations/enums/invitation-status.enum';
 import { VehicleInvitation } from '../../../../features/invitations/models/invitation';
-import { By } from '@angular/platform-browser';
 
 describe('NotificationBellComponent', () => {
   let component: NotificationBellComponent;
@@ -37,7 +37,7 @@ describe('NotificationBellComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NotificationBellComponent],
+      imports: [ NotificationBellComponent ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NotificationBellComponent);
