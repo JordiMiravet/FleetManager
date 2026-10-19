@@ -81,7 +81,12 @@ describe('NotificationBellComponent', () => {
     });
 
     it('should hide the badge from assistive technologies', () => {
+      (invitationService as any)._invitations.set([
+        buildInvitation(InvitationStatus.Pending),
+      ]);
+      fixture.detectChanges();
 
+      expect(getBadge()?.getAttribute('aria-hidden')).toBe('true');
     });
 
     it('should update reactively when an invitation is accepted', () => {
