@@ -213,7 +213,15 @@ describe('NotificationBellComponent', () => {
     });
 
     it('should not show the dropdown empty state when there are pending invitations', () => {
+      (invitationService as any)._invitations.set([
+        buildInvitation(InvitationStatus.Pending),
+      ]);
+      fixture.detectChanges();
 
+      getButton().click();
+      fixture.detectChanges();
+
+      expect(getEmptyMessage()).toBeNull();
     });
 
   });
