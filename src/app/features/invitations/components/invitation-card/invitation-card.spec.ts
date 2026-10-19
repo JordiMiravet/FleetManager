@@ -35,7 +35,7 @@ describe('InvitationCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [InvitationCardComponent],
+      imports: [ InvitationCardComponent ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(InvitationCardComponent);
