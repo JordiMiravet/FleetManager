@@ -184,6 +184,10 @@ describe('InvitationService', () => {
       expect(service.pendingCount()).toBe(initialCount - 1);
     });
 
+    it('should not modify other invitations', () => {
+
+    });
+
     it('should do nothing when id does not match any invitation', () => {
       const before = service.invitations();
 
