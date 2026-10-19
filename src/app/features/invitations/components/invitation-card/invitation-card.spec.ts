@@ -128,7 +128,9 @@ describe('InvitationCardComponent', () => {
   describe('accessibility', () => {
 
     it('should use the accept aria message with the vehicle name on Accept', () => {
+      const messages = TestBed.inject(InvitationMessagesService).invitationCard;
 
+      expect(getButtonAccept()?.getAttribute('aria-label')).toBe(messages.aria.accept('Ferrari LaFerrari'));
     });
 
     it('should hide the Accept icon from assistive technologies', () => {
@@ -140,7 +142,9 @@ describe('InvitationCardComponent', () => {
     });
 
     it('should use the decline aria message with the vehicle name on Decline', () => {
+      const messages = TestBed.inject(InvitationMessagesService).invitationCard;
 
+      expect(getButtonDecline()?.getAttribute('aria-label')).toBe(messages.aria.decline('Ferrari LaFerrari'));
     });
 
     it('should hide the Decline icon from assistive technologies', () => {
