@@ -55,7 +55,7 @@ describe('NotificationBellComponent', () => {
   });
 
   it('should hide the bell icon from assistive technologies', () => {
-
+    expect(getIcon()?.getAttribute('aria-hidden')).toBe('true');
   });
 
   describe('badge', () => {
