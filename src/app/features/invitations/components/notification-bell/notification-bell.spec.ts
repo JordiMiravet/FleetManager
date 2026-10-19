@@ -5,6 +5,7 @@ import { NotificationBellComponent } from './notification-bell';
 import { InvitationService } from '../../../../features/invitations/data-access/invitation-service';
 import { InvitationStatus } from '../../../../features/invitations/enums/invitation-status.enum';
 import { VehicleInvitation } from '../../../../features/invitations/models/invitation';
+import { By } from '@angular/platform-browser';
 
 describe('NotificationBellComponent', () => {
   let component: NotificationBellComponent;
@@ -148,11 +149,12 @@ describe('NotificationBellComponent', () => {
       expect(getDropdown()).toBeNull();
     });
 
-    it('should close the dropdown when it emits close', () => {
-      component.isPanelOpen.set(true);
+    it('should close the dropdown when it emits panelClose', () => {
+      getButton().click();
       fixture.detectChanges();
 
-      component.closePanel();
+      const dropdown = fixture.debugElement.query(By.css('app-notification-dropdown'));
+      dropdown.componentInstance.panelClose.emit();
       fixture.detectChanges();
 
       expect(getDropdown()).toBeNull();
