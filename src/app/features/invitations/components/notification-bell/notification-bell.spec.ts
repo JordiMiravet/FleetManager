@@ -80,6 +80,10 @@ describe('NotificationBellComponent', () => {
       expect(getBadge()?.textContent?.trim()).toBe('2');
     });
 
+    it('should hide the badge from assistive technologies', () => {
+
+    });
+
     it('should update reactively when an invitation is accepted', () => {
       (invitationService as any)._invitations.set([
         buildInvitation(InvitationStatus.Pending),
