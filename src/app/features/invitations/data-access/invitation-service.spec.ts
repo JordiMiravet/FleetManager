@@ -64,6 +64,10 @@ describe('InvitationService', () => {
       expect(result.every(invitation => invitation.status === InvitationStatus.Declined)).toBeTrue();
     });
 
+    it('should not modify other invitations', () => {
+
+    });
+
   });
 
   describe('pendingCount', () => {
