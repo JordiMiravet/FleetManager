@@ -12,7 +12,7 @@ describe('NotificationDropdownComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NotificationDropdownComponent],
+      imports: [ NotificationDropdownComponent ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NotificationDropdownComponent);
