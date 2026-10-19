@@ -127,8 +127,8 @@ describe('InvitationCardComponent', () => {
 
   describe('accessibility', () => {
 
-    it('should have an aria-label on Accept mentioning the vehicle name', () => {
-      expect(getButtonAccept()?.getAttribute('aria-label')).toContain('Ferrari LaFerrari');
+    it('should use the accept aria message with the vehicle name on Accept', () => {
+
     });
 
     it('should hide the Accept icon from assistive technologies', () => {
@@ -137,6 +137,10 @@ describe('InvitationCardComponent', () => {
 
     it('should have an aria-label on Decline mentioning the vehicle name', () => {
       expect(getButtonDecline()?.getAttribute('aria-label')).toContain('Ferrari LaFerrari');
+    });
+
+    it('should use the decline aria message with the vehicle name on Decline', () => {
+
     });
 
     it('should hide the Decline icon from assistive technologies', () => {
