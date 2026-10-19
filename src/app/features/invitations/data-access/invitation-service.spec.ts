@@ -185,7 +185,12 @@ describe('InvitationService', () => {
     });
 
     it('should not modify other invitations', () => {
+      const [target, other] = service.pendingInvitations();
 
+      service.declineInvitation(target._id);
+
+      const untouched = service.invitations().find(i => i._id === other._id);
+      expect(untouched?.status).toBe(other.status);
     });
 
     it('should do nothing when id does not match any invitation', () => {
