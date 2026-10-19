@@ -29,6 +29,7 @@ describe('InvitationCardComponent', () => {
 
   const getVehicleName = (): HTMLElement | null => fixture.nativeElement.querySelector('.invitation-card__vehicle-name');
   const getOwnerEmail = (): HTMLElement | null => fixture.nativeElement.querySelector('.invitation-card__owner span');
+  const getOwnerLabel = (): HTMLElement | null => fixture.nativeElement.querySelector('.invitation-card__owner');
   const getInvitationDate = (): HTMLElement | null => fixture.nativeElement.querySelector('.invitation-card__date');
 
   beforeEach(async () => {
