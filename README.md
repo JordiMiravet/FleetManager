@@ -341,6 +341,105 @@ The typical workflow is:
 
 This structure maintains traceability from the initial objective to the individual implementation steps and their corresponding PRs, ensuring that each change can be reviewed independently and that development work remains organized, understandable, and maintainable.
 
+### Epic Structure and Conventions
+
+Epics organize larger features, improvements, or technical objectives into a single initiative that can be completed through multiple related tasks.
+
+#### Title
+
+Epic titles must follow this format:
+
+`[CATEGORY] - Short description of the objective`
+
+The category identifies the type of work, and the description summarizes the overall objective of the epic.
+
+Example:
+`[DOCS] - Document project workflow and issue templates`
+
+#### Structure
+
+Every epic must contain the following sections in this order:
+
+1. Description
+2. Scope
+3. Acceptance Criteria
+
+Use the following guidelines when writing each section.
+
+**Description**
+
+Explain the problem, need, or objective behind the epic. Provide enough context to understand why the work is necessary and what it aims to achieve.
+
+The description should introduce the overall goal without listing every implementation step. When relevant, explain the current situation and the improvement expected from the proposed work.
+
+**Scope**
+
+Define the work covered by the epic using a bullet list.
+
+- Describe the main changes, improvements, or deliverables included in the epic.
+- Keep each item focused on a specific area of work.
+- Establish clear boundaries to prevent unrelated changes from being included.
+- Ensure the scope is consistent with the objective described above.
+
+**Acceptance Criteria**
+
+List the conditions that must be satisfied for the epic to be considered complete.
+
+- Use a checklist with Markdown checkboxes (`- [ ]`).
+- Describe specific, verifiable outcomes rather than implementation steps.
+- Ensure each criterion corresponds to the epic's objective and scope.
+- Include relevant constraints, such as preserving existing functionality or limiting changes to documentation, when applicable.
+
+#### Example
+
+The following example illustrates how these sections fit together in a real epic.
+
+**Title**
+
+`[DOCS] - Document project workflow and issue templates`
+
+```markdown
+**Description**
+
+Document the project's development workflow and establish consistent conventions for organizing and documenting development work.
+
+The project already follows a structured workflow using epics, tasks, branches, commits, and pull requests. However, these conventions are not yet fully documented in the README.
+
+The goal is to document the existing workflow and define reusable structures for epics, tasks, and pull requests, ensuring that future work follows a consistent and professional standard.
+
+**Scope**
+
+- Document the overall issue and pull request organization strategy in the README.
+- Document the structure and expected content of epics.
+- Document the structure and expected content of tasks.
+- Document the structure and expected content of pull requests.
+- Provide examples consistent with the conventions already used in the project.
+- Explain how epics, tasks, and pull requests relate to each other.
+- Keep the documentation concise, practical, and easy to follow.
+- Preserve the existing branch naming and commit message conventions.
+- Avoid unnecessary changes to the existing development workflow.
+
+**Acceptance Criteria**
+
+- [ ] The README documents the project's issue and pull request organization strategy.
+- [ ] The expected structure of epics is documented.
+- [ ] The expected structure of tasks is documented.
+- [ ] The expected structure of pull requests is documented.
+- [ ] Examples follow the conventions already used in the project.
+- [ ] The relationship between epics, tasks, and pull requests is clearly explained.
+- [ ] Existing branch naming and commit message conventions remain documented and unchanged.
+- [ ] The documentation is consistent, readable, and written in English.
+- [ ] No application code or functionality is modified as part of this epic.
+```
+
+#### Relationship with Tasks
+
+An epic represents the overall objective, while its tasks define the individual pieces of work required to achieve it.
+
+Create separate tasks for specific, manageable parts of the epic. Each task should contribute to one or more of the epic's acceptance criteria, and the epic should only be considered complete when its required work and acceptance criteria have been satisfied.
+
+Each task must be linked to its parent epic in GitHub to maintain traceability between the overall objective and the work required to complete it.
+
 ### Branch naming
 
 Create a new branch from the main branch using the following convention:
