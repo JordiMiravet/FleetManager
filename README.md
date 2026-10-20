@@ -542,6 +542,141 @@ Each task must be linked to its parent epic in GitHub to maintain traceability b
 
 Tasks should represent specific, actionable steps toward fulfilling the epic's scope and acceptance criteria. Keep tasks focused enough to be implemented and reviewed independently, while ensuring that their combined outcomes contribute to completing the epic.
 
+### Pull Request Structure and Conventions
+
+Pull Requests (PRs) document and submit the changes implemented for a task. They provide reviewers with the context, affected components, implementation details, and relevant information needed to evaluate the changes before merging them.
+
+#### Title
+
+PR titles must follow the project's commit message convention:
+
+`<type>(<scope>): <short description in English> (#<task-number>)`
+
+The type identifies the kind of change, the scope identifies the affected area, and the description summarizes the implementation. The task number provides traceability to the corresponding GitHub Issue.
+
+Example:
+
+`docs(readme): document pull request conventions (#543)`
+
+#### Structure
+
+Every PR must contain the following sections in this order:
+
+1. Task Reference
+2. Summary
+3. Components
+4. What's included
+5. Notes
+
+Use the following guidelines when writing each section.
+
+**Task Reference**
+
+Link the task associated with the PR using the following format:
+
+`### [Task #<task-number>](<task-url>)`
+
+Replace the placeholders with the actual task number and its GitHub URL.
+
+Each PR should reference the task whose implementation it contains. This maintains traceability between the original objective, the implementation, and the review process.
+
+**Summary**
+
+Explain the purpose of the PR and the changes it introduces.
+
+- Describe the objective and context of the changes.
+- Explain what the implementation aims to achieve.
+- Summarize the overall result without listing every individual change.
+- Keep the explanation concise and focused on the task being completed.
+
+**Components**
+
+List the files, components, or relevant areas of the project affected by the changes.
+
+- Use a bullet list with file paths or component names.
+- Include all relevant modified files.
+- Keep the list consistent with the actual changes introduced by the PR.
+
+**What's included**
+
+Describe the specific changes implemented in the PR using a bullet list.
+
+- Identify the main changes and deliverables.
+- Explain relevant implementation details that help reviewers understand the changes.
+- Include important test improvements, documentation updates, or other changes when applicable.
+- Keep each item focused on a specific change.
+- Ensure the description matches the actual implementation.
+
+**Notes**
+
+Document relevant details that reviewers should know but that do not belong in the previous sections.
+
+- Include relevant test results and coverage information when applicable.
+- Explain important implementation decisions or constraints.
+- Mention whether existing behavior has been preserved when relevant.
+- Explicitly state when application functionality remains unchanged if this is relevant to the task.
+- Include limitations or outstanding considerations that reviewers should be aware of.
+
+Only report tests, coverage figures, and behavior checks that have actually been verified.
+
+#### Example
+
+The following example illustrates how the sections fit together in a real PR.
+
+**Title**
+
+`test(readme): update test coverage after invitations refactoring (#528)`
+
+```markdown
+### [Task #528](https://github.com/JordiMiravet/FleetManager-Frontend/issues/528)
+
+## Summary
+
+Update the test coverage figures documented in `README.md` to reflect the final state of the frontend test suite after completing the invitation-related refactoring.
+
+This change ensures that the documented coverage percentages, execution totals and successful test count match the latest test results. It also includes test improvements focused on readability, accessibility and notification behavior.
+
+### Components
+
+- `src/app/core/layout/notifications/notifications.spec.ts`
+- `src/app/features/invitations/components/invitation-card/invitation-card.spec.ts`
+- `src/app/features/invitations/components/notification-bell/notification-bell.spec.ts`
+- `src/app/features/invitations/components/notification-dropdown/notification-dropdown.spec.ts`
+- `src/app/features/invitations/data-access/invitation-service.spec.ts`
+- `README.md`
+
+## What's included
+
+- Updated the total number of successful tests to `1017`.
+- Updated Statements coverage to `98.57% (1108/1124)`.
+- Updated Branches coverage to `93.02% (200/215)`.
+- Updated Functions coverage to `97.81% (314/321)`.
+- Updated Lines coverage to `98.71% (999/1012)`.
+- Reviewed and completed test coverage for `NotificationsComponent`.
+- Expanded test coverage for `InvitationCardComponent`, including owner label rendering and accessibility-related behavior.
+- Reviewed and completed test cases for `NotificationBellComponent`, including notification icon accessibility.
+- Updated and refined `NotificationDropdownComponent` tests to cover dropdown closing behavior and improve assertion clarity.
+- Improved invitation-related service and component tests by removing duplicate cases and simplifying assertions.
+- Reorganized test cases across invitation and notification specifications to improve readability and maintainability.
+
+## Notes
+
+- Coverage figures reflect the latest reported frontend test execution.
+- Existing application functionality remains unchanged.
+- No application functionality was modified.
+- The README structure and coverage summary format have been preserved.
+- The changes focus on test quality, accessibility verification and accurate coverage documentation.
+```
+
+#### Relationship with Tasks
+
+Each PR must reference the task it implements to maintain traceability between the requested work and the resulting changes.
+
+A task may require one or more PRs, depending on the scope of the work. PRs should remain focused on the changes needed to complete their associated task, making implementation and review easier to manage.
+
+The task's acceptance criteria should guide implementation and verification, while the PR description should explain how the changes address the task's objective and scope.
+
+
 ### Branch naming
 
 Create a new branch from the main branch using the following convention:
