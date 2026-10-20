@@ -322,6 +322,25 @@ Notes
 
 This project follows a simple Git workflow to keep contributions consistent and easy to review.
 
+### Issue and Pull Request Structure
+
+Development work is organized into epics, tasks, and pull requests to define clear objectives, break work into manageable steps, and ensure that changes are easy to review and maintain.
+
+- **Epics:** Define broader objectives, features, or improvements, establishing their motivation, scope, and acceptance criteria.
+- **Tasks:** Break epics down into specific, actionable steps that contribute to achieving the epic's overall objective. Each task defines a clear goal, implementation scope, and verifiable acceptance criteria.
+- **Pull Requests (PRs):** Document and submit the changes implemented for a task, providing the context and details needed to review the implementation before merging it into the `main` branch.
+
+The typical workflow is:
+
+1. Create an epic to define the overall objective, scope, and expected outcome.
+2. Create individual tasks that represent the steps required to complete the epic, linking each task to its parent epic.
+3. Create a dedicated branch for each task, following the [branch naming](#branch-naming) convention.
+4. Implement the task through small, granular commits, each focused on a single responsibility or logical change. This improves code readability, simplifies reviews, and supports long-term maintainability.
+5. Open a PR referencing the corresponding task. Describe the changes using the project's established PR structure, including a summary, affected components, implemented changes, and relevant notes.
+6. Review the PR, address any feedback, and merge it into `main` once it is approved.
+
+This structure maintains traceability from the initial objective to the individual implementation steps and their corresponding PRs, ensuring that each change can be reviewed independently and that development work remains organized, understandable, and maintainable.
+
 ### Branch naming
 
 Create a new branch from the main branch using the following convention:
