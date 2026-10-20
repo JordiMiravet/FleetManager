@@ -440,6 +440,108 @@ Create separate tasks for specific, manageable parts of the epic. Each task shou
 
 Each task must be linked to its parent epic in GitHub to maintain traceability between the overall objective and the work required to complete it.
 
+### Task Structure and Conventions
+
+Tasks break epics down into specific, manageable pieces of work that contribute to achieving the epic's overall objective. Each task should have a clear purpose, a defined implementation scope, and verifiable acceptance criteria.
+
+#### Title
+
+Task titles must follow this format:
+
+`[CATEGORY] - Short description of the task`
+
+The category identifies the type of work, and the description summarizes the specific objective of the task.
+
+Example:
+
+`[DOCS] - Document issue and pull request workflow`
+
+#### Structure
+
+Every task must contain the following sections in this order:
+
+1. PR Reference
+2. Description
+3. Scope
+4. Acceptance Criteria
+
+Use the following guidelines when writing each section.
+
+**PR Reference**
+
+Include a reference to the pull request associated with the task using the following format:
+
+`### [PR #]()`
+
+Replace the placeholder with the pull request number and URL once the PR has been created. Leave the reference empty until a PR exists.
+
+This reference connects the task to its implementation and makes it easier to track the changes introduced to complete it.
+
+**Description**
+
+Explain the specific objective of the task and provide enough context to understand what needs to be achieved and why.
+
+The description should focus on the particular piece of work covered by the task, rather than repeating the entire objective of its parent epic.
+
+**Scope**
+
+Define the changes required to complete the task using a bullet list.
+
+- Describe the specific changes or deliverables included in the task.
+- Keep each item focused on a clear part of the implementation.
+- Establish boundaries to avoid unrelated changes.
+- Ensure the scope contributes to the parent epic's objective.
+- Avoid including work that belongs to other tasks.
+
+**Acceptance Criteria**
+
+List the conditions that must be satisfied for the task to be considered complete.
+
+- Use a checklist with Markdown checkboxes (`- [ ]`).
+- Describe specific, verifiable outcomes.
+- Ensure each criterion corresponds to an item in the task's scope or its expected result.
+- Include relevant constraints, such as preserving existing behavior or limiting changes to documentation, when applicable.
+
+#### Example
+
+The following example illustrates how these sections fit together in a real task.
+
+**Title**
+
+`[DOCS] - Document issue and pull request workflow`
+
+```markdown
+### [PR #]()
+
+## Description
+
+Document the overall issue and pull request organization strategy in the README to make the project's development process easier to understand and follow.
+
+The goal is to explain how development work is organized through epics, tasks, and pull requests, and how these elements relate to each other throughout the implementation lifecycle.
+
+## Scope
+
+- Introduce an Issue and Pull Request Structure subsection within Development Workflow.
+- Explain the purpose of epics, tasks, and pull requests.
+- Describe how work progresses from an epic to individual tasks and their corresponding pull requests.
+- Keep the explanation concise and consistent with the existing development workflow documentation.
+- Preserve the existing branch naming, commit message, and pull request workflow sections.
+
+## Acceptance Criteria
+
+- [ ] The README includes an Issue and Pull Request Structure subsection.
+- [ ] The purpose of epics, tasks, and pull requests is clearly explained.
+- [ ] The relationship between these elements is documented.
+- [ ] The new section fits naturally into the existing Development Workflow section.
+- [ ] Existing workflow documentation remains intact.
+```
+
+#### Relationship with Epics
+
+Each task must be linked to its parent epic in GitHub to maintain traceability between the overall objective and the work required to complete it.
+
+Tasks should represent specific, actionable steps toward fulfilling the epic's scope and acceptance criteria. Keep tasks focused enough to be implemented and reviewed independently, while ensuring that their combined outcomes contribute to completing the epic.
+
 ### Branch naming
 
 Create a new branch from the main branch using the following convention:
