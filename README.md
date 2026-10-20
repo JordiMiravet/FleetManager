@@ -320,66 +320,113 @@ Notes
 
 ## Development Workflow
 
-This project follows a simple Git workflow to keep contributions consistent and easy to review.
+This project follows a simple Git workflow to keep contributions consistent and easy to review. Work is organized into epics, tasks, and pull requests, so every change can be traced from its objective to its implementation.
 
 ### Issue and Pull Request Structure
 
-Development work is organized into epics, tasks, and pull requests to define clear objectives, break work into manageable steps, and ensure that changes are easy to review and maintain.
-
 - **Epics:** Define broader objectives, features, or improvements, establishing their motivation, scope, and acceptance criteria.
-- **Tasks:** Break epics down into specific, actionable steps that contribute to achieving the epic's overall objective. Each task defines a clear goal, implementation scope, and verifiable acceptance criteria.
-- **Pull Requests (PRs):** Document and submit the changes implemented for a task, providing the context and details needed to review the implementation before merging it into the `main` branch.
+- **Tasks:** Break epics down into specific, actionable steps. Each task defines a clear goal, implementation scope, and verifiable acceptance criteria.
+- **Pull Requests (PRs):** Document and submit the changes implemented for a task, providing the context needed to review them before merging into `main`.
+
+```text
+Epic
+ └─ Task          (linked to its parent epic in GitHub)
+     └─ Pull Request   (references the task it implements)
+```
+
+How they relate:
+
+- Each task must be linked to its parent epic in GitHub. Tasks should be focused enough to be implemented and reviewed independently, and together they must cover the epic's scope and acceptance criteria. An epic is complete only when its required work and acceptance criteria have been satisfied.
+- Each PR must reference the task it implements. A task may require one or more PRs, and each PR should stay focused on the changes needed for that task.
+- Epics and tasks are GitHub issues. Their issue number is the `<task-number>` used in branch names, commit messages, and PR titles.
+
+Quick reference:
+
+| Element | Title format | Sections (in order) |
+| --- | --- | --- |
+| Epic | `[CATEGORY] - Short description` | Description, Scope, Acceptance Criteria |
+| Task | `[CATEGORY] - Short description` | PR Reference, Description, Scope, Acceptance Criteria |
+| Pull Request | `<type>(<scope>): <short description> (#<task-number>)` | Task Reference, Summary, Components, What's included, Notes |
 
 The typical workflow is:
 
 1. Create an epic to define the overall objective, scope, and expected outcome.
-2. Create individual tasks that represent the steps required to complete the epic, linking each task to its parent epic.
+2. Create individual tasks for the steps required to complete the epic, linking each one to its parent epic.
 3. Create a dedicated branch for each task, following the [branch naming](#branch-naming) convention.
-4. Implement the task through small, granular commits, each focused on a single responsibility or logical change. This improves code readability, simplifies reviews, and supports long-term maintainability.
-5. Open a PR referencing the corresponding task. Describe the changes using the project's established PR structure, including a summary, affected components, implemented changes, and relevant notes.
-6. Review the PR, address any feedback, and merge it into `main` once it is approved.
+4. Implement the task through small, granular commits that follow the [commit message](#commit-messages) convention, each focused on a single responsibility or logical change.
+5. Open a PR referencing the task, following the [pull request structure](#pull-request-structure-and-conventions) and the [pull request workflow](#pull-request-workflow).
+6. Review the PR, address any feedback, and merge it into `main` once approved.
 
-This structure maintains traceability from the initial objective to the individual implementation steps and their corresponding PRs, ensuring that each change can be reviewed independently and that development work remains organized, understandable, and maintainable.
+### Branch naming
+
+Create a new branch from `main` using the following convention:
+
+```text
+    <type>/<task-number>-<short-description>
+```
+
+Examples:
+
+```text
+    feature/234-document-development-workflow
+    fix/198-handle-null-response
+    docs/234-update-readme
+```
+
+### Commit messages
+
+Commit messages follow this format:
+
+```text
+    <type>(<scope>): <short description in English> (#<task-number>)
+```
+
+Examples:
+
+```text
+    feat(vehicle): add vehicle filtering (#145)
+    fix(calendar): prevent overlapping events (#182)
+    docs(readme): document development workflow (#234)
+```
+
+To keep commits consistent:
+
+- Keep commit messages concise.
+- Write them in English.
+- Focus each commit on a single logical change.
 
 ### Epic Structure and Conventions
 
-Epics organize larger features, improvements, or technical objectives into a single initiative that can be completed through multiple related tasks.
+Epics organize larger features, improvements, or technical objectives into a single initiative that is completed through multiple related tasks.
 
 #### Title
 
-Epic titles must follow this format:
-
 `[CATEGORY] - Short description of the objective`
 
-The category identifies the type of work, and the description summarizes the overall objective of the epic.
+The category identifies the type of work, and the description summarizes the overall objective.
 
-Example:
-`[DOCS] - Document project workflow and issue templates`
+Example: `[DOCS] - Document project workflow and issue templates`
 
 #### Structure
 
-Every epic must contain the following sections in this order:
+Every epic must contain the following sections, in this order:
 
 1. Description
 2. Scope
 3. Acceptance Criteria
 
-Use the following guidelines when writing each section.
-
 **Description**
 
-Explain the problem, need, or objective behind the epic. Provide enough context to understand why the work is necessary and what it aims to achieve.
-
-The description should introduce the overall goal without listing every implementation step. When relevant, explain the current situation and the improvement expected from the proposed work.
+Explain the problem, need, or objective behind the epic, with enough context to understand why the work is necessary and what it aims to achieve. Introduce the overall goal without listing every implementation step. When relevant, explain the current situation and the improvement expected.
 
 **Scope**
 
 Define the work covered by the epic using a bullet list.
 
-- Describe the main changes, improvements, or deliverables included in the epic.
+- Describe the main changes, improvements, or deliverables included.
 - Keep each item focused on a specific area of work.
 - Establish clear boundaries to prevent unrelated changes from being included.
-- Ensure the scope is consistent with the objective described above.
+- Keep the scope consistent with the objective described in the description.
 
 **Acceptance Criteria**
 
@@ -392,14 +439,10 @@ List the conditions that must be satisfied for the epic to be considered complet
 
 #### Example
 
-The following example illustrates how these sections fit together in a real epic.
-
-**Title**
-
-`[DOCS] - Document project workflow and issue templates`
+**Title:** `[DOCS] - Document project workflow and issue templates`
 
 ```markdown
-**Description**
+## Description
 
 Document the project's development workflow and establish consistent conventions for organizing and documenting development work.
 
@@ -407,7 +450,7 @@ The project already follows a structured workflow using epics, tasks, branches, 
 
 The goal is to document the existing workflow and define reusable structures for epics, tasks, and pull requests, ensuring that future work follows a consistent and professional standard.
 
-**Scope**
+## Scope
 
 - Document the overall issue and pull request organization strategy in the README.
 - Document the structure and expected content of epics.
@@ -419,7 +462,7 @@ The goal is to document the existing workflow and define reusable structures for
 - Preserve the existing branch naming and commit message conventions.
 - Avoid unnecessary changes to the existing development workflow.
 
-**Acceptance Criteria**
+## Acceptance Criteria
 
 - [ ] The README documents the project's issue and pull request organization strategy.
 - [ ] The expected structure of epics is documented.
@@ -432,66 +475,47 @@ The goal is to document the existing workflow and define reusable structures for
 - [ ] No application code or functionality is modified as part of this epic.
 ```
 
-#### Relationship with Tasks
-
-An epic represents the overall objective, while its tasks define the individual pieces of work required to achieve it.
-
-Create separate tasks for specific, manageable parts of the epic. Each task should contribute to one or more of the epic's acceptance criteria, and the epic should only be considered complete when its required work and acceptance criteria have been satisfied.
-
-Each task must be linked to its parent epic in GitHub to maintain traceability between the overall objective and the work required to complete it.
-
 ### Task Structure and Conventions
 
-Tasks break epics down into specific, manageable pieces of work that contribute to achieving the epic's overall objective. Each task should have a clear purpose, a defined implementation scope, and verifiable acceptance criteria.
+Tasks break epics down into specific, manageable pieces of work. Each task has a clear purpose, a defined implementation scope, and verifiable acceptance criteria.
 
 #### Title
-
-Task titles must follow this format:
 
 `[CATEGORY] - Short description of the task`
 
 The category identifies the type of work, and the description summarizes the specific objective of the task.
 
-Example:
-
-`[DOCS] - Document issue and pull request workflow`
+Example: `[DOCS] - Document issue and pull request workflow`
 
 #### Structure
 
-Every task must contain the following sections in this order:
+Every task must contain the following sections, in this order:
 
 1. PR Reference
 2. Description
 3. Scope
 4. Acceptance Criteria
 
-Use the following guidelines when writing each section.
-
 **PR Reference**
 
-Include a reference to the pull request associated with the task using the following format:
+Reference the pull request associated with the task using this format:
 
 `### [PR #]()`
 
-Replace the placeholder with the pull request number and URL once the PR has been created. Leave the reference empty until a PR exists.
-
-This reference connects the task to its implementation and makes it easier to track the changes introduced to complete it.
+Leave it empty until a PR exists, then replace the placeholder with the PR number and URL. This connects the task to its implementation.
 
 **Description**
 
-Explain the specific objective of the task and provide enough context to understand what needs to be achieved and why.
-
-The description should focus on the particular piece of work covered by the task, rather than repeating the entire objective of its parent epic.
+Explain the specific objective of the task and provide enough context to understand what needs to be achieved and why. Focus on the particular piece of work covered by the task rather than repeating the objective of its parent epic.
 
 **Scope**
 
 Define the changes required to complete the task using a bullet list.
 
-- Describe the specific changes or deliverables included in the task.
+- Describe the specific changes or deliverables included.
 - Keep each item focused on a clear part of the implementation.
-- Establish boundaries to avoid unrelated changes.
+- Establish boundaries to avoid unrelated changes and work that belongs to other tasks.
 - Ensure the scope contributes to the parent epic's objective.
-- Avoid including work that belongs to other tasks.
 
 **Acceptance Criteria**
 
@@ -504,11 +528,7 @@ List the conditions that must be satisfied for the task to be considered complet
 
 #### Example
 
-The following example illustrates how these sections fit together in a real task.
-
-**Title**
-
-`[DOCS] - Document issue and pull request workflow`
+**Title:** `[DOCS] - Document issue and pull request workflow`
 
 ```markdown
 ### [PR #]()
@@ -536,31 +556,23 @@ The goal is to explain how development work is organized through epics, tasks, a
 - [ ] Existing workflow documentation remains intact.
 ```
 
-#### Relationship with Epics
-
-Each task must be linked to its parent epic in GitHub to maintain traceability between the overall objective and the work required to complete it.
-
-Tasks should represent specific, actionable steps toward fulfilling the epic's scope and acceptance criteria. Keep tasks focused enough to be implemented and reviewed independently, while ensuring that their combined outcomes contribute to completing the epic.
-
 ### Pull Request Structure and Conventions
 
-Pull Requests (PRs) document and submit the changes implemented for a task. They provide reviewers with the context, affected components, implementation details, and relevant information needed to evaluate the changes before merging them.
+Pull Requests document and submit the changes implemented for a task. They give reviewers the context, affected components, and implementation details needed to evaluate the changes before merging.
 
 #### Title
 
-PR titles must follow the project's commit message convention:
+PR titles follow the project's [commit message](#commit-messages) convention:
 
 `<type>(<scope>): <short description in English> (#<task-number>)`
 
-The type identifies the kind of change, the scope identifies the affected area, and the description summarizes the implementation. The task number provides traceability to the corresponding GitHub Issue.
+The type identifies the kind of change, the scope identifies the affected area, and the task number provides traceability to the corresponding GitHub issue.
 
-Example:
-
-`docs(readme): document pull request conventions (#543)`
+Example: `docs(readme): document pull request conventions (#543)`
 
 #### Structure
 
-Every PR must contain the following sections in this order:
+Every PR must contain the following sections, in this order:
 
 1. Task Reference
 2. Summary
@@ -568,17 +580,13 @@ Every PR must contain the following sections in this order:
 4. What's included
 5. Notes
 
-Use the following guidelines when writing each section.
-
 **Task Reference**
 
-Link the task associated with the PR using the following format:
+Link the task implemented by the PR using this format:
 
 `### [Task #<task-number>](<task-url>)`
 
 Replace the placeholders with the actual task number and its GitHub URL.
-
-Each PR should reference the task whose implementation it contains. This maintains traceability between the original objective, the implementation, and the review process.
 
 **Summary**
 
@@ -587,45 +595,39 @@ Explain the purpose of the PR and the changes it introduces.
 - Describe the objective and context of the changes.
 - Explain what the implementation aims to achieve.
 - Summarize the overall result without listing every individual change.
-- Keep the explanation concise and focused on the task being completed.
+- Keep it concise and focused on the task being completed.
 
 **Components**
 
-List the files, components, or relevant areas of the project affected by the changes.
+List the files, components, or areas of the project affected by the changes.
 
 - Use a bullet list with file paths or component names.
 - Include all relevant modified files.
-- Keep the list consistent with the actual changes introduced by the PR.
+- Keep the list consistent with the actual changes in the PR.
 
 **What's included**
 
-Describe the specific changes implemented in the PR using a bullet list.
+Describe the specific changes implemented using a bullet list.
 
 - Identify the main changes and deliverables.
-- Explain relevant implementation details that help reviewers understand the changes.
+- Explain implementation details that help reviewers understand the changes.
 - Include important test improvements, documentation updates, or other changes when applicable.
-- Keep each item focused on a specific change.
-- Ensure the description matches the actual implementation.
+- Keep each item focused on a specific change and consistent with the actual implementation.
 
 **Notes**
 
-Document relevant details that reviewers should know but that do not belong in the previous sections.
+Document relevant details for reviewers that do not belong in the previous sections.
 
 - Include relevant test results and coverage information when applicable.
 - Explain important implementation decisions or constraints.
-- Mention whether existing behavior has been preserved when relevant.
-- Explicitly state when application functionality remains unchanged if this is relevant to the task.
-- Include limitations or outstanding considerations that reviewers should be aware of.
+- Mention whether existing behavior has been preserved, and state explicitly when application functionality remains unchanged if relevant.
+- Include limitations or outstanding considerations.
 
 Only report tests, coverage figures, and behavior checks that have actually been verified.
 
 #### Example
 
-The following example illustrates how the sections fit together in a real PR.
-
-**Title**
-
-`test(readme): update test coverage after invitations refactoring (#528)`
+**Title:** `test(readme): update test coverage after invitations refactoring (#528)`
 
 ```markdown
 ### [Task #528](https://github.com/JordiMiravet/FleetManager-Frontend/issues/528)
@@ -662,65 +664,18 @@ This change ensures that the documented coverage percentages, execution totals a
 ## Notes
 
 - Coverage figures reflect the latest reported frontend test execution.
-- Existing application functionality remains unchanged.
-- No application functionality was modified.
+- No application functionality was modified; existing behavior remains unchanged.
 - The README structure and coverage summary format have been preserved.
 - The changes focus on test quality, accessibility verification and accurate coverage documentation.
 ```
-
-#### Relationship with Tasks
-
-Each PR must reference the task it implements to maintain traceability between the requested work and the resulting changes.
-
-A task may require one or more PRs, depending on the scope of the work. PRs should remain focused on the changes needed to complete their associated task, making implementation and review easier to manage.
-
-The task's acceptance criteria should guide implementation and verification, while the PR description should explain how the changes address the task's objective and scope.
-
-
-### Branch naming
-
-Create a new branch from the main branch using the following convention:
-
-```text
-    <type>/<task-number>-<short-description>
-```
-
-Examples:
-
-```text
-    feature/234-document-development-workflow
-    fix/198-handle-null-response
-    docs/234-update-readme
-```
-
-### Commit messages
-
-Commit messages should follow the following format:
-
-```text
-    <type>(<scope>): <short description in English> (#<task-number>)
-```
-
-Examples:
-
-```text
-    feat(vehicle): add vehicle filtering (#145)
-    fix(calendar): prevent overlapping events (#182)
-    docs(readme): document development workflow (#234)
-```
-
-To keep commits consistent:
-- Keep commit messages concise.
-- Write them in English.
-- Focus each commit on a single logical change.
 
 ### Pull Request workflow
 
 When your work is ready:
 
-1. Ensure your branch is up to date.
+1. Ensure your branch is up to date with `main`.
 2. Push your branch to the remote repository.
-3. Open a Pull Request targeting the main branch.
+3. Open a Pull Request targeting `main`, with a title that follows the [PR title convention](#title-2).
 4. Reference the related task in the Pull Request.
 5. Address any review feedback before the Pull Request is merged.
 
@@ -729,7 +684,7 @@ When your work is ready:
 ```bash
     git checkout -b docs/234-development-workflow
 
-    # Make your changes
+# Make your changes
 
     git add .
     git commit -m "docs(readme): document development workflow (#234)"
