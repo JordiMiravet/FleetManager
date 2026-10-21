@@ -23,6 +23,7 @@ The short version lives in the [README](../README.md#development-workflow). This
       - [PR title](#pr-title)
       - [PR structure](#pr-structure)
       - [PR example](#pr-example)
+  - [Pull Request workflow](#pull-request-workflow)
 
 ## Issue and Pull Request Structure
 
@@ -374,4 +375,14 @@ This change ensures that the documented coverage percentages, execution totals a
 - The README structure and coverage summary format have been preserved.
 - The changes focus on test quality, accessibility verification and accurate coverage documentation.
 ```
+
+## Pull Request workflow
+
+When your work is ready:
+
+1. Ensure your branch is up to date with `main`.
+2. Push your branch to the remote repository.
+3. Open a Pull Request targeting `main`, with a title that follows the [PR title](#pr-title) convention.
+4. Reference the related task in the Pull Request.
+5. Address any review feedback before the Pull Request is merged.
 
