@@ -10,6 +10,7 @@ The short version lives in the [README](../README.md#development-workflow). This
   - [Contents](#contents)
   - [Issue and Pull Request Structure](#issue-and-pull-request-structure)
   - [Branch naming](#branch-naming)
+  - [Commit messages](#commit-messages)
 
 ## Issue and Pull Request Structure
 
@@ -65,4 +66,26 @@ feature/234-document-development-workflow
 fix/198-handle-null-response
 docs/234-update-readme
 ```
+
+## Commit messages
+
+Commit messages follow this format:
+
+```text
+<type>(<scope>): <short description in English> (#<task-number>)
+```
+
+Examples:
+
+```text
+feat(vehicle): add vehicle filtering (#145)
+fix(calendar): prevent overlapping events (#182)
+docs(readme): document development workflow (#234)
+```
+
+To keep commits consistent:
+
+- Keep commit messages concise.
+- Write them in English.
+- Focus each commit on a single logical change.
 
