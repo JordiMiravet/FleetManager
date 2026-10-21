@@ -11,6 +11,10 @@ The short version lives in the [README](../README.md#development-workflow). This
   - [Issue and Pull Request Structure](#issue-and-pull-request-structure)
   - [Branch naming](#branch-naming)
   - [Commit messages](#commit-messages)
+  - [Epic Structure and Conventions](#epic-structure-and-conventions)
+      - [Epic title](#epic-title)
+      - [Epic structure](#epic-structure)
+      - [Epic example](#epic-example)
 
 ## Issue and Pull Request Structure
 
@@ -88,4 +92,84 @@ To keep commits consistent:
 - Keep commit messages concise.
 - Write them in English.
 - Focus each commit on a single logical change.
+
+## Epic Structure and Conventions
+
+Epics organize larger features, improvements, or technical objectives into a single initiative that is completed through multiple related tasks. Template: [epic.md](../.github/ISSUE_TEMPLATE/epic.md).
+
+#### Epic title
+
+`[CATEGORY] - Short description of the objective`
+
+The category identifies the type of work, and the description summarizes the overall objective.
+
+Example: `[DOCS] - Document project workflow and issue templates`
+
+#### Epic structure
+
+Every epic must contain the following sections, in this order:
+
+1. Description
+2. Scope
+3. Acceptance Criteria
+
+**Description**
+
+Explain the problem, need, or objective behind the epic, with enough context to understand why the work is necessary and what it aims to achieve. Introduce the overall goal without listing every implementation step. When relevant, explain the current situation and the improvement expected.
+
+**Scope**
+
+Define the work covered by the epic using a bullet list.
+
+- Describe the main changes, improvements, or deliverables included.
+- Keep each item focused on a specific area of work.
+- Establish clear boundaries to prevent unrelated changes from being included.
+- Keep the scope consistent with the objective described in the description.
+
+**Acceptance Criteria**
+
+List the conditions that must be satisfied for the epic to be considered complete.
+
+- Use a checklist with Markdown checkboxes (`- [ ]`).
+- Describe specific, verifiable outcomes rather than implementation steps.
+- Ensure each criterion corresponds to the epic's objective and scope.
+- Include relevant constraints, such as preserving existing functionality or limiting changes to documentation, when applicable.
+
+#### Epic example
+
+**Title:** `[DOCS] - Document project workflow and issue templates`
+
+```markdown
+## Description
+
+Document the project's development workflow and establish consistent conventions for organizing and documenting development work.
+
+The project already follows a structured workflow using epics, tasks, branches, commits, and pull requests. However, these conventions are not yet fully documented in the README.
+
+The goal is to document the existing workflow and define reusable structures for epics, tasks, and pull requests, ensuring that future work follows a consistent and professional standard.
+
+## Scope
+
+- Document the overall issue and pull request organization strategy in the README.
+- Document the structure and expected content of epics.
+- Document the structure and expected content of tasks.
+- Document the structure and expected content of pull requests.
+- Provide examples consistent with the conventions already used in the project.
+- Explain how epics, tasks, and pull requests relate to each other.
+- Keep the documentation concise, practical, and easy to follow.
+- Preserve the existing branch naming and commit message conventions.
+- Avoid unnecessary changes to the existing development workflow.
+
+## Acceptance Criteria
+
+- [ ] The README documents the project's issue and pull request organization strategy.
+- [ ] The expected structure of epics is documented.
+- [ ] The expected structure of tasks is documented.
+- [ ] The expected structure of pull requests is documented.
+- [ ] Examples follow the conventions already used in the project.
+- [ ] The relationship between epics, tasks, and pull requests is clearly explained.
+- [ ] Existing branch naming and commit message conventions remain documented and unchanged.
+- [ ] The documentation is consistent, readable, and written in English.
+- [ ] No application code or functionality is modified as part of this epic.
+```
 
