@@ -399,3 +399,7 @@ git commit -m "docs(readme): document development workflow (#234)"
 
 git push --set-upstream origin docs/234-development-workflow
 ```
+
+---
+
+[⬆ Back to top](#development-workflow)
