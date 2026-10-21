@@ -9,6 +9,7 @@ The short version lives in the [README](../README.md#development-workflow). This
 - [Development Workflow](#development-workflow)
   - [Contents](#contents)
   - [Issue and Pull Request Structure](#issue-and-pull-request-structure)
+  - [Branch naming](#branch-naming)
 
 ## Issue and Pull Request Structure
 
@@ -48,4 +49,20 @@ The typical flow is:
 4. Implement the task through small, granular commits that follow the [commit message](#commit-messages) convention, each focused on a single responsibility or logical change.
 5. Open a PR referencing the task, following the [pull request structure](#pull-request-structure-and-conventions) and the [pull request workflow](#pull-request-workflow).
 6. Review the PR, address any feedback, and merge it into `main` once approved.
+
+## Branch naming
+
+Create a new branch from `main` using the following convention:
+
+```text
+<type>/<task-number>-<short-description>
+```
+
+Examples:
+
+```text
+feature/234-document-development-workflow
+fix/198-handle-null-response
+docs/234-update-readme
+```
 
