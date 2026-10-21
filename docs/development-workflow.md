@@ -24,6 +24,7 @@ The short version lives in the [README](../README.md#development-workflow). This
       - [PR structure](#pr-structure)
       - [PR example](#pr-example)
   - [Pull Request workflow](#pull-request-workflow)
+  - [Typical workflow](#typical-workflow)
 
 ## Issue and Pull Request Structure
 
@@ -386,3 +387,15 @@ When your work is ready:
 4. Reference the related task in the Pull Request.
 5. Address any review feedback before the Pull Request is merged.
 
+## Typical workflow
+
+```bash
+git checkout -b docs/234-development-workflow
+
+# Make your changes
+
+git add .
+git commit -m "docs(readme): document development workflow (#234)"
+
+git push --set-upstream origin docs/234-development-workflow
+```
