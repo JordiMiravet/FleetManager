@@ -15,6 +15,10 @@ The short version lives in the [README](../README.md#development-workflow). This
       - [Epic title](#epic-title)
       - [Epic structure](#epic-structure)
       - [Epic example](#epic-example)
+  - [Task Structure and Conventions](#task-structure-and-conventions)
+      - [Task title](#task-title)
+      - [Task structure](#task-structure)
+      - [Task example](#task-example)
 
 ## Issue and Pull Request Structure
 
@@ -171,5 +175,86 @@ The goal is to document the existing workflow and define reusable structures for
 - [ ] Existing branch naming and commit message conventions remain documented and unchanged.
 - [ ] The documentation is consistent, readable, and written in English.
 - [ ] No application code or functionality is modified as part of this epic.
+```
+
+## Task Structure and Conventions
+
+Tasks break epics down into specific, manageable pieces of work. Each task has a clear purpose, a defined implementation scope, and verifiable acceptance criteria. Template: [task.md](../.github/ISSUE_TEMPLATE/task.md).
+
+#### Task title
+
+`[CATEGORY] - Short description of the task`
+
+The category identifies the type of work, and the description summarizes the specific objective of the task.
+
+Example: `[DOCS] - Document issue and pull request workflow`
+
+#### Task structure
+
+Every task must contain the following sections, in this order:
+
+1. PR Reference
+2. Description
+3. Scope
+4. Acceptance Criteria
+
+**PR Reference**
+
+Reference the pull request associated with the task using this format:
+
+`### [PR #]()`
+
+Leave it empty until a PR exists, then replace the placeholder with the PR number and URL. This connects the task to its implementation.
+
+**Description**
+
+Explain the specific objective of the task and provide enough context to understand what needs to be achieved and why. Focus on the particular piece of work covered by the task rather than repeating the objective of its parent epic.
+
+**Scope**
+
+Define the changes required to complete the task using a bullet list.
+
+- Describe the specific changes or deliverables included.
+- Keep each item focused on a clear part of the implementation.
+- Establish boundaries to avoid unrelated changes and work that belongs to other tasks.
+- Ensure the scope contributes to the parent epic's objective.
+
+**Acceptance Criteria**
+
+List the conditions that must be satisfied for the task to be considered complete.
+
+- Use a checklist with Markdown checkboxes (`- [ ]`).
+- Describe specific, verifiable outcomes.
+- Ensure each criterion corresponds to an item in the task's scope or its expected result.
+- Include relevant constraints, such as preserving existing behavior or limiting changes to documentation, when applicable.
+
+#### Task example
+
+**Title:** `[DOCS] - Document issue and pull request workflow`
+
+```markdown
+### [PR #]()
+
+## Description
+
+Document the overall issue and pull request organization strategy in the README to make the project's development process easier to understand and follow.
+
+The goal is to explain how development work is organized through epics, tasks, and pull requests, and how these elements relate to each other throughout the implementation lifecycle.
+
+## Scope
+
+- Introduce an Issue and Pull Request Structure subsection within Development Workflow.
+- Explain the purpose of epics, tasks, and pull requests.
+- Describe how work progresses from an epic to individual tasks and their corresponding pull requests.
+- Keep the explanation concise and consistent with the existing development workflow documentation.
+- Preserve the existing branch naming, commit message, and pull request workflow sections.
+
+## Acceptance Criteria
+
+- [ ] The README includes an Issue and Pull Request Structure subsection.
+- [ ] The purpose of epics, tasks, and pull requests is clearly explained.
+- [ ] The relationship between these elements is documented.
+- [ ] The new section fits naturally into the existing Development Workflow section.
+- [ ] Existing workflow documentation remains intact.
 ```
 
