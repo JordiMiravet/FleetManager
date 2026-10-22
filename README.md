@@ -416,6 +416,7 @@ Then open a Pull Request targeting `main` and reference the related task. See th
 
 ## Roadmap
 
+This project is continuously evolving to improve its scalability, maintainability, and production readiness. The planned features and architectural improvements are documented in the [project roadmap](docs/roadmap.md).
 
 ---
 
