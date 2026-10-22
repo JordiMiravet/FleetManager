@@ -320,6 +320,17 @@ Notes
 
 ## Development Workflow
 
+This project follows a simple Git workflow to keep contributions consistent and easy to review. Work is organized into epics, tasks, and pull requests, so every change can be traced from its objective to its implementation.
+
+```text
+Epic
+ └─ Task          (linked to its parent epic in GitHub)
+     └─ Pull Request   (references the task it implements)
+```
+
+The detailed conventions for epics, tasks, and pull requests are documented in the [development workflow guide](docs/development-workflow.md). GitHub loads the matching templates automatically from the [`.github`](.github) folder when you create an issue or open a pull request.
+
+
 
 ---
 
