@@ -330,6 +330,22 @@ Epic
 
 The detailed conventions for epics, tasks, and pull requests are documented in the [development workflow guide](docs/development-workflow.md). GitHub loads the matching templates automatically from the [`.github`](.github) folder when you create an issue or open a pull request.
 
+### Branch naming
+
+Create a new branch from `main` using the following convention:
+
+```text
+<type>/<task-number>-<short-description>
+```
+
+Examples:
+
+```text
+feature/234-document-development-workflow
+fix/198-handle-null-response
+docs/234-update-readme
+```
+
 
 
 ---
