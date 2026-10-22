@@ -364,7 +364,20 @@ docs(readme): document development workflow (#234)
 
 Keep commit messages concise, write them in English, and focus each commit on a single logical change.
 
+### Typical workflow
 
+```bash
+git checkout -b docs/234-development-workflow
+
+# Make your changes
+
+git add .
+git commit -m "docs(readme): document development workflow (#234)"
+
+git push --set-upstream origin docs/234-development-workflow
+```
+
+Then open a Pull Request targeting `main` and reference the related task. See the [pull request workflow](docs/development-workflow.md#pull-request-workflow) for details.
 
 ---
 
