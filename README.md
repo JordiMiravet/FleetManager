@@ -346,6 +346,24 @@ fix/198-handle-null-response
 docs/234-update-readme
 ```
 
+### Commit messages
+
+Commit messages follow this format:
+
+```text
+<type>(<scope>): <short description in English> (#<task-number>)
+```
+
+Examples:
+
+```text
+feat(vehicle): add vehicle filtering (#145)
+fix(calendar): prevent overlapping events (#182)
+docs(readme): document development workflow (#234)
+```
+
+Keep commit messages concise, write them in English, and focus each commit on a single logical change.
+
 
 
 ---
