@@ -554,3 +554,7 @@ To contribute:
 ## Author
 
 [**Jordi Miravet**](https://www.linkedin.com/in/jordimiravet-dev/)
+
+---
+
+[⬆ Back to top](#fleet-manager)
