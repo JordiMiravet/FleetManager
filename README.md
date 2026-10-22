@@ -383,6 +383,8 @@ Then open a Pull Request targeting `main` and reference the related task. See th
 
 ## Usage
 
+A step-by-step guide to using the application (registration, vehicle management, invitations, map, calendar, and statistics) is available in the [usage guide](docs/usage.md). For a summary of what the application does, see [Main Features](#main-features).
+
 ---
 
 ## Roadmap
