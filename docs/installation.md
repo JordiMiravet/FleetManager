@@ -27,4 +27,42 @@ cd FleetManager-Frontend
 npm install
 ```
 
+### Firebase Authentication configuration
+
+- Create a project in Firebase Console.
+- Enable Email/Password Authentication.
+- Add a web application and copy the configuration.
+
+From the root of the frontend repository, create the file src/environments/environment.ts. This file contains the Firebase configuration and the settings required to connect to the backend API.
+
+Replace the placeholder values with your Firebase project configuration:
+
+```typescript
+export const environment = {
+    production: true,
+    apiUrl: 'http://localhost:3000',
+    dataSource: 'api', // 'mock' | 'api'
+    firebaseConfig: {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_AUTH_DOMAIN",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_STORAGE_BUCKET",
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+        appId: "YOUR_APP_ID"
+    }
+};
+```
+
+The `apiUrl` property must contain the URL where the backend API is running. For local development, use:
+
+```typescript
+apiUrl: 'http://localhost:3000'
+```
+
+> If the backend is running on a different host or port, update `apiUrl` accordingly.
+
+The `dataSource` property controls whether the application uses mock data or communicates with the backend API. Use `'mock'` for local development without a running backend, or `'api'` to use the real backend. If `dataSource` is set to `'api'` and the backend becomes unavailable, the application automatically falls back to mock data without requiring manual configuration changes.
+
+Firebase Authentication is required in every mode: mock data only replaces the vehicles and events normally provided by the backend.
+
 
