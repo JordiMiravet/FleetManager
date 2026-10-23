@@ -98,4 +98,23 @@ From the downloaded JSON file, you need:
 
 The `private_key` must remain on a single line and preserve the `\n` characters.
 
+## 3. Run the application
+
+First, start the backend:
+
+```bash
+npm run start:dev
+```
+
+Then, in another terminal inside the frontend project, start the frontend:
+
+```bash
+ng serve
+```
+
+Open the application in your browser:
+
+```text
+http://localhost:4200
+```
 
