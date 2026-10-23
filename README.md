@@ -222,6 +222,7 @@ Open http://localhost:4200 in your browser.
 
 Firebase Authentication is required in every mode: mock data only replaces the vehicles and events normally provided by the backend.
 
+For the Firebase setup, the environment file, the backend configuration, and more details, see the [full installation guide](docs/installation.md).
 
 ---
 
