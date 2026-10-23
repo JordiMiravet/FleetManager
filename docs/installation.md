@@ -17,4 +17,14 @@ Back to the [README](../README.md#installation).
 - Angular CLI (`npm install -g @angular/cli`)
 - MongoDB running
 
+## 1. Frontend
+
+Clone the repository:
+
+```bash
+git clone https://github.com/JordiMiravet/FleetManager-Frontend.git
+cd FleetManager-Frontend
+npm install
+```
+
 
