@@ -494,4 +494,4 @@ To contribute:
 
 ---
 
-[⬆ Back to top](#fleet-manager)
+[↑ Back to top](#fleet-manager)
