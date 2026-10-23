@@ -11,4 +11,10 @@ Both repositories need to be running to use the application with the real backen
 
 Back to the [README](../README.md#installation).
 
+## Prerequisites
+
+- Node.js v20 or higher
+- Angular CLI (`npm install -g @angular/cli`)
+- MongoDB running
+
 
