@@ -65,4 +65,37 @@ The `dataSource` property controls whether the application uses mock data or com
 
 Firebase Authentication is required in every mode: mock data only replaces the vehicles and events normally provided by the backend.
 
+## 2. Backend
+
+Clone the backend repository:
+
+```bash
+git clone https://github.com/JordiMiravet/FleetManager-Backend.git
+cd FleetManager-Backend
+npm install
+```
+
+Create a `.env` file in the project root with the following content:
+
+```env
+PORT=3000
+MONGO_URI=mongodb://localhost:27017/whereismycar
+
+FIREBASE_PROJECT_ID=your_project_id
+FIREBASE_CLIENT_EMAIL=your_client_email
+FIREBASE_PRIVATE_KEY=your_private_key
+```
+
+Firebase credentials can be obtained from:
+
+Firebase Console → Project Settings → Service Accounts → Generate new private key.
+
+From the downloaded JSON file, you need:
+
+- `project_id`
+- `client_email`
+- `private_key`
+
+The `private_key` must remain on a single line and preserve the `\n` characters.
+
 
