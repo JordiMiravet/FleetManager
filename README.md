@@ -196,6 +196,21 @@ The application is divided into two repositories:
 
 Both repositories need to be running to use the application with the real backend API. The frontend can also run independently using mock data by setting `dataSource` to `'mock'`. When configured to use the API, the application automatically falls back to mock data if the backend becomes unavailable.
 
+### Quick start (frontend)
+
+Prerequisites: Node.js v20 or higher and the Angular CLI (`npm install -g @angular/cli`).
+
+Clone the frontend repository and install its dependencies:
+
+```bash
+git clone https://github.com/JordiMiravet/FleetManager-Frontend.git
+cd FleetManager-Frontend
+npm install
+```
+
+From the root of the frontend repository, create src/environments/environment.ts with your Firebase configuration and set dataSource to 'mock' or 'api'.
+
+Firebase Authentication is required in every mode. Mock data only replaces the vehicles and events normally provided by the backend.
 
 
 
