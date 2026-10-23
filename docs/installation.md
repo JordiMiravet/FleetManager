@@ -129,3 +129,7 @@ npm install -g @angular/cli
 
 - Real credentials are not included in the repository.
 - Each developer must use their own Firebase project.
+
+---
+
+[↑ Back to top](#installation)

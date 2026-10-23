@@ -39,3 +39,7 @@ Back to the [README](../README.md#roadmap).
 - Review and improve the existing GitHub Actions workflows.
 - Evaluate opportunities to automate testing, build validation, and releases.
 - Deploy the application to a production environment.
+
+---
+
+[↑ Back to top](#roadmap)

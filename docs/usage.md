@@ -32,3 +32,7 @@ Back to the [README](../README.md#usage).
    - Identify the most-used vehicle.
    - View usage hour distribution by day of the week.
    - Filter statistics by period: This Month, This Year, and All Time.
+
+---
+
+[↑ Back to top](#usage)
