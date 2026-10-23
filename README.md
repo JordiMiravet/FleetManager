@@ -212,6 +212,14 @@ From the root of the frontend repository, create src/environments/environment.ts
 
 Firebase Authentication is required in every mode. Mock data only replaces the vehicles and events normally provided by the backend.
 
+Start the frontend:
+
+```bash
+ng serve
+```
+
+Open http://localhost:4200 in your browser.
+
 
 
 ---
