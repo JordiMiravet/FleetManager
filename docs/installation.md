@@ -9,4 +9,6 @@ The application is divided into two repositories:
 
 Both repositories need to be running to use the application with the real backend API. The frontend can also run independently using mock data by setting `dataSource` to `'mock'`. When configured to use the API, the application automatically falls back to mock data if the backend becomes unavailable.
 
+Back to the [README](../README.md#installation).
+
 
