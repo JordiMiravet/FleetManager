@@ -244,6 +244,14 @@ The following section shows a preview of the application in operation:
 
 ## Tests
 
+The project uses Jasmine and Karma for unit testing Angular components and services, and aims to keep test coverage above 90%. Run all unit tests with:
+
+```bash
+ng test
+```
+
+The testing strategy, how to run the tests for a specific feature, and the current coverage are documented in the [testing guide](docs/testing.md).
+
 ---
 
 ## Contribution
