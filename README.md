@@ -20,7 +20,6 @@
 - [Application Overview](#application-overview)
 - [Technologies](#technologies)
 - [Architecture](#architecture)
-- [Project Structure](#project-structure)
 - [Installation](#installation)
 - [Development Workflow](#development-workflow)
 - [Usage](#usage)
