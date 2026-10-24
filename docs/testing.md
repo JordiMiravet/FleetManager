@@ -1,5 +1,7 @@
 # Testing
 
+Back to the [README](../README.md#tests).
+
 ## Testing Strategy
 
 The project uses Jasmine and Karma for unit testing Angular components and services.
