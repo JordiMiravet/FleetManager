@@ -208,9 +208,9 @@ cd FleetManager-Frontend
 npm install
 ```
 
-From the root of the frontend repository, create src/environments/environment.ts with your Firebase configuration and set dataSource to 'mock' or 'api'.
+From the root of the frontend repository, edit (or create) `src/environments/environment.development.ts`, the file used by `ng serve`, with your Firebase configuration, and set `dataSource` to `'mock'` or `'api'`.
 
-Firebase Authentication is required in every mode. Mock data only replaces the vehicles and events normally provided by the backend.
+Firebase Authentication is required in every mode: mock data only replaces the vehicles and events normally provided by the backend.
 
 Start the frontend:
 
@@ -220,9 +220,7 @@ ng serve
 
 Open http://localhost:4200 in your browser.
 
-Firebase Authentication is required in every mode: mock data only replaces the vehicles and events normally provided by the backend.
-
-For the Firebase setup, the environment file, the backend configuration, and more details, see the [full installation guide](docs/installation.md).
+For the Firebase setup, the environment files, the backend configuration, and more details, see the [full installation guide](docs/installation.md).
 
 ---
 
@@ -243,15 +241,15 @@ The detailed conventions for epics, tasks, and pull requests are documented in t
 Create a new branch from `main` using the following convention:
 
 ```text
-    <type>/<task-number>-<short-description>
+<type>/<task-number>-<short-description>
 ```
 
 Examples:
 
 ```text
-    feature/234-document-development-workflow
-    fix/198-handle-null-response
-    docs/234-update-readme
+feature/234-document-development-workflow
+fix/198-handle-null-response
+docs/234-update-readme
 ```
 
 ### Commit messages
@@ -259,15 +257,15 @@ Examples:
 Commit messages follow this format:
 
 ```text
-    <type>(<scope>): <short description in English> (#<task-number>)
+<type>(<scope>): <short description in English> (#<task-number>)
 ```
 
 Examples:
 
 ```text
-    feat(vehicle): add vehicle filtering (#145)
-    fix(calendar): prevent overlapping events (#182)
-    docs(readme): document development workflow (#234)
+feat(vehicle): add vehicle filtering (#145)
+fix(calendar): prevent overlapping events (#182)
+docs(readme): document development workflow (#234)
 ```
 
 Keep commit messages concise, write them in English, and focus each commit on a single logical change.
@@ -275,14 +273,14 @@ Keep commit messages concise, write them in English, and focus each commit on a 
 ### Typical workflow
 
 ```bash
-    git checkout -b docs/234-development-workflow
+git checkout -b docs/234-development-workflow
 
 # Make your changes
 
-    git add .
-    git commit -m "docs(readme): document development workflow (#234)"
+git add .
+git commit -m "docs(readme): document development workflow (#234)"
 
-    git push --set-upstream origin docs/234-development-workflow
+git push --set-upstream origin docs/234-development-workflow
 ```
 
 Then open a Pull Request targeting `main` and reference the related task. See the [pull request workflow](docs/development-workflow.md#pull-request-workflow) for details.

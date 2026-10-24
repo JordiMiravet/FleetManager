@@ -33,13 +33,13 @@ npm install
 - Enable Email/Password Authentication.
 - Add a web application and copy the configuration.
 
-From the root of the frontend repository, create the file src/environments/environment.ts. This file contains the Firebase configuration and the settings required to connect to the backend API.
+From the root of the frontend repository, edit (or create) the file `src/environments/environment.development.ts`. This is the file used by `ng serve`, because `angular.json` replaces `src/environments/environment.ts` with it in the development configuration. It contains the Firebase configuration and the settings required to connect to the backend API.
 
 Replace the placeholder values with your Firebase project configuration:
 
 ```typescript
 export const environment = {
-    production: true,
+    production: false,
     apiUrl: 'http://localhost:3000',
     dataSource: 'api', // 'mock' | 'api'
     firebaseConfig: {
@@ -64,6 +64,8 @@ apiUrl: 'http://localhost:3000'
 The `dataSource` property controls whether the application uses mock data or communicates with the backend API. Use `'mock'` for local development without a running backend, or `'api'` to use the real backend. If `dataSource` is set to `'api'` and the backend becomes unavailable, the application automatically falls back to mock data without requiring manual configuration changes.
 
 Firebase Authentication is required in every mode: mock data only replaces the vehicles and events normally provided by the backend.
+
+`src/environments/environment.ts` is used for production builds (`ng build`). It has the same structure, with `production: true`, and must contain the values for your production environment.
 
 ## 2. Backend
 
