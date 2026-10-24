@@ -1,0 +1,23 @@
+# Testing
+
+## Testing Strategy
+
+The project uses Jasmine and Karma for unit testing Angular components and services.
+
+Tests cover component rendering, user interactions, business logic, validation rules, error handling, and fallback scenarios. The goal is to ensure reliable behavior across the application's main features.
+
+## Running Tests
+
+Run all unit tests:
+
+```bash
+ng test
+```
+
+Run tests for a specific feature:
+
+```bash
+ng test --include "src/app/features/<feature>/**/*.spec.ts"
+```
+
+This allows running tests for a specific feature without executing the complete test suite.
