@@ -97,3 +97,7 @@ src/
 ├─ main.ts
 └─ styles.scss
 ```
+
+---
+
+[↑ Back to top](#architecture)
