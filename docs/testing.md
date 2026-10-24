@@ -21,3 +21,18 @@ ng test --include "src/app/features/<feature>/**/*.spec.ts"
 ```
 
 This allows running tests for a specific feature without executing the complete test suite.
+
+## Coverage
+
+Current test coverage:
+
+```text
+=============================== Coverage summary ===============================
+Statements   : 98.57% ( 1108/1124 )
+Branches     : 93.02% ( 200/215 )
+Functions    : 97.81% ( 314/321 )
+Lines        : 98.71% ( 999/1012 )
+================================================================================
+
+TOTAL: 1017 SUCCESS
+```
