@@ -256,6 +256,8 @@ The testing strategy, how to run the tests for a specific feature, and the curre
 
 ## Documentation
 
+Detailed guides are available in the [`docs`](docs) folder:
+
 ---
 
 ## Contribution
