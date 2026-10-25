@@ -28,6 +28,7 @@
 - [Tests](#tests)
 - [Documentation](#documentation)
 - [Contribution](#contribution)
+- [License](#license)
 - [Author](#author)
 
 ---
@@ -283,6 +284,12 @@ To contribute:
 3. Commit your changes following the **Commit messages** convention described in the [Development Workflow](#development-workflow).
 4. Push your branch and open a Pull Request targeting the `main` branch.
 5. Follow the Pull Request expectations described in the [development workflow guide](docs/development-workflow.md#pull-request-structure-and-conventions).
+
+---
+
+## License
+
+See the [LICENSE](LICENSE) file for copyright and usage terms.
 
 ---
 
