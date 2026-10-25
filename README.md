@@ -261,7 +261,7 @@ Detailed guides are available in the [`docs`](docs) folder:
 | Guide | Description |
 | --- | --- |
 | [Installation](docs/installation.md) | Full setup of the frontend and the backend, including Firebase and environment configuration. |
-
+| [Usage](docs/usage.md) | Step-by-step guide to using the application. |
 
 
 
