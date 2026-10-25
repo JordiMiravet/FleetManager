@@ -263,7 +263,7 @@ Detailed guides are available in the [`docs`](docs) folder:
 | [Installation](docs/installation.md) | Full setup of the frontend and the backend, including Firebase and environment configuration. |
 | [Usage](docs/usage.md) | Step-by-step guide to using the application. |
 | [Architecture](docs/architecture.md) | Feature-based architecture and project structure. |
-
+| [Testing](docs/testing.md) | Testing strategy, how to run the tests, and current coverage. |
 
 
 
