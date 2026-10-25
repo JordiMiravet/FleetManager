@@ -258,6 +258,15 @@ The testing strategy, how to run the tests for a specific feature, and the curre
 
 Detailed guides are available in the [`docs`](docs) folder:
 
+| Guide | Description |
+| --- | --- |
+| [Installation](docs/installation.md) | Full setup of the frontend and the backend, including Firebase and environment configuration. |
+
+
+
+
+
+
 ---
 
 ## Contribution
