@@ -26,6 +26,7 @@
 - [Roadmap](#roadmap)
 - [Project Preview](#project-preview)
 - [Tests](#tests)
+- [Documentation](#documentation)
 - [Contribution](#contribution)
 - [Author](#author)
 
