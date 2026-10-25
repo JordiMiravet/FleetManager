@@ -264,7 +264,7 @@ Detailed guides are available in the [`docs`](docs) folder:
 | [Usage](docs/usage.md) | Step-by-step guide to using the application. |
 | [Architecture](docs/architecture.md) | Feature-based architecture and project structure. |
 | [Testing](docs/testing.md) | Testing strategy, how to run the tests, and current coverage. |
-
+| [Development Workflow](docs/development-workflow.md) | Conventions for epics, tasks, branches, commits, and pull requests. |
 
 
 ---
