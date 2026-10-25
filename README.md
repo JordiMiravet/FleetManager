@@ -28,6 +28,7 @@
 - [Tests](#tests)
 - [Documentation](#documentation)
 - [Contribution](#contribution)
+- [License](#license)
 - [Author](#author)
 
 ---
