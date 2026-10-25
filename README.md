@@ -265,7 +265,7 @@ Detailed guides are available in the [`docs`](docs) folder:
 | [Architecture](docs/architecture.md) | Feature-based architecture and project structure. |
 | [Testing](docs/testing.md) | Testing strategy, how to run the tests, and current coverage. |
 | [Development Workflow](docs/development-workflow.md) | Conventions for epics, tasks, branches, commits, and pull requests. |
-
+| [Roadmap](docs/roadmap.md) | Planned features and architectural improvements. |
 
 ---
 
