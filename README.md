@@ -273,17 +273,14 @@ Detailed guides are available in the [`docs`](docs) folder:
 
 ## Contribution
 
-Contributions are welcome.
+Fleet Manager is a personal portfolio project and is not offered as open-source software. Feedback, bug reports, and suggestions for improvement are welcome.
 
-To contribute:
+If you would like to propose a code change, please open an issue first to discuss it with the author. Any contribution intended for inclusion in the project must be agreed upon beforehand, and submitting a pull request does not guarantee that it will be accepted or grant permission to reuse the project's source code. Accepted contributions are included under the same terms as the rest of the project, and the copyright and usage terms described in the [License](#license) section continue to apply.
 
-1. Fork the repository you want to contribute to:
-   - Frontend: https://github.com/JordiMiravet/FleetManager-Frontend.git
-   - Backend: https://github.com/JordiMiravet/FleetManager-Backend.git
-2. Create a branch following the **Branch naming** convention described in the [Development Workflow](#development-workflow).
-3. Commit your changes following the **Commit messages** convention described in the [Development Workflow](#development-workflow).
-4. Push your branch and open a Pull Request targeting the `main` branch.
-5. Follow the Pull Request expectations described in the [development workflow guide](docs/development-workflow.md#pull-request-structure-and-conventions).
+To report a bug or suggest an improvement, open an issue in the corresponding repository:
+
+- Frontend: https://github.com/JordiMiravet/FleetManager-Frontend
+- Backend: https://github.com/JordiMiravet/FleetManager-Backend
 
 ---
 
