@@ -289,7 +289,9 @@ To contribute:
 
 ## License
 
-See the [LICENSE](LICENSE) file for copyright and usage terms.
+Copyright (c) 2026 Jordi Miravet. All rights reserved.
+
+Fleet Manager is a personal project published for portfolio presentation, demonstration, and professional evaluation purposes. Public access to this repository does not grant permission to reuse its source code. See the [LICENSE](LICENSE) file for the full copyright and usage terms.
 
 ---
 
