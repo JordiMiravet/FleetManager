@@ -286,6 +286,12 @@ To contribute:
 
 ---
 
+## License
+
+See the [LICENSE](LICENSE) file for copyright and usage terms.
+
+---
+
 ## Author
 
 [**Jordi Miravet**](https://www.linkedin.com/in/jordimiravet-dev/)
