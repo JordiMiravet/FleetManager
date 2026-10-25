@@ -254,6 +254,10 @@ The testing strategy, how to run the tests for a specific feature, and the curre
 
 ---
 
+## Documentation
+
+---
+
 ## Contribution
 
 Contributions are welcome.
