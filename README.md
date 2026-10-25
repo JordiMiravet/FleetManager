@@ -26,6 +26,7 @@
 - [Roadmap](#roadmap)
 - [Project Preview](#project-preview)
 - [Tests](#tests)
+- [Documentation](#documentation)
 - [Contribution](#contribution)
 - [Author](#author)
 
@@ -251,6 +252,21 @@ ng test
 ```
 
 The testing strategy, how to run the tests for a specific feature, and the current coverage are documented in the [testing guide](docs/testing.md).
+
+---
+
+## Documentation
+
+Detailed guides are available in the [`docs`](docs) folder:
+
+| Guide | Description |
+| --- | --- |
+| [Installation](docs/installation.md) | Full setup of the frontend and the backend, including Firebase and environment configuration. |
+| [Usage](docs/usage.md) | Step-by-step guide to using the application. |
+| [Architecture](docs/architecture.md) | Feature-based architecture and project structure. |
+| [Testing](docs/testing.md) | Testing strategy, how to run the tests, and current coverage. |
+| [Development Workflow](docs/development-workflow.md) | Conventions for epics, tasks, branches, commits, and pull requests. |
+| [Roadmap](docs/roadmap.md) | Planned features and architectural improvements. |
 
 ---
 
