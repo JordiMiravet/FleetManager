@@ -64,6 +64,11 @@ Fleet Manager provides a centralized solution for managing vehicles, planning us
 
 | Area | Technologies |
 | --- | --- |
+| Frontend | `Angular 20`, `TypeScript`, `SCSS`, `HTML5` |
+| UI libraries and visualization | `PrimeNG`, `Leaflet`, `FullCalendar`, `Chart.js` |
+| Backend | `NestJS`, `MongoDB` |
+| Authentication | `Firebase Authentication` |
+| Testing | `Jasmine & Karma` |
 
 ---
 
