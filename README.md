@@ -17,19 +17,35 @@
 
 ## Table of Contents
 
-- [Application Overview](#application-overview)
-- [Technologies](#technologies)
-- [Architecture](#architecture)
-- [Installation](#installation)
-- [Development Workflow](#development-workflow)
-- [Usage](#usage)
-- [Roadmap](#roadmap)
-- [Project Preview](#project-preview)
-- [Tests](#tests)
-- [Documentation](#documentation)
-- [Contribution](#contribution)
-- [License](#license)
-- [Author](#author)
+- [Fleet Manager](#fleet-manager)
+  - [Table of Contents](#table-of-contents)
+  - [Application Overview](#application-overview)
+    - [Main Features](#main-features)
+  - [Technologies](#technologies)
+  - [Architecture](#architecture)
+  - [Installation](#installation)
+    - [Quick start (frontend)](#quick-start-frontend)
+  - [Development Workflow](#development-workflow)
+    - [Branch naming](#branch-naming)
+    - [Commit messages](#commit-messages)
+    - [Typical workflow](#typical-workflow)
+  - [Usage](#usage)
+  - [Roadmap](#roadmap)
+  - [Project Preview](#project-preview)
+      - [User Registration](#user-registration)
+      - [User Login](#user-login)
+      - [Vehicle Management (CRUD)](#vehicle-management-crud)
+      - [Vehicle Management (Vehicle Filtering)](#vehicle-management-vehicle-filtering)
+      - [Interactive Map (drag \& drop and vehicle filtering)](#interactive-map-drag--drop-and-vehicle-filtering)
+      - [Vehicle Usage Calendar (CRUD)](#vehicle-usage-calendar-crud)
+      - [Vehicle Usage Calendar (Event Filtering)](#vehicle-usage-calendar-event-filtering)
+      - [Vehicle Usage Calendar (Validation: overlap and time consistency)](#vehicle-usage-calendar-validation-overlap-and-time-consistency)
+      - [Statistics Dashboard](#statistics-dashboard)
+  - [Tests](#tests)
+  - [Documentation](#documentation)
+  - [Contribution](#contribution)
+  - [License](#license)
+  - [Author](#author)
 
 ---
 
@@ -61,14 +77,6 @@ Fleet Manager provides a centralized solution for managing vehicles, planning us
 ---
 
 ## Technologies
-
-| Area | Technologies |
-| --- | --- |
-| Frontend | `Angular 20`, `TypeScript`, `SCSS`, `HTML5` |
-| UI libraries and visualization | `PrimeNG`, `Leaflet`, `FullCalendar`, `Chart.js` |
-| Backend | `NestJS`, `MongoDB` |
-| Authentication | `Firebase Authentication` |
-| Testing | `Jasmine & Karma` |
 
 ---
 
