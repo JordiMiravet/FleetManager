@@ -69,6 +69,9 @@ Fleet Manager provides a centralized solution for managing vehicles, planning us
 
 ## Technologies
 
+| Area | Technologies |
+| --- | --- |
+
 ---
 
 ## Architecture
