@@ -4,10 +4,10 @@ This guide documents the development workflow of the project: how work is organi
 
 The short version lives in the [README](../README.md#development-workflow). This document is the detailed reference.
 
-## Contents
+## Table of Contents
 
 - [Development Workflow](#development-workflow)
-  - [Contents](#contents)
+  - [Table of Contents](#table-of-contents)
   - [Issue and Pull Request Structure](#issue-and-pull-request-structure)
   - [Branch naming](#branch-naming)
   - [Commit messages](#commit-messages)
