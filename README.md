@@ -32,15 +32,6 @@
   - [Usage](#usage)
   - [Roadmap](#roadmap)
   - [Project Preview](#project-preview)
-      - [User Registration](#user-registration)
-      - [User Login](#user-login)
-      - [Vehicle Management (CRUD)](#vehicle-management-crud)
-      - [Vehicle Management (Vehicle Filtering)](#vehicle-management-vehicle-filtering)
-      - [Interactive Map (drag \& drop and vehicle filtering)](#interactive-map-drag--drop-and-vehicle-filtering)
-      - [Vehicle Usage Calendar (CRUD)](#vehicle-usage-calendar-crud)
-      - [Vehicle Usage Calendar (Event Filtering)](#vehicle-usage-calendar-event-filtering)
-      - [Vehicle Usage Calendar (Validation: overlap and time consistency)](#vehicle-usage-calendar-validation-overlap-and-time-consistency)
-      - [Statistics Dashboard](#statistics-dashboard)
   - [Tests](#tests)
   - [Documentation](#documentation)
   - [Contribution](#contribution)
@@ -202,38 +193,47 @@ This project is continuously evolving to improve its scalability, maintainabilit
 
 ## Project Preview
 
-The following section shows a preview of the application in operation:
+The following section showcases the main features of the application through animated previews.
 
-#### User Registration
+**User Registration**
+
 ![Register](src/assets/readme/FM-register.gif)
 
-#### User Login
+**User Login**
+
 ![Login](src/assets/readme/FM-login.gif)
 
-#### Vehicle Management (CRUD)
+**Vehicle Management**
+
 ![Create Vehicle](src/assets/readme/FM-vehicle-create.gif)
 ![Edit Vehicle](src/assets/readme/FM-vehicle-edit.gif)
 ![Delete Vehicle](src/assets/readme/FM-vehicle-delete.gif)
 
-#### Vehicle Management (Vehicle Filtering)
+**Vehicle Filtering**
+
 ![Vehicle Filter](src/assets/readme/FM-vehicle-filter.gif)
 
-#### Interactive Map (drag & drop and vehicle filtering)
+**Interactive Map**
+
 ![Drag & Drop](src/assets/readme/FM-map_drag-drop.gif)
 ![Geolocation Update Button](src/assets/readme/FM-map_geolocation-button.gif)
 
-#### Vehicle Usage Calendar (CRUD)
+**Vehicle Usage Calendar**
+
 ![Create Event](src/assets/readme/FM-event-create.gif)
 ![Edit Event](src/assets/readme/FM-event-edit.gif)
 
-#### Vehicle Usage Calendar (Event Filtering)
+**Event Filtering**
+
 ![Event filter](src/assets/readme/FM-event-filter.gif)
 
-#### Vehicle Usage Calendar (Validation: overlap and time consistency)
+**Event Validation**
+
 ![Overlap validation](src/assets/readme/FM-event-valid-overlap.gif)
 ![Event time validation](src/assets/readme/FM-event-valid-time.gif)
 
-#### Statistics Dashboard
+**Statistics Dashboard**
+
 ![Graphics](src/assets/readme/FM-graphics.gif)
 
 ---
