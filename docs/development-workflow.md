@@ -403,5 +403,3 @@ git push --set-upstream origin docs/234-development-workflow
 ---
 
 [↑ Back to top](#development-workflow)
-
-[← Back to README](../README.md)
