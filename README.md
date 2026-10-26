@@ -17,19 +17,26 @@
 
 ## Table of Contents
 
-- [Application Overview](#application-overview)
-- [Technologies](#technologies)
-- [Architecture](#architecture)
-- [Installation](#installation)
-- [Development Workflow](#development-workflow)
-- [Usage](#usage)
-- [Roadmap](#roadmap)
-- [Project Preview](#project-preview)
-- [Tests](#tests)
-- [Documentation](#documentation)
-- [Contribution](#contribution)
-- [License](#license)
-- [Author](#author)
+- [Fleet Manager](#fleet-manager)
+  - [Table of Contents](#table-of-contents)
+  - [Application Overview](#application-overview)
+    - [Main Features](#main-features)
+  - [Technologies](#technologies)
+  - [Architecture](#architecture)
+  - [Installation](#installation)
+    - [Quick start (frontend)](#quick-start-frontend)
+  - [Development Workflow](#development-workflow)
+    - [Branch naming](#branch-naming)
+    - [Commit messages](#commit-messages)
+    - [Typical workflow](#typical-workflow)
+  - [Usage](#usage)
+  - [Roadmap](#roadmap)
+  - [Project Preview](#project-preview)
+  - [Tests](#tests)
+  - [Documentation](#documentation)
+  - [Contribution](#contribution)
+  - [License](#license)
+  - [Author](#author)
 
 ---
 
@@ -62,27 +69,13 @@ Fleet Manager provides a centralized solution for managing vehicles, planning us
 
 ## Technologies
 
-### Frontend
-- `Angular 20`
-- `TypeScript`
-- `SCSS`
-- `HTML5`
-
-### UI Libraries and Visualization
-- `PrimeNG`
-- `Leaflet`
-- `FullCalendar`
-- `Chart.js`
-
-### Backend
-- `NestJS`
-- `MongoDB`
-
-### Authentication
-- `Firebase Authentication`
-
-### Testing
-- `Jasmine & Karma`
+| Area | Technologies |
+| --- | --- |
+| Frontend | `Angular 20`, `TypeScript`, `SCSS`, `HTML5` |
+| UI libraries and visualization | `PrimeNG`, `Leaflet`, `FullCalendar`, `Chart.js` |
+| Backend | `NestJS`, `MongoDB` |
+| Authentication | `Firebase Authentication` |
+| Testing | `Jasmine & Karma` |
 
 ---
 
@@ -208,38 +201,47 @@ This project is continuously evolving to improve its scalability, maintainabilit
 
 ## Project Preview
 
-The following section shows a preview of the application in operation:
+The following section showcases the main features of the application through animated previews.
 
-#### User Registration
+**User Registration**
+
 ![Register](src/assets/readme/FM-register.gif)
 
-#### User Login
+**User Login**
+
 ![Login](src/assets/readme/FM-login.gif)
 
-#### Vehicle Management (CRUD)
+**Vehicle Management**
+
 ![Create Vehicle](src/assets/readme/FM-vehicle-create.gif)
 ![Edit Vehicle](src/assets/readme/FM-vehicle-edit.gif)
 ![Delete Vehicle](src/assets/readme/FM-vehicle-delete.gif)
 
-#### Vehicle Management (Vehicle Filtering)
+**Vehicle Filtering**
+
 ![Vehicle Filter](src/assets/readme/FM-vehicle-filter.gif)
 
-#### Interactive Map (drag & drop and vehicle filtering)
+**Interactive Map**
+
 ![Drag & Drop](src/assets/readme/FM-map_drag-drop.gif)
 ![Geolocation Update Button](src/assets/readme/FM-map_geolocation-button.gif)
 
-#### Vehicle Usage Calendar (CRUD)
+**Vehicle Usage Calendar**
+
 ![Create Event](src/assets/readme/FM-event-create.gif)
 ![Edit Event](src/assets/readme/FM-event-edit.gif)
 
-#### Vehicle Usage Calendar (Event Filtering)
+**Event Filtering**
+
 ![Event filter](src/assets/readme/FM-event-filter.gif)
 
-#### Vehicle Usage Calendar (Validation: overlap and time consistency)
+**Event Validation**
+
 ![Overlap validation](src/assets/readme/FM-event-valid-overlap.gif)
 ![Event time validation](src/assets/readme/FM-event-valid-time.gif)
 
-#### Statistics Dashboard
+**Statistics Dashboard**
+
 ![Graphics](src/assets/readme/FM-graphics.gif)
 
 ---
