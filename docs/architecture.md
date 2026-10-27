@@ -143,7 +143,7 @@ The frontend follows a feature-based architecture. The `core` directory contains
 
 ### Backend Structure
 
-The following structure is relative to the `backend/` directory and shows the main modules and configuration files of the NestJS API.
+The following tree shows the main modules and configuration files of the NestJS API. Paths are relative to the repository root, with `backend/` as the API's root directory.
 
 ```text
 backend/
