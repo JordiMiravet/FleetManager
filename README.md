@@ -281,10 +281,7 @@ Fleet Manager is a personal portfolio project and is not offered as open-source 
 
 If you would like to propose a code change, please open an issue first to discuss it with the author. Any contribution intended for inclusion in the project must be agreed upon beforehand, and submitting a pull request does not guarantee that it will be accepted or grant permission to reuse the project's source code. Accepted contributions are included under the same terms as the rest of the project, and the copyright and usage terms described in the [License](#license) section continue to apply.
 
-To report a bug or suggest an improvement, open an issue in the corresponding repository:
-
-- Frontend: https://github.com/JordiMiravet/FleetManager-Frontend
-- Backend: https://github.com/JordiMiravet/FleetManager-Backend
+To report a bug or suggest an improvement, open an issue in the [repository](https://github.com/JordiMiravet/FleetManager/issues).
 
 ---
 
