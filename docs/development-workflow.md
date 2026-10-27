@@ -338,7 +338,7 @@ Only report tests, coverage figures, and behavior checks that have actually been
 **Title:** `test(readme): update test coverage after invitations refactoring (#528)`
 
 ```markdown
-### [Task #528](https://github.com/JordiMiravet/FleetManager-Frontend/issues/528)
+### [Task #528](https://github.com/JordiMiravet/FleetManager/issues/528)
 
 ## Summary
 
