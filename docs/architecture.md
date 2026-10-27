@@ -2,6 +2,24 @@
 
 Back to the [README](../README.md#architecture).
 
+## Repository Layout
+
+Fleet Manager is a monorepo with two independent applications that share the documentation and the GitHub configuration:
+
+```text
+FleetManager/
+├─ frontend/    # Angular application
+├─ backend/     # NestJS API
+├─ docs/        # Project documentation
+├─ .github/     # Issue and pull request templates
+├─ README.md
+└─ LICENSE
+```
+
+The decisions behind this structure are documented in [ADR 0001](decisions/0001-monorepo-structure.md). The rest of this guide describes the architecture of the frontend application.
+
+## Frontend Architecture
+
 Fleet Manager follows a **feature-based architecture**, where the application is organized by business domains instead of grouping files only by their technical role. This approach keeps related functionality together, making the codebase easier to understand, maintain, and extend.
 
 The application is divided into three main areas:
