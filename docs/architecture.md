@@ -124,6 +124,8 @@ src/
 │  └─ readme/
 │
 ├─ environments/                    # Environment configurations
+│  ├─ environment.development.ts    # Development environment configuration
+│  └─ environment.ts                # Default environment configuration
 │
 ├─ styles/                           # Global SCSS styling system
 │  ├─ abstracts/                     # Variables and mixins
@@ -155,6 +157,7 @@ backend/
 │  └─ main.ts
 │
 ├─ test/                    # End-to-end tests
+├─ .env                    # Local environment variables (not committed)
 ├─ .env.example             # Environment variable template
 ├─ package.json
 ├─ nest-cli.json
@@ -163,7 +166,7 @@ backend/
 
 The backend follows NestJS's modular architecture, with separate modules for authentication, events, and vehicle management. Each module groups the components required for its functionality, such as controllers, services, DTOs, and schemas.
 
-The `dist/` directory contains generated build output and is not part of the source structure. Real environment files and credentials are excluded from the repository.
+The `dist/` directory contains generated build output and is not part of the source structure. The `.env` file contains local environment variables and is excluded from version control, while `.env.example` documents the required environment variables without exposing real credentials.
 
 ---
 
