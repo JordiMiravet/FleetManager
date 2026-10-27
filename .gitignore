@@ -1,11 +1,9 @@
 # Dependencies
 node_modules/
 
-# Angular cache
-.angular/
-
-# Build output
+# Build output and caches
 dist/
+.angular/
 out-tsc/
 tmp/
 
@@ -15,3 +13,15 @@ coverage/
 # Logs
 npm-debug.log*
 yarn-error.log
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.idea/
