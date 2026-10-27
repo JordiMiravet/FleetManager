@@ -38,3 +38,10 @@ FleetManager/
 - **New repository:** a clean start, but it would lose the existing issues, pull requests, and links.
 - **Import the backend without history:** simpler, but it loses the record of how the backend evolved.
 
+## Consequences
+
+- A single issue tracker, project board, and README for the whole product.
+- Changes that affect both applications can be reviewed in a single pull request.
+- If CI is added, its workflows should use path filters so each application is built only when its folder changes.
+- References such as `#12` in the imported backend commit messages are linked by GitHub to issue or pull request #12 of the monorepo.
+- The decision should be revisited if shared code between applications or long build times appear.
