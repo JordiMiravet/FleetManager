@@ -127,12 +127,12 @@ src/
 │  ├─ environment.development.ts    # Development environment configuration
 │  └─ environment.ts                # Default environment configuration
 │
-├─ styles/                           # Global SCSS styling system
-│  ├─ abstracts/                     # Variables and mixins
-│  ├─ base/                          # Base styles and typography
-│  ├─ themes/                        # Light and dark themes
-│  ├─ tokens/                        # Design tokens
-│  └─ utilities/                     # SCSS helpers
+├─ styles/                          # Global SCSS styling system
+│  ├─ abstracts/                    # Variables and mixins
+│  ├─ base/                         # Base styles and typography
+│  ├─ themes/                       # Light and dark themes
+│  ├─ tokens/                       # Design tokens
+│  └─ utilities/                    # SCSS helpers
 │
 ├─ index.html
 ├─ main.ts
