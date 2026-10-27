@@ -4,7 +4,9 @@ import admin from './firebase/firebase-admin';
 @Controller('auth')
 export class AuthController {
   @Post('verify')
-  async verifyToken(@Headers('authorization') authHeader: string) {
+  async verifyToken(
+    @Headers('authorization') authHeader: string,
+  ): Promise<any> {
     if (!authHeader) {
       throw new HttpException('No token provided', 401);
     }
