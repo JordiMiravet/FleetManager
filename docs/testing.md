@@ -10,6 +10,8 @@ Tests cover component rendering, user interactions, business logic, validation r
 
 ## Running Tests
 
+All commands below must be run from the `frontend/` folder.
+
 Run all unit tests:
 
 ```bash
