@@ -2,6 +2,19 @@
 
 Back to the [README](../README.md#architecture).
 
+## Table of Contents
+
+- [Architecture](#architecture)
+  - [Table of Contents](#table-of-contents)
+  - [Repository Layout](#repository-layout)
+  - [Frontend Architecture](#frontend-architecture)
+  - [Core](#core)
+  - [Features](#features)
+  - [Shared](#shared)
+  - [Project Structure](#project-structure)
+
+---
+
 ## Repository Layout
 
 Fleet Manager is a monorepo with two independent applications that share the documentation and the GitHub configuration:
