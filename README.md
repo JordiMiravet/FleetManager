@@ -89,26 +89,26 @@ The full explanation and the project structure are documented in the [architectu
 
 ## Installation
 
-The application is divided into two repositories:
+Fleet Manager is organized as a monorepo with two independent applications:
 
-- Frontend → Angular 20: https://github.com/JordiMiravet/FleetManager-Frontend.git
-- Backend → NestJS: https://github.com/JordiMiravet/FleetManager-Backend.git
+- `frontend/` → Angular 20 application.
+- `backend/` → NestJS API.
 
-Both repositories need to be running to use the application with the real backend API. The frontend can also run independently using mock data by setting `dataSource` to `'mock'`. When configured to use the API, the application automatically falls back to mock data if the backend becomes unavailable.
+Both applications need to be running to use the real backend API. The frontend can also run independently using mock data by setting `dataSource` to `'mock'`. When configured to use the API, the application automatically falls back to mock data if the backend becomes unavailable.
 
 ### Quick start (frontend)
 
 Prerequisites: Node.js v20 or higher and the Angular CLI (`npm install -g @angular/cli`).
 
-Clone the frontend repository and install its dependencies:
+Clone the repository and install the frontend dependencies:
 
 ```bash
-git clone https://github.com/JordiMiravet/FleetManager-Frontend.git
-cd FleetManager-Frontend
+git clone https://github.com/JordiMiravet/FleetManager.git
+cd FleetManager/frontend
 npm install
 ```
 
-From the root of the frontend repository, edit (or create) `src/environments/environment.development.ts`, the file used by `ng serve`, with your Firebase configuration, and set `dataSource` to `'mock'` or `'api'`.
+From the `frontend/` folder, edit (or create) `src/environments/environment.development.ts`, the file used by `ng serve`, with your Firebase configuration, and set `dataSource` to `'mock'` or `'api'`.
 
 Firebase Authentication is required in every mode: mock data only replaces the vehicles and events normally provided by the backend.
 
