@@ -205,44 +205,44 @@ The following section showcases the main features of the application through ani
 
 **User Registration**
 
-![Register](src/assets/readme/FM-register.gif)
+![Register](frontend/src/assets/readme/FM-register.gif)
 
 **User Login**
 
-![Login](src/assets/readme/FM-login.gif)
+![Login](frontend/src/assets/readme/FM-login.gif)
 
 **Vehicle Management**
 
-![Create Vehicle](src/assets/readme/FM-vehicle-create.gif)
-![Edit Vehicle](src/assets/readme/FM-vehicle-edit.gif)
-![Delete Vehicle](src/assets/readme/FM-vehicle-delete.gif)
+![Create Vehicle](frontend/src/assets/readme/FM-vehicle-create.gif)
+![Edit Vehicle](frontend/src/assets/readme/FM-vehicle-edit.gif)
+![Delete Vehicle](frontend/src/assets/readme/FM-vehicle-delete.gif)
 
 **Vehicle Filtering**
 
-![Vehicle Filter](src/assets/readme/FM-vehicle-filter.gif)
+![Vehicle Filter](frontend/src/assets/readme/FM-vehicle-filter.gif)
 
 **Interactive Map**
 
-![Drag & Drop](src/assets/readme/FM-map_drag-drop.gif)
-![Geolocation Update Button](src/assets/readme/FM-map_geolocation-button.gif)
+![Drag & Drop](frontend/src/assets/readme/FM-map_drag-drop.gif)
+![Geolocation Update Button](frontend/src/assets/readme/FM-map_geolocation-button.gif)
 
 **Vehicle Usage Calendar**
 
-![Create Event](src/assets/readme/FM-event-create.gif)
-![Edit Event](src/assets/readme/FM-event-edit.gif)
+![Create Event](frontend/src/assets/readme/FM-event-create.gif)
+![Edit Event](frontend/src/assets/readme/FM-event-edit.gif)
 
 **Event Filtering**
 
-![Event filter](src/assets/readme/FM-event-filter.gif)
+![Event filter](frontend/src/assets/readme/FM-event-filter.gif)
 
 **Event Validation**
 
-![Overlap validation](src/assets/readme/FM-event-valid-overlap.gif)
-![Event time validation](src/assets/readme/FM-event-valid-time.gif)
+![Overlap validation](frontend/src/assets/readme/FM-event-valid-overlap.gif)
+![Event time validation](frontend/src/assets/readme/FM-event-valid-time.gif)
 
 **Statistics Dashboard**
 
-![Graphics](src/assets/readme/FM-graphics.gif)
+![Graphics](frontend/src/assets/readme/FM-graphics.gif)
 
 ---
 
