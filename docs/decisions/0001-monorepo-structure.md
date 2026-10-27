@@ -31,3 +31,10 @@ FleetManager/
 - **Tooling:** Nx, Turborepo, and npm workspaces are not introduced for now.
 - **Old backend repository:** archived after the migration is verified, not deleted.
 
+## Alternatives considered
+
+- **Keep two repositories:** no migration cost, but cross-application changes stay split and the documentation and planning remain tied to the frontend repository.
+- **Monorepo with Nx, Turborepo, or npm workspaces:** useful when there is shared code or long build times. Neither applies today, and it would add complexity and tooling to learn before it is needed.
+- **New repository:** a clean start, but it would lose the existing issues, pull requests, and links.
+- **Import the backend without history:** simpler, but it loses the record of how the backend evolved.
+
