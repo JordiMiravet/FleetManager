@@ -86,6 +86,8 @@ Resources placed in `shared` are intended to be reused across multiple features 
 
 ## Project Structure
 
+Paths are relative to the `frontend/` folder.
+
 ```text
 src/
 ├─ app/
