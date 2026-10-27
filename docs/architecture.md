@@ -12,6 +12,8 @@ Back to the [README](../README.md#architecture).
   - [Features](#features)
   - [Shared](#shared)
   - [Project Structure](#project-structure)
+    - [Frontend Structure](#frontend-structure)
+    - [Backend Structure](#backend-structure)
 
 ---
 
@@ -86,7 +88,11 @@ Resources placed in `shared` are intended to be reused across multiple features 
 
 ## Project Structure
 
-Paths are relative to the `frontend/` folder.
+Fleet Manager is organized as a monorepo containing two independent applications: an Angular frontend and a NestJS backend. Each application has its own source code, dependencies, configuration, and development commands.
+
+### Frontend Structure
+
+The following structure is relative to the `frontend/` directory and shows the main source files of the Angular application.
 
 ```text
 src/
@@ -119,17 +125,45 @@ src/
 │
 ├─ environments/                    # Environment configurations
 │
-├─ styles/                          # Global SCSS styling system
-│  ├─ abstracts/                    # Variables and mixins
-│  ├─ base/                         # Base styles and typography
-│  ├─ themes/                       # Light and dark themes
-│  ├─ tokens/                       # Design tokens
-│  └─ utilities/                    # SCSS helpers
+├─ styles/                           # Global SCSS styling system
+│  ├─ abstracts/                     # Variables and mixins
+│  ├─ base/                          # Base styles and typography
+│  ├─ themes/                        # Light and dark themes
+│  ├─ tokens/                        # Design tokens
+│  └─ utilities/                     # SCSS helpers
 │
 ├─ index.html
 ├─ main.ts
 └─ styles.scss
 ```
+
+The frontend follows a feature-based architecture. The `core` directory contains application-wide infrastructure, `features` groups functionality by business domain, and `shared` contains reusable UI components. This separation keeps related functionality together and makes the application easier to maintain and extend.
+
+### Backend Structure
+
+The following structure is relative to the `backend/` directory and shows the main modules and configuration files of the NestJS API.
+
+```text
+backend/
+├─ src/
+│  ├─ auth/                # Authentication and Firebase integration
+│  ├─ events/              # Event management
+│  ├─ vehicle/             # Vehicle management
+│  ├─ app.controller.ts
+│  ├─ app.module.ts
+│  ├─ app.service.ts
+│  └─ main.ts
+│
+├─ test/                    # End-to-end tests
+├─ .env.example             # Environment variable template
+├─ package.json
+├─ nest-cli.json
+└─ tsconfig.json
+```
+
+The backend follows NestJS's modular architecture, with separate modules for authentication, events, and vehicle management. Each module groups the components required for its functionality, such as controllers, services, DTOs, and schemas.
+
+The `dist/` directory contains generated build output and is not part of the source structure. Real environment files and credentials are excluded from the repository.
 
 ---
 
