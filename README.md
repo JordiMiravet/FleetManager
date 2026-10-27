@@ -83,6 +83,8 @@ Fleet Manager provides a centralized solution for managing vehicles, planning us
 
 Fleet Manager follows a **feature-based architecture**, where the application is organized by business domains instead of grouping files only by their technical role. The code is divided into three main areas: `core` (application-wide infrastructure), `features` (self-contained business domains such as `auth`, `vehicle`, `invitations`, `map`, `calendar`, and `graphics`), and `shared` (reusable building blocks).
 
+The repository is organized as a monorepo: the Angular application lives in `frontend/` and the NestJS API lives in `backend/`. The architecture described below refers to the frontend.
+
 The full explanation and the project structure are documented in the [architecture guide](docs/architecture.md).
 
 ---
