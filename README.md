@@ -207,44 +207,44 @@ The following section showcases the main features of the application through ani
 
 **User Registration**
 
-![Register](frontend/src/assets/readme/FM-register.gif)
+![Register](docs/images/FM-register.gif)
 
 **User Login**
 
-![Login](frontend/src/assets/readme/FM-login.gif)
+![Login](docs/images/FM-login.gif)
 
 **Vehicle Management**
 
-![Create Vehicle](frontend/src/assets/readme/FM-vehicle-create.gif)
-![Edit Vehicle](frontend/src/assets/readme/FM-vehicle-edit.gif)
-![Delete Vehicle](frontend/src/assets/readme/FM-vehicle-delete.gif)
+![Create Vehicle](docs/images/FM-vehicle-create.gif)
+![Edit Vehicle](docs/images/FM-vehicle-edit.gif)
+![Delete Vehicle](docs/images/FM-vehicle-delete.gif)
 
 **Vehicle Filtering**
 
-![Vehicle Filter](frontend/src/assets/readme/FM-vehicle-filter.gif)
+![Vehicle Filter](docs/images/FM-vehicle-filter.gif)
 
 **Interactive Map**
 
-![Drag & Drop](frontend/src/assets/readme/FM-map_drag-drop.gif)
-![Geolocation Update Button](frontend/src/assets/readme/FM-map_geolocation-button.gif)
+![Drag & Drop](docs/images/FM-map_drag-drop.gif)
+![Geolocation Update Button](docs/images/FM-map_geolocation-button.gif)
 
 **Vehicle Usage Calendar**
 
-![Create Event](frontend/src/assets/readme/FM-event-create.gif)
-![Edit Event](frontend/src/assets/readme/FM-event-edit.gif)
+![Create Event](docs/images/FM-event-create.gif)
+![Edit Event](docs/images/FM-event-edit.gif)
 
 **Event Filtering**
 
-![Event filter](frontend/src/assets/readme/FM-event-filter.gif)
+![Event filter](docs/images/FM-event-filter.gif)
 
 **Event Validation**
 
-![Overlap validation](frontend/src/assets/readme/FM-event-valid-overlap.gif)
-![Event time validation](frontend/src/assets/readme/FM-event-valid-time.gif)
+![Overlap validation](docs/images/FM-event-valid-overlap.gif)
+![Event time validation](docs/images/FM-event-valid-time.gif)
 
 **Statistics Dashboard**
 
-![Graphics](frontend/src/assets/readme/FM-graphics.gif)
+![Graphics](docs/images/FM-graphics.gif)
 
 ---
 
