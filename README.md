@@ -83,32 +83,34 @@ Fleet Manager provides a centralized solution for managing vehicles, planning us
 
 Fleet Manager follows a **feature-based architecture**, where the application is organized by business domains instead of grouping files only by their technical role. The code is divided into three main areas: `core` (application-wide infrastructure), `features` (self-contained business domains such as `auth`, `vehicle`, `invitations`, `map`, `calendar`, and `graphics`), and `shared` (reusable building blocks).
 
+The repository is organized as a monorepo: the Angular application lives in `frontend/` and the NestJS API lives in `backend/`. The architecture described below refers to the frontend.
+
 The full explanation and the project structure are documented in the [architecture guide](docs/architecture.md).
 
 ---
 
 ## Installation
 
-The application is divided into two repositories:
+Fleet Manager is organized as a monorepo with two independent applications:
 
-- Frontend → Angular 20: https://github.com/JordiMiravet/FleetManager-Frontend.git
-- Backend → NestJS: https://github.com/JordiMiravet/FleetManager-Backend.git
+- `frontend/` → Angular 20 application.
+- `backend/` → NestJS API.
 
-Both repositories need to be running to use the application with the real backend API. The frontend can also run independently using mock data by setting `dataSource` to `'mock'`. When configured to use the API, the application automatically falls back to mock data if the backend becomes unavailable.
+Both applications need to be running to use the real backend API. The frontend can also run independently using mock data by setting `dataSource` to `'mock'`. When configured to use the API, the application automatically falls back to mock data if the backend becomes unavailable.
 
 ### Quick start (frontend)
 
 Prerequisites: Node.js v20 or higher and the Angular CLI (`npm install -g @angular/cli`).
 
-Clone the frontend repository and install its dependencies:
+Clone the repository and install the frontend dependencies:
 
 ```bash
-git clone https://github.com/JordiMiravet/FleetManager-Frontend.git
-cd FleetManager-Frontend
+git clone https://github.com/JordiMiravet/FleetManager.git
+cd FleetManager/frontend
 npm install
 ```
 
-From the root of the frontend repository, edit (or create) `src/environments/environment.development.ts`, the file used by `ng serve`, with your Firebase configuration, and set `dataSource` to `'mock'` or `'api'`.
+From the `frontend/` folder, edit (or create) `src/environments/environment.development.ts`, the file used by `ng serve`, with your Firebase configuration, and set `dataSource` to `'mock'` or `'api'`.
 
 Firebase Authentication is required in every mode: mock data only replaces the vehicles and events normally provided by the backend.
 
@@ -205,50 +207,50 @@ The following section showcases the main features of the application through ani
 
 **User Registration**
 
-![Register](src/assets/readme/FM-register.gif)
+![Register](docs/images/FM-register.gif)
 
 **User Login**
 
-![Login](src/assets/readme/FM-login.gif)
+![Login](docs/images/FM-login.gif)
 
 **Vehicle Management**
 
-![Create Vehicle](src/assets/readme/FM-vehicle-create.gif)
-![Edit Vehicle](src/assets/readme/FM-vehicle-edit.gif)
-![Delete Vehicle](src/assets/readme/FM-vehicle-delete.gif)
+![Create Vehicle](docs/images/FM-vehicle-create.gif)
+![Edit Vehicle](docs/images/FM-vehicle-edit.gif)
+![Delete Vehicle](docs/images/FM-vehicle-delete.gif)
 
 **Vehicle Filtering**
 
-![Vehicle Filter](src/assets/readme/FM-vehicle-filter.gif)
+![Vehicle Filter](docs/images/FM-vehicle-filter.gif)
 
 **Interactive Map**
 
-![Drag & Drop](src/assets/readme/FM-map_drag-drop.gif)
-![Geolocation Update Button](src/assets/readme/FM-map_geolocation-button.gif)
+![Drag & Drop](docs/images/FM-map_drag-drop.gif)
+![Geolocation Update Button](docs/images/FM-map_geolocation-button.gif)
 
 **Vehicle Usage Calendar**
 
-![Create Event](src/assets/readme/FM-event-create.gif)
-![Edit Event](src/assets/readme/FM-event-edit.gif)
+![Create Event](docs/images/FM-event-create.gif)
+![Edit Event](docs/images/FM-event-edit.gif)
 
 **Event Filtering**
 
-![Event filter](src/assets/readme/FM-event-filter.gif)
+![Event filter](docs/images/FM-event-filter.gif)
 
 **Event Validation**
 
-![Overlap validation](src/assets/readme/FM-event-valid-overlap.gif)
-![Event time validation](src/assets/readme/FM-event-valid-time.gif)
+![Overlap validation](docs/images/FM-event-valid-overlap.gif)
+![Event time validation](docs/images/FM-event-valid-time.gif)
 
 **Statistics Dashboard**
 
-![Graphics](src/assets/readme/FM-graphics.gif)
+![Graphics](docs/images/FM-graphics.gif)
 
 ---
 
 ## Tests
 
-The project uses Jasmine and Karma for unit testing Angular components and services, and aims to keep test coverage above 90%. Run all unit tests with:
+The project uses Jasmine and Karma for unit testing Angular components and services, and aims to keep test coverage above 90%. Run all frontend unit tests from the `frontend/` folder with:
 
 ```bash
 ng test
@@ -279,10 +281,7 @@ Fleet Manager is a personal portfolio project and is not offered as open-source 
 
 If you would like to propose a code change, please open an issue first to discuss it with the author. Any contribution intended for inclusion in the project must be agreed upon beforehand, and submitting a pull request does not guarantee that it will be accepted or grant permission to reuse the project's source code. Accepted contributions are included under the same terms as the rest of the project, and the copyright and usage terms described in the [License](#license) section continue to apply.
 
-To report a bug or suggest an improvement, open an issue in the corresponding repository:
-
-- Frontend: https://github.com/JordiMiravet/FleetManager-Frontend
-- Backend: https://github.com/JordiMiravet/FleetManager-Backend
+To report a bug or suggest an improvement, open an issue in the [repository](https://github.com/JordiMiravet/FleetManager/issues).
 
 ---
 

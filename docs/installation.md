@@ -2,12 +2,14 @@
 
 This guide explains how to install and run Fleet Manager locally.
 
-The application is divided into two repositories:
+Fleet Manager is organized as a monorepo with two independent applications:
 
-- Frontend → Angular 20: https://github.com/JordiMiravet/FleetManager-Frontend.git
-- Backend → NestJS: https://github.com/JordiMiravet/FleetManager-Backend.git
+- `frontend/` → Angular 20 application.
+- `backend/` → NestJS API.
 
-Both repositories need to be running to use the application with the real backend API. The frontend can also run independently using mock data by setting `dataSource` to `'mock'`. When configured to use the API, the application automatically falls back to mock data if the backend becomes unavailable.
+Each application has its own `package.json`, dependencies, and commands, so every command in this guide must be run from the folder of the application it refers to.
+
+Both applications need to be running to use the real backend API. The frontend can also run independently using mock data by setting `dataSource` to `'mock'`. When configured to use the API, the application automatically falls back to mock data if the backend becomes unavailable.
 
 Back to the [README](../README.md#installation).
 
@@ -17,13 +19,19 @@ Back to the [README](../README.md#installation).
 - Angular CLI (`npm install -g @angular/cli`)
 - MongoDB running
 
-## 1. Frontend
-
-Clone the repository:
+## 1. Clone the repository
 
 ```bash
-git clone https://github.com/JordiMiravet/FleetManager-Frontend.git
-cd FleetManager-Frontend
+git clone https://github.com/JordiMiravet/FleetManager.git
+cd FleetManager
+```
+
+## 2. Frontend
+
+Install the dependencies:
+
+```bash
+cd frontend
 npm install
 ```
 
@@ -33,7 +41,7 @@ npm install
 - Enable Email/Password Authentication.
 - Add a web application and copy the configuration.
 
-From the root of the frontend repository, edit (or create) the file `src/environments/environment.development.ts`. This is the file used by `ng serve`, because `angular.json` replaces `src/environments/environment.ts` with it in the development configuration. It contains the Firebase configuration and the settings required to connect to the backend API.
+From the `frontend/` folder, edit (or create) the file `src/environments/environment.development.ts`. This is the file used by `ng serve`, because `angular.json` replaces `src/environments/environment.ts` with it in the development configuration. It contains the Firebase configuration and the settings required to connect to the backend API.
 
 Replace the placeholder values with your Firebase project configuration:
 
@@ -67,17 +75,16 @@ Firebase Authentication is required in every mode: mock data only replaces the v
 
 `src/environments/environment.ts` is used for production builds (`ng build`). It has the same structure, with `production: true`, and must contain the values for your production environment.
 
-## 2. Backend
+## 3. Backend
 
-Clone the backend repository:
+Install the dependencies:
 
 ```bash
-git clone https://github.com/JordiMiravet/FleetManager-Backend.git
-cd FleetManager-Backend
+cd backend
 npm install
 ```
 
-Create a `.env` file in the project root with the following content:
+Create a `.env` file in the `backend/` folder. You can start from the provided example (`cp .env.example .env`, or copy the file manually) and replace the placeholder values:
 
 ```env
 PORT=3000
@@ -100,15 +107,15 @@ From the downloaded JSON file, you need:
 
 The `private_key` must remain on a single line and preserve the `\n` characters.
 
-## 3. Run the application
+## 4. Run the application
 
-First, start the backend:
+First, start the backend from the `backend/` folder:
 
 ```bash
 npm run start:dev
 ```
 
-Then, in another terminal inside the frontend project, start the frontend:
+Then, in another terminal, start the frontend from the `frontend/` folder:
 
 ```bash
 ng serve
