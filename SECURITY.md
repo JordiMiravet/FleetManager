@@ -37,3 +37,10 @@ Security reports may concern, among other things:
 - Exposure of secrets, credentials, or sensitive configuration.
 - Dependencies and application security vulnerabilities.
 
+## Security Limitations
+
+Fleet Manager is a portfolio project and is not intended to guarantee production-grade security or availability.
+
+Users should not submit real credentials, sensitive personal information, or production data to demonstration environments.
+
+This policy does not grant permission to reuse, modify, or redistribute the project's source code. The terms described in the [LICENSE](LICENSE) file remain applicable.
