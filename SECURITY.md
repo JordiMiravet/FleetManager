@@ -27,4 +27,13 @@ Reports will be reviewed on a best-effort basis. As this is a personal project, 
 
 Please allow reasonable time for an issue to be assessed and, where appropriate, addressed before publicly disclosing technical details.
 
+## Scope
+
+Security reports may concern, among other things:
+
+- Authentication and session handling.
+- Authorization and access control, including vehicle sharing and invitations.
+- API endpoints and backend validation.
+- Exposure of secrets, credentials, or sensitive configuration.
+- Dependencies and application security vulnerabilities.
 
