@@ -44,3 +44,7 @@ Fleet Manager is a portfolio project and is not intended to guarantee production
 Users should not submit real credentials, sensitive personal information, or production data to demonstration environments.
 
 This policy does not grant permission to reuse, modify, or redistribute the project's source code. The terms described in the [LICENSE](LICENSE) file remain applicable.
+
+---
+
+[↑ Back to top](#security-policy)
