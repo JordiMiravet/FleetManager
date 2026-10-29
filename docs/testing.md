@@ -12,8 +12,6 @@ Back to the [README](../README.md#tests).
     - [Backend Tests](#backend-tests)
   - [Coverage](#coverage)
 
----
-
 ## Testing Strategy
 
 The project uses Jasmine and Karma for unit testing Angular components and services, and Jest for testing the NestJS backend.

@@ -1,5 +1,17 @@
 # Security Policy
 
+Back to the [README](../README.md).
+
+## Table of Contents
+
+- [Security Policy](#security-policy)
+  - [Table of Contents](#table-of-contents)
+  - [Overview](#overview)
+  - [Reporting a Vulnerability](#reporting-a-vulnerability)
+  - [Response and Disclosure](#response-and-disclosure)
+  - [Scope](#scope)
+  - [Security Limitations](#security-limitations)
+
 ## Overview
 
 Fleet Manager is a personal portfolio project developed for demonstration, educational, and professional evaluation purposes.
