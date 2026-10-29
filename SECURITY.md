@@ -21,5 +21,10 @@ Please avoid accessing, modifying, or disclosing other users' data while investi
 
 For private reports, use GitHub's private vulnerability reporting feature if it is enabled for this repository. Otherwise, contact the repository owner privately through an available communication channel.
 
+## Response and Disclosure
+
+Reports will be reviewed on a best-effort basis. As this is a personal project, there is no guaranteed response time or commitment to provide a fix.
+
+Please allow reasonable time for an issue to be assessed and, where appropriate, addressed before publicly disclosing technical details.
 
 
