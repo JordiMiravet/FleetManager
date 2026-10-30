@@ -7,10 +7,11 @@ Back to the [README](../README.md#architecture).
 - [Architecture](#architecture)
   - [Table of Contents](#table-of-contents)
   - [Repository Layout](#repository-layout)
+  - [System Architecture](#system-architecture)
   - [Frontend Architecture](#frontend-architecture)
-  - [Core](#core)
-  - [Features](#features)
-  - [Shared](#shared)
+    - [Core](#core)
+    - [Features](#features)
+    - [Shared](#shared)
   - [Project Structure](#project-structure)
     - [Frontend Structure](#frontend-structure)
     - [Backend Structure](#backend-structure)
@@ -55,13 +56,30 @@ flowchart TD
 
 The decisions behind this structure are documented in [ADR 0001](decisions/0001-monorepo-structure.md). The rest of this guide describes the architecture of the frontend application.
 
+## System Architecture
+
+Fleet Manager consists of an Angular frontend, a NestJS backend API, Firebase Authentication, and MongoDB. The frontend communicates with the backend through HTTP requests, while Firebase Authentication handles user authentication and MongoDB stores application data.
+
+The following diagram illustrates the main components and their relationships.
+
+```mermaid
+flowchart TD
+    U["User"] --> F["Angular Frontend"]
+
+    F -->|"Authentication"| A["Firebase Authentication"]
+    F -->|"HTTP requests"| B["NestJS Backend API"]
+    B -->|"Database operations"| D[("MongoDB")]
+```
+
+The frontend and backend maintain separate dependencies, configurations, and development commands. Firebase Authentication handles user identity, while the backend is responsible for API operations and data persistence.
+
 ## Frontend Architecture
 
 Fleet Manager follows a **feature-based architecture**, where the application is organized by business domains instead of grouping files only by their technical role. This approach keeps related functionality together, making the codebase easier to understand, maintain, and extend.
 
 The application is divided into three main areas:
 
-## Core
+### Core
 
 The `core` folder contains application-wide infrastructure that is shared across the entire application. These elements are created once and are not tied to a specific business feature.
 
@@ -71,7 +89,7 @@ Examples include:
 - Route guards for authentication and guest access.
 - Cross-cutting services such as authorization, data source management, geolocation, theme management and layout messages.
 
-## Features
+### Features
 
 The `features` folder contains the application's business domains. Each feature is self-contained and groups together everything required for that area of functionality.
 
@@ -97,7 +115,7 @@ Internationalization message services are also organized within individual featu
 
 Keeping these resources together allows each feature to evolve independently while reducing coupling between different parts of the application.
 
-## Shared
+### Shared
 
 The `shared` folder contains reusable building blocks that are not specific to any single feature.
 
