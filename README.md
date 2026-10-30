@@ -277,7 +277,7 @@ The testing strategy, how to run the tests for a specific feature, and the curre
 
 ## Documentation
 
-Detailed guides are available in the [`docs`](docs) folder:
+Detailed guides are available in the [`docs`](docs) folder, along with the contribution guidelines at the repository root:
 
 | Guide | Description |
 | --- | --- |
@@ -286,6 +286,7 @@ Detailed guides are available in the [`docs`](docs) folder:
 | [Architecture](docs/architecture.md) | Feature-based architecture and project structure. |
 | [Testing](docs/testing.md) | Testing strategy, how to run the tests, and current coverage. |
 | [Development Workflow](docs/development-workflow.md) | Conventions for epics, tasks, branches, commits, and pull requests. |
+| [Contribution Guidelines](CONTRIBUTING.md) | Policy and guidelines for reporting issues and proposing changes. |
 | [Roadmap](docs/roadmap.md) | Planned features and architectural improvements. |
 
 ---
