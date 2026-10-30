@@ -23,6 +23,7 @@
     - [Main Features](#main-features)
   - [Technologies](#technologies)
   - [Architecture](#architecture)
+    - [Application Architecture](#application-architecture)
   - [Installation](#installation)
     - [Quick start (frontend)](#quick-start-frontend)
   - [Development Workflow](#development-workflow)
@@ -83,9 +84,23 @@ Fleet Manager provides a centralized solution for managing vehicles, planning us
 
 Fleet Manager follows a **feature-based architecture**, where the application is organized by business domains instead of grouping files only by their technical role. The code is divided into three main areas: `core` (application-wide infrastructure), `features` (self-contained business domains such as `auth`, `vehicle`, `invitations`, `map`, `calendar`, and `graphics`), and `shared` (reusable building blocks).
 
-The repository is organized as a monorepo: the Angular application lives in `frontend/` and the NestJS API lives in `backend/`. The architecture described below refers to the frontend.
+The repository is organized as a monorepo: the Angular application lives in `frontend/` and the NestJS API lives in `backend/`.
 
-The full explanation and the project structure are documented in the [architecture guide](docs/architecture.md).
+### Application Architecture
+
+The following diagram illustrates the main components of Fleet Manager and their interactions.
+
+```mermaid
+flowchart TD
+    U["User"] --> F["Angular Frontend"]
+    F -->|"Authentication"| A["Firebase Authentication"]
+    F -->|"HTTP requests"| B["NestJS Backend API"]
+    B -->|"Database operations"| D[("MongoDB")]
+```
+
+The frontend handles the user interface and authentication flow, while the backend exposes the API and manages persistent application data.
+
+The full explanation of the system architecture and repository structure is available in the [architecture guide](docs/architecture.md).
 
 ---
 
