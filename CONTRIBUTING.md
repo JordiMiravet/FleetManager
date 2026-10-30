@@ -17,3 +17,9 @@ Before implementing a code change, open an issue to discuss the proposal with th
 Pull requests must be agreed upon beforehand and should follow the project's development conventions.
 
 See the [Development Workflow](docs/development-workflow.md) guide for branch naming, commit messages, task organization, and pull request requirements.
+
+## License
+
+Submitting a suggestion or pull request does not grant permission to reuse, modify, or redistribute the project's source code.
+
+The terms described in the [LICENSE](LICENSE) file remain applicable.
