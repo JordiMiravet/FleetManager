@@ -4,6 +4,8 @@ This guide documents the development workflow of the project: how work is organi
 
 The short version lives in the [README](../README.md#development-workflow). This document is the detailed reference.
 
+Contribution guidelines, including how to report issues and propose changes, are documented in [CONTRIBUTING.md](../CONTRIBUTING.md).
+
 ## Table of Contents
 
 - [Development Workflow](#development-workflow)
