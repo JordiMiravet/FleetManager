@@ -31,6 +31,28 @@ FleetManager/
 └─ LICENSE
 ```
 
+The following diagram provides a high-level overview of the repository structure and the main architectural areas of each application.
+
+```mermaid
+flowchart TD
+    R["FleetManager Monorepo"]
+
+    R --> F["frontend/"]
+    R --> B["backend/"]
+    R --> D["docs/"]
+    R --> G[".github/"]
+
+    F --> FA["Angular 20"]
+    FA --> FC["Core"]
+    FA --> FF["Features"]
+    FA --> FS["Shared"]
+
+    B --> BA["NestJS API"]
+    BA --> AUTH["Auth"]
+    BA --> VEH["Vehicle"]
+    BA --> EVT["Events"]
+```
+
 The decisions behind this structure are documented in [ADR 0001](decisions/0001-monorepo-structure.md). The rest of this guide describes the architecture of the frontend application.
 
 ## Frontend Architecture
