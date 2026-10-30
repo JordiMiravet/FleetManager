@@ -277,7 +277,7 @@ The testing strategy, how to run the tests for a specific feature, and the curre
 
 ## Documentation
 
-Detailed guides are available in the [`docs`](docs) folder:
+Detailed guides are available in the [`docs`](docs) folder, along with the contribution guidelines at the repository root:
 
 | Guide | Description |
 | --- | --- |
@@ -286,17 +286,20 @@ Detailed guides are available in the [`docs`](docs) folder:
 | [Architecture](docs/architecture.md) | Feature-based architecture and project structure. |
 | [Testing](docs/testing.md) | Testing strategy, how to run the tests, and current coverage. |
 | [Development Workflow](docs/development-workflow.md) | Conventions for epics, tasks, branches, commits, and pull requests. |
+| [Contribution Guidelines](CONTRIBUTING.md) | Policy and guidelines for reporting issues and proposing changes. |
 | [Roadmap](docs/roadmap.md) | Planned features and architectural improvements. |
 
 ---
 
 ## Contribution
 
-Fleet Manager is a personal portfolio project and is not offered as open-source software. Feedback, bug reports, and suggestions for improvement are welcome.
+Fleet Manager is a personal portfolio project and is not offered as open-source software. Contributions are not accepted without prior agreement from the project author.
 
-If you would like to propose a code change, please open an issue first to discuss it with the author. Any contribution intended for inclusion in the project must be agreed upon beforehand, and submitting a pull request does not guarantee that it will be accepted or grant permission to reuse the project's source code. Accepted contributions are included under the same terms as the rest of the project, and the copyright and usage terms described in the [License](#license) section continue to apply.
+Bug reports and improvement suggestions are welcome. If you would like to propose a change, open an issue first to discuss it with the author before implementing it.
 
-To report a bug or suggest an improvement, open an issue in the [repository](https://github.com/JordiMiravet/FleetManager/issues).
+For more information about reporting issues, proposing changes, and contribution guidelines, see the [CONTRIBUTING.md](CONTRIBUTING.md).
+
+To report a bug or suggest an improvement, open an issue in the [GitHub repository](https://github.com/JordiMiravet/FleetManager/issues).
 
 ---
 
