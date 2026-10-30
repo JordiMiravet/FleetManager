@@ -1,6 +1,6 @@
 # Security Policy
 
-Back to the [README](../README.md).
+Back to the [README](README.md).
 
 ## Table of Contents
 
