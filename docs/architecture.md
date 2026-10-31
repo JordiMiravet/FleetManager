@@ -164,8 +164,7 @@ src/
 │  └─ app.ts
 │
 ├─ assets/
-│  ├─ icons/
-│  └─ readme/
+│  └─ icons/
 │
 ├─ environments/                    # Environment configurations
 │  ├─ environment.development.ts    # Development environment configuration
