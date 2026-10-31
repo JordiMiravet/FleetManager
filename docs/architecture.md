@@ -143,7 +143,7 @@ src/
 ├─ app/
 │  ├─ core/                         # Global application infrastructure
 │  │  ├─ guards/                    # Authentication and guest guards
-│  │  ├─ layout/                    # Header, navigation, account drawer, notifications
+│  │  ├─ layout/                    # Header, navigation, account drawer, notifications and messages
 │  │  └─ services/                  # Shared application services
 │  │
 │  ├─ features/                     # Main application features
