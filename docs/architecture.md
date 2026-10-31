@@ -24,11 +24,14 @@ Fleet Manager is a monorepo with two independent applications that share the doc
 
 ```text
 FleetManager/
-├─ frontend/    # Angular application
-├─ backend/     # NestJS API
-├─ docs/        # Project documentation
-├─ .github/     # Issue and pull request templates
+├─ frontend/          # Angular application
+├─ backend/           # NestJS API
+├─ docs/              # Project documentation
+├─ .github/           # Issue and pull request templates
 ├─ README.md
+├─ CONTRIBUTING.md
+├─ CONTRIBUTORS.md
+├─ SECURITY.md
 └─ LICENSE
 ```
 
@@ -85,9 +88,9 @@ The `core` folder contains application-wide infrastructure that is shared across
 
 Examples include:
 
-- Global layout components such as the header, navigation, account drawer and notification interface.
+- Global layout components such as the header, navigation, account drawer, notification interface and the layout messages (i18n) service.
 - Route guards for authentication and guest access.
-- Cross-cutting services such as authorization, data source management, geolocation, theme management and layout messages.
+- Cross-cutting services such as authorization, data source management, geolocation, theme management and vehicle access.
 
 ### Features
 
@@ -123,6 +126,7 @@ This includes:
 
 - Reusable UI components, such as buttons.
 - Generic modal components.
+- Messages (i18n) service for the shared UI components.
 
 Resources placed in `shared` are intended to be reused across multiple features without containing business-specific logic.
 
@@ -139,7 +143,7 @@ src/
 ├─ app/
 │  ├─ core/                         # Global application infrastructure
 │  │  ├─ guards/                    # Authentication and guest guards
-│  │  ├─ layout/                    # Header, navigation, account drawer, notifications
+│  │  ├─ layout/                    # Header, navigation, account drawer, notifications and messages
 │  │  └─ services/                  # Shared application services
 │  │
 │  ├─ features/                     # Main application features
@@ -151,7 +155,7 @@ src/
 │  │  └─ vehicle/                   # Vehicle management, access and permissions
 │  │
 │  ├─ shared/                       # Reusable UI components
-│  │  └─ ui/                        # Buttons and generic modals
+│  │  └─ ui/                        # Buttons, generic modals and shared UI messages
 │  │
 │  ├─ app.config.ts
 │  ├─ app.routes.ts
@@ -160,8 +164,7 @@ src/
 │  └─ app.ts
 │
 ├─ assets/
-│  ├─ icons/
-│  └─ readme/
+│  └─ icons/
 │
 ├─ environments/                    # Environment configurations
 │  ├─ environment.development.ts    # Development environment configuration
@@ -188,21 +191,39 @@ The following tree shows the main modules and configuration files of the NestJS 
 ```text
 backend/
 ├─ src/
-│  ├─ auth/                # Authentication and Firebase integration
-│  ├─ events/              # Event management
-│  ├─ vehicle/             # Vehicle management
+│  ├─ auth/                    # Authentication and Firebase integration
+│  │  ├─ firebase/             # Firebase Admin setup
+│  │  ├─ auth.controller.ts
+│  │  ├─ auth.module.ts
+│  │  └─ firebase-auth.guard.ts
+│  ├─ events/                  # Event management
+│  │  ├─ dtos/                 # Create and update DTOs
+│  │  ├─ schemas/              # MongoDB schema
+│  │  ├─ events.controller.ts
+│  │  ├─ events.module.ts
+│  │  ├─ events.service.ts
+│  │  └─ *.spec.ts             # Unit tests (controller and service)
+│  ├─ vehicle/                 # Vehicle management
+│  │  ├─ dtos/                 # Create and update DTOs
+│  │  ├─ schemas/              # MongoDB schema
+│  │  ├─ vehicle.controller.ts
+│  │  ├─ vehicle.module.ts
+│  │  ├─ vehicle.service.ts
+│  │  └─ *.spec.ts             # Unit tests (controller and service)
 │  ├─ app.controller.ts
 │  ├─ app.module.ts
 │  ├─ app.service.ts
 │  └─ main.ts
 │
-├─ test/                    # End-to-end tests
-├─ .env                    # Local environment variables (not committed)
-├─ .env.example             # Environment variable template
+├─ test/                       # End-to-end tests
+├─ .env                        # Local environment variables (not committed)
+├─ .env.example                # Environment variable template
 ├─ package.json
 ├─ nest-cli.json
 └─ tsconfig.json
 ```
+
+Unit tests (`*.spec.ts`) are located next to the code they test, and the tree omits some configuration files for brevity.
 
 The backend follows NestJS's modular architecture, with separate modules for authentication, events, and vehicle management. Each module groups the components required for its functionality, such as controllers, services, DTOs, and schemas.
 
