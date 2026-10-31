@@ -191,21 +191,39 @@ The following tree shows the main modules and configuration files of the NestJS 
 ```text
 backend/
 ├─ src/
-│  ├─ auth/                # Authentication and Firebase integration
-│  ├─ events/              # Event management
-│  ├─ vehicle/             # Vehicle management
+│  ├─ auth/                    # Authentication and Firebase integration
+│  │  ├─ firebase/             # Firebase Admin setup
+│  │  ├─ auth.controller.ts
+│  │  ├─ auth.module.ts
+│  │  └─ firebase-auth.guard.ts
+│  ├─ events/                  # Event management
+│  │  ├─ dtos/                 # Create and update DTOs
+│  │  ├─ schemas/              # MongoDB schema
+│  │  ├─ events.controller.ts
+│  │  ├─ events.module.ts
+│  │  ├─ events.service.ts
+│  │  └─ *.spec.ts             # Unit tests (controller and service)
+│  ├─ vehicle/                 # Vehicle management
+│  │  ├─ dtos/                 # Create and update DTOs
+│  │  ├─ schemas/              # MongoDB schema
+│  │  ├─ vehicle.controller.ts
+│  │  ├─ vehicle.module.ts
+│  │  ├─ vehicle.service.ts
+│  │  └─ *.spec.ts             # Unit tests (controller and service)
 │  ├─ app.controller.ts
 │  ├─ app.module.ts
 │  ├─ app.service.ts
 │  └─ main.ts
 │
-├─ test/                    # End-to-end tests
-├─ .env                    # Local environment variables (not committed)
-├─ .env.example             # Environment variable template
+├─ test/                       # End-to-end tests
+├─ .env                        # Local environment variables (not committed)
+├─ .env.example                # Environment variable template
 ├─ package.json
 ├─ nest-cli.json
 └─ tsconfig.json
 ```
+
+Unit tests (`*.spec.ts`) are located next to the code they test, and the tree omits some configuration files for brevity.
 
 The backend follows NestJS's modular architecture, with separate modules for authentication, events, and vehicle management. Each module groups the components required for its functionality, such as controllers, services, DTOs, and schemas.
 
