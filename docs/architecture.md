@@ -24,11 +24,14 @@ Fleet Manager is a monorepo with two independent applications that share the doc
 
 ```text
 FleetManager/
-├─ frontend/    # Angular application
-├─ backend/     # NestJS API
-├─ docs/        # Project documentation
-├─ .github/     # Issue and pull request templates
+├─ frontend/          # Angular application
+├─ backend/           # NestJS API
+├─ docs/              # Project documentation
+├─ .github/           # Issue and pull request templates
 ├─ README.md
+├─ CONTRIBUTING.md
+├─ CONTRIBUTORS.md
+├─ SECURITY.md
 └─ LICENSE
 ```
 
