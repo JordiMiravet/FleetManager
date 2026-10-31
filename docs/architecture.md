@@ -88,9 +88,9 @@ The `core` folder contains application-wide infrastructure that is shared across
 
 Examples include:
 
-- Global layout components such as the header, navigation, account drawer and notification interface.
+- Global layout components such as the header, navigation, account drawer, notification interface and the layout messages (i18n) service.
 - Route guards for authentication and guest access.
-- Cross-cutting services such as authorization, data source management, geolocation, theme management and layout messages.
+- Cross-cutting services such as authorization, data source management, geolocation, theme management and vehicle access.
 
 ### Features
 
