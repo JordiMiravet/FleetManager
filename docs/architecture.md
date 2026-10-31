@@ -126,6 +126,7 @@ This includes:
 
 - Reusable UI components, such as buttons.
 - Generic modal components.
+- Messages (i18n) service for the shared UI components.
 
 Resources placed in `shared` are intended to be reused across multiple features without containing business-specific logic.
 
@@ -154,7 +155,7 @@ src/
 │  │  └─ vehicle/                   # Vehicle management, access and permissions
 │  │
 │  ├─ shared/                       # Reusable UI components
-│  │  └─ ui/                        # Buttons and generic modals
+│  │  └─ ui/                        # Buttons, generic modals and shared UI messages
 │  │
 │  ├─ app.config.ts
 │  ├─ app.routes.ts
