@@ -287,6 +287,7 @@ Detailed guides are available in the [`docs`](docs) folder, along with the contr
 | [Testing](docs/testing.md) | Testing strategy, how to run the tests, and current coverage. |
 | [Development Workflow](docs/development-workflow.md) | Conventions for epics, tasks, branches, commits, and pull requests. |
 | [Contribution Guidelines](CONTRIBUTING.md) | Policy and guidelines for reporting issues and proposing changes. |
+| [Security Policy](SECURITY.md) | How to privately report vulnerabilities and the project's security scope. |
 | [Roadmap](docs/roadmap.md) | Planned features and architectural improvements. |
 
 ---
