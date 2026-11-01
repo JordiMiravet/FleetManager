@@ -4,6 +4,12 @@ This project is continuously evolving to improve its scalability, maintainabilit
 
 Back to the [README](../README.md#roadmap).
 
+## Status Definitions
+
+- **In Progress:** Work has started and is currently being actively developed.
+- **Planned:** Identified as a future improvement but implementation has not started yet.
+- **Ongoing:** Continuous activities that are maintained and improved throughout the project's development.
+
 ## Notification & Invitation System
 
 **Status:** In Progress
