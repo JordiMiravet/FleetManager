@@ -25,7 +25,7 @@
   - [Architecture](#architecture)
     - [Application Architecture](#application-architecture)
   - [Installation](#installation)
-    - [Quick start (frontend)](#quick-start-frontend)
+    - [Quick start](#quick-start)
   - [Development Workflow](#development-workflow)
     - [Branch naming](#branch-naming)
     - [Commit messages](#commit-messages)
@@ -113,7 +113,9 @@ Fleet Manager is organized as a monorepo with two independent applications:
 
 Both applications need to be running to use the real backend API. The frontend can also run independently using mock data by setting `dataSource` to `'mock'`. When configured to use the API, the application automatically falls back to mock data if the backend becomes unavailable.
 
-### Quick start (frontend)
+### Quick start
+
+Start the frontend independently using mock data. This is the quickest way to try Fleet Manager without configuring or starting the backend.
 
 Prerequisites: Node.js v20 or higher and the Angular CLI (`npm install -g @angular/cli`).
 
