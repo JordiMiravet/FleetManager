@@ -10,7 +10,9 @@ Back to the [README](../README.md#roadmap).
 - **Planned:** Identified as a future improvement but implementation has not started yet.
 - **Ongoing:** Continuous activities that are maintained and improved throughout the project's development.
 
-## Notification & Invitation System
+## Planned and Ongoing Work
+
+### Notification & Invitation System
 
 **Status:** In Progress
 
@@ -18,7 +20,7 @@ Back to the [README](../README.md#roadmap).
 - Ensure invitation statuses and notification data are managed and synchronized through the backend.
 - Maintain consistency between the frontend interfaces and backend data.
 
-## Internationalization (i18n)
+### Internationalization (i18n)
 
 **Status:** In Progress
 
@@ -27,7 +29,7 @@ Back to the [README](../README.md#roadmap).
 - Implement language selection and apply the selected language consistently across the application.
 - Prepare the application for additional languages in the future.
 
-## Design System and Theme Improvements
+### Design System and Theme Improvements
 
 **Status:** Planned
 
@@ -35,7 +37,7 @@ Back to the [README](../README.md#roadmap).
 - Review design tokens and component styling following future visual redesigns.
 - Evaluate improvements to theme consistency and user preferences.
 
-## State Management Improvements
+### State Management Improvements
 
 **Status:** Planned
 
@@ -43,7 +45,7 @@ Back to the [README](../README.md#roadmap).
 - Improve state consistency and separation of responsibilities where needed.
 - Evaluate opportunities to simplify state handling across features.
 
-## Backend and Data Architecture Improvements
+### Backend and Data Architecture Improvements
 
 **Status:** Planned
 
@@ -51,7 +53,7 @@ Back to the [README](../README.md#roadmap).
 - Review data models and persistence strategies when new requirements arise.
 - Maintain clear separation of responsibilities between frontend and backend.
 
-## Testing and Code Quality
+### Testing and Code Quality
 
 **Status:** Ongoing
 
@@ -59,7 +61,7 @@ Back to the [README](../README.md#roadmap).
 - Ensure new features and bug fixes include appropriate tests.
 - Continue improving test quality, readability, and maintainability.
 
-## Deployment and CI/CD
+### Deployment and CI/CD
 
 **Status:** Planned
 
