@@ -4,6 +4,20 @@ This project is continuously evolving to improve its scalability, maintainabilit
 
 Back to the [README](../README.md#roadmap).
 
+## Table of Contents
+
+- [Roadmap](#roadmap)
+  - [Table of Contents](#table-of-contents)
+  - [Status Definitions](#status-definitions)
+  - [Planned and Ongoing Work](#planned-and-ongoing-work)
+    - [Notification \& Invitation System](#notification--invitation-system)
+    - [Internationalization (i18n)](#internationalization-i18n)
+    - [Design System and Theme Improvements](#design-system-and-theme-improvements)
+    - [State Management Improvements](#state-management-improvements)
+    - [Backend and Data Architecture Improvements](#backend-and-data-architecture-improvements)
+    - [Testing and Code Quality](#testing-and-code-quality)
+    - [Deployment and CI/CD](#deployment-and-cicd)
+  
 ## Status Definitions
 
 - **In Progress:** Work has started and is currently being actively developed.
