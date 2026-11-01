@@ -129,13 +129,6 @@ http://localhost:4200
 
 ## Notes
 
-- Node.js must be installed.
-- Angular CLI must be installed globally:
-
-```bash
-npm install -g @angular/cli
-```
-
 - Real credentials are not included in the repository.
 - Each developer must use their own Firebase project.
 
