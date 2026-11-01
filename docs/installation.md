@@ -69,6 +69,8 @@ apiUrl: 'http://localhost:3000'
 
 > If the backend is running on a different host or port, update `apiUrl` accordingly.
 
+The backend itself is configured and started in the [next section](#3-backend).
+
 The `dataSource` property controls whether the application uses mock data or communicates with the backend API. Use `'mock'` for local development without a running backend, or `'api'` to use the real backend. If `dataSource` is set to `'api'` and the backend becomes unavailable, the application automatically falls back to mock data without requiring manual configuration changes.
 
 Firebase Authentication is required in every mode: mock data only replaces the vehicles and events normally provided by the backend.
