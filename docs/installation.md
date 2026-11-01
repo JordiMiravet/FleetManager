@@ -13,6 +13,18 @@ Both applications need to be running to use the real backend API. The frontend c
 
 Back to the [README](../README.md#installation).
 
+## Table of Contents
+
+- [Installation](#installation)
+  - [Table of Contents](#table-of-contents)
+  - [Prerequisites](#prerequisites)
+  - [1. Clone the repository](#1-clone-the-repository)
+  - [2. Frontend](#2-frontend)
+    - [Firebase Authentication configuration](#firebase-authentication-configuration)
+  - [3. Backend](#3-backend)
+  - [4. Run the application](#4-run-the-application)
+  - [Notes](#notes)
+
 ## Prerequisites
 
 - Node.js v20 or higher
@@ -68,6 +80,8 @@ apiUrl: 'http://localhost:3000'
 ```
 
 > If the backend is running on a different host or port, update `apiUrl` accordingly.
+
+The backend itself is configured and started in the [next section](#3-backend).
 
 The `dataSource` property controls whether the application uses mock data or communicates with the backend API. Use `'mock'` for local development without a running backend, or `'api'` to use the real backend. If `dataSource` is set to `'api'` and the backend becomes unavailable, the application automatically falls back to mock data without requiring manual configuration changes.
 
@@ -128,13 +142,6 @@ http://localhost:4200
 ```
 
 ## Notes
-
-- Node.js must be installed.
-- Angular CLI must be installed globally:
-
-```bash
-npm install -g @angular/cli
-```
 
 - Real credentials are not included in the repository.
 - Each developer must use their own Firebase project.
