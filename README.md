@@ -125,7 +125,7 @@ cd FleetManager/frontend
 npm install
 ```
 
-From the `frontend/` folder, edit (or create) `src/environments/environment.development.ts`, the file used by `ng serve`, with your Firebase configuration, and set `dataSource` to `'mock'` or `'api'`.
+From the `frontend/` folder, edit (or create) `src/environments/environment.development.ts`, the file used by `ng serve`, with your Firebase configuration, and set `dataSource` to `'mock'` (recommended for a quick trial without the backend) or `'api'` (requires the backend running).
 
 Firebase Authentication is required in every mode: mock data only replaces the vehicles and events normally provided by the backend.
 
