@@ -1,12 +1,12 @@
-import { CommonModule } from '@angular/common';
 import { Component, inject, input, output } from '@angular/core';
+
 import { VehicleInterface } from '../../models/vehicle';
 import { VehicleMessagesService } from '../../i18n/vehicle-messages-service';
 
 @Component({
   selector: 'app-vehicle-selector',
   standalone: true,
-  imports: [ CommonModule ],
+  imports: [],
   templateUrl: './vehicle-selector.html',
   styleUrl: './vehicle-selector.scss',
 })
