@@ -224,44 +224,44 @@ The following section showcases the main features of the application through ani
 
 **User Registration**
 
-![Register](docs/images/FM-register.gif)
+![Register](docs/images/RM-register.gif)
 
 **User Login**
 
-![Login](docs/images/FM-login.gif)
+![Login](docs/images/RM-login.gif)
 
 **Vehicle Management**
 
-![Create Vehicle](docs/images/FM-vehicle-create.gif)
-![Edit Vehicle](docs/images/FM-vehicle-edit.gif)
-![Delete Vehicle](docs/images/FM-vehicle-delete.gif)
+![Create Vehicle](docs/images/RM-vehicle-create.gif)
+![Edit Vehicle](docs/images/RM-vehicle-edit.gif)
+![Delete Vehicle](docs/images/RM-vehicle-delete.gif)
 
 **Vehicle Filtering**
 
-![Vehicle Filter](docs/images/FM-vehicle-filter.gif)
+![Vehicle Filter](docs/images/RM-vehicle-filter.gif)
 
 **Interactive Map**
 
-![Drag & Drop](docs/images/FM-map_drag-drop.gif)
-![Geolocation Update Button](docs/images/FM-map_geolocation-button.gif)
+![Drag & Drop](docs/images/RM-map_drag-drop.gif)
+![Geolocation Update Button](docs/images/RM-map_geolocation-button.gif)
 
 **Vehicle Usage Calendar**
 
-![Create Event](docs/images/FM-event-create.gif)
-![Edit Event](docs/images/FM-event-edit.gif)
+![Create Event](docs/images/RM-event-create.gif)
+![Edit Event](docs/images/RM-event-edit.gif)
 
 **Event Filtering**
 
-![Event filter](docs/images/FM-event-filter.gif)
+![Event filter](docs/images/RM-event-filter.gif)
 
 **Event Validation**
 
-![Overlap validation](docs/images/FM-event-valid-overlap.gif)
-![Event time validation](docs/images/FM-event-valid-time.gif)
+![Overlap validation](docs/images/RM-event-valid-overlap.gif)
+![Event time validation](docs/images/RM-event-valid-time.gif)
 
 **Statistics Dashboard**
 
-![Graphics](docs/images/FM-graphics.gif)
+![Graphics](docs/images/RM-graphics.gif)
 
 ---
 
