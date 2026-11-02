@@ -1,5 +1,4 @@
 import { AfterViewInit, Component, inject, signal,} from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 import { TimePeriod } from '../../enums/time-period.enum';
 
@@ -14,10 +13,9 @@ import { HoursByWeekdayVehicleChartComponent } from "../hours-by-weekday-vehicle
 @Component({
   selector: 'app-graphics-view',
   standalone: true,
-  imports: [ 
-    CommonModule, 
-    VehicleUsageHoursChartComponent, 
-    MostUsedVehicleChartComponent, 
+  imports: [
+    VehicleUsageHoursChartComponent,
+    MostUsedVehicleChartComponent,
     HoursByWeekdayVehicleChartComponent
   ],
   templateUrl: './graphics-view.html',

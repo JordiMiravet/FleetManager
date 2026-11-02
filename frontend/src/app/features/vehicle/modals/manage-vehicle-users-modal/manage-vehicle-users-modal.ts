@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, inject, input, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
@@ -11,8 +10,7 @@ import { DeleteButtonComponent } from "../../../../shared/ui/buttons/delete-butt
   selector: 'app-manage-vehicle-users-modal',
   standalone: true,
   imports: [
-    FormsModule, 
-    CommonModule, 
+    FormsModule,
     DeleteButtonComponent
   ],
   templateUrl: './manage-vehicle-users-modal.html',

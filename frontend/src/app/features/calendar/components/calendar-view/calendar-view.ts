@@ -1,6 +1,5 @@
 
 import { Component, signal, computed, ViewChild, ViewEncapsulation, inject, AfterViewInit, effect } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
 import { EventClickArg, EventInput } from '@fullcalendar/core';
@@ -27,7 +26,6 @@ import { CalendarModalState } from '../../enums/calendar-modal-state.enum';
   standalone: true,
   imports: [
     FullCalendarModule,
-    CommonModule,
     DayEventsModalComponent,
     ConfirmModalComponent,
     EventFormModalComponent,

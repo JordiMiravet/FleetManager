@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, inject, input, output } from '@angular/core';
 
 import { SharedUiMessagesService } from '../../i18n/shared-ui-messages-service';
@@ -6,7 +5,7 @@ import { SharedUiMessagesService } from '../../i18n/shared-ui-messages-service';
 @Component({
   selector: 'app-confirm-modal',
   standalone: true,
-  imports: [ CommonModule ],
+  imports: [],
   templateUrl: './confirm-modal.html',
   styleUrl: './confirm-modal.scss',
 })
