@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, inject, input, output } from '@angular/core';
 
 import { EventInterface } from '../../models/event';
@@ -14,7 +13,6 @@ import { CreateButtonComponent } from "../../../../shared/ui/buttons/create-butt
   selector: 'app-day-events-modal',
   standalone: true,
   imports: [
-    CommonModule,
     EditButtonComponent,
     DeleteButtonComponent,
     CreateButtonComponent
