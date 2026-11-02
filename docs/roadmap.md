@@ -13,6 +13,7 @@ Back to the [README](../README.md#roadmap).
     - [Notification \& Invitation System](#notification--invitation-system)
     - [Internationalization (i18n)](#internationalization-i18n)
     - [Design System and Theme Improvements](#design-system-and-theme-improvements)
+    - [Loading States and Skeleton Components](#loading-states-and-skeleton-components)
     - [State Management Improvements](#state-management-improvements)
     - [Backend and Data Architecture Improvements](#backend-and-data-architecture-improvements)
     - [Testing and Code Quality](#testing-and-code-quality)
@@ -50,6 +51,15 @@ Back to the [README](../README.md#roadmap).
 - Refine the existing design system as the application evolves.
 - Review design tokens and component styling following future visual redesigns.
 - Evaluate improvements to theme consistency and user preferences.
+
+### Loading States and Skeleton Components
+
+**Status:** Planned
+
+- Add skeleton placeholders that mimic the layout of the main components (vehicle table, map, calendar and statistics) while their data is loading.
+- Replace the skeleton with the real component once the data is available.
+- Define a fallback state for when the data fails to load.
+- Introduce them after the visual refactoring, so the skeletons follow the final design system.
 
 ### State Management Improvements
 
