@@ -1,5 +1,4 @@
 import { Component, inject, input, output } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 import { VehicleInterface } from '../../models/vehicle';
 
@@ -15,7 +14,6 @@ import { AuthorizationService } from '../../../../core/services/authorization/au
   imports: [
     EditButtonComponent,
     DeleteButtonComponent,
-    CommonModule,
     UserButtonComponent
   ],
   templateUrl: './vehicle-table.html',
