@@ -27,7 +27,7 @@ Back to the [README](../README.md#installation).
 
 ## Prerequisites
 
-- Node.js v20 or higher
+- Node.js v22.22.3 or higher
 - Angular CLI (`npm install -g @angular/cli`)
 - MongoDB running
 
