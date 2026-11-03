@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { VehicleInterface } from '../../../vehicle/models/vehicle';
 
 @Component({
@@ -6,6 +6,7 @@ import { VehicleInterface } from '../../../vehicle/models/vehicle';
   standalone: true,
   imports: [],
   templateUrl: './vehicle-marker.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './vehicle-marker.scss',
 })
 export class VehicleMarkerComponent {
