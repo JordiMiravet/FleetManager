@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Auth } from '@angular/fire/auth';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { EventFormModalComponent } from './event-form-modal';
@@ -58,7 +58,7 @@ describe('EventFormModalComponent', () => {
       imports: [EventFormModalComponent],
       providers: [
         { provide: Auth, useValue: authMock },
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting()
       ]
     }).compileComponents();
