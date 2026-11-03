@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 
 import { GraphicsViewComponent } from './graphics-view';
 
@@ -45,7 +45,7 @@ describe('GraphicsViewComponent', () => {
     await TestBed.configureTestingModule({
       imports: [GraphicsViewComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         { provide: Auth, useValue: authMock },
         { provide: VehicleService, useValue: vehicleServiceMock },
         { provide: EventService, useValue: eventServiceMock }
