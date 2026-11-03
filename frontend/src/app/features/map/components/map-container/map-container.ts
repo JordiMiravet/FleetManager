@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { VehicleInterface } from '../../../vehicle/models/vehicle';
 
@@ -20,6 +20,7 @@ import { VehicleFormModalComponent } from "../../../vehicle/modals/vehicle-form-
     VehicleFormModalComponent
   ],
   templateUrl: './map-container.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './map-container.scss',
 })
 
