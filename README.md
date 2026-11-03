@@ -43,7 +43,7 @@
 
 ## Application Overview
 
-Fleet Manager is an Angular 21 application designed to help users manage their personal vehicle garage. It allows users to organize their vehicles, share access with other users through an invitation system, track vehicle locations, schedule vehicle usage through an interactive calendar, and visualize detailed usage statistics.
+Fleet Manager is an Angular 22 application designed to help users manage their personal vehicle garage. It allows users to organize their vehicles, share access with other users through an invitation system, track vehicle locations, schedule vehicle usage through an interactive calendar, and visualize detailed usage statistics.
 
 The application follows a modular architecture based on reusable components and integrates user authentication, route guards, API communication, state management, reactive forms with validation, and data persistence.
 
@@ -72,7 +72,7 @@ Fleet Manager provides a centralized solution for managing vehicles, planning us
 
 | Area | Technologies |
 | --- | --- |
-| Frontend | `Angular 21`, `TypeScript`, `SCSS`, `HTML5` |
+| Frontend | `Angular 22`, `TypeScript`, `SCSS`, `HTML5` |
 | UI libraries and visualization | `PrimeNG`, `Leaflet`, `FullCalendar`, `Chart.js` |
 | Backend | `NestJS`, `MongoDB` |
 | Authentication | `Firebase Authentication` |
@@ -108,7 +108,7 @@ The full explanation of the system architecture and repository structure is avai
 
 Fleet Manager is organized as a monorepo with two independent applications:
 
-- `frontend/` → Angular 21 application.
+- `frontend/` → Angular 22 application.
 - `backend/` → NestJS API.
 
 Both applications need to be running to use the real backend API. The frontend can also run independently using mock data by setting `dataSource` to `'mock'`. When configured to use the API, the application automatically falls back to mock data if the backend becomes unavailable.
