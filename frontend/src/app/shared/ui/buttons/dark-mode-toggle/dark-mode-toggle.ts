@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { ThemeService } from '../../../../core/services/theme/theme-service';
 import { SharedUiMessagesService } from '../../i18n/shared-ui-messages-service';
@@ -9,6 +9,7 @@ import { SharedUiMessagesService } from '../../i18n/shared-ui-messages-service';
   standalone: true,
   imports: [ CommonModule ],
   templateUrl: './dark-mode-toggle.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './dark-mode-toggle.scss',
 })
 export class DarkModeToggleComponent {
