@@ -4,7 +4,7 @@ This guide explains how to install and run Fleet Manager locally.
 
 Fleet Manager is organized as a monorepo with two independent applications:
 
-- `frontend/` → Angular 21 application.
+- `frontend/` → Angular 22 application.
 - `backend/` → NestJS API.
 
 Each application has its own `package.json`, dependencies, and commands, so every command in this guide must be run from the folder of the application it refers to.
