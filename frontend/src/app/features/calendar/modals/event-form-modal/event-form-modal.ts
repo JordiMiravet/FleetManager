@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit, output } from '@angular/core';
+import { Component, inject, input, OnInit, output, ChangeDetectionStrategy } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -16,6 +16,7 @@ import { EventService } from '../../data-access/event-service';
     CommonModule 
   ],
   templateUrl: './event-form-modal.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './event-form-modal.scss',
 })
 export class EventFormModalComponent implements OnInit {
