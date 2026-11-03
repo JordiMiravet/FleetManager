@@ -1,4 +1,4 @@
-import { Component, inject, input, output, signal } from '@angular/core';
+import { Component, inject, input, output, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { VehicleInterface } from '../../models/vehicle';
@@ -14,6 +14,7 @@ import { DeleteButtonComponent } from "../../../../shared/ui/buttons/delete-butt
     DeleteButtonComponent
   ],
   templateUrl: './manage-vehicle-users-modal.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './manage-vehicle-users-modal.scss',
 })
 export class ManageVehicleUsersModalComponent {
