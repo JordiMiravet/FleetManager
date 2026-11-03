@@ -44,7 +44,7 @@ flowchart TD
     R --> D["docs/"]
     R --> G[".github/"]
 
-    F --> FA["Angular 21"]
+    F --> FA["Angular 22"]
     FA --> FC["Core"]
     FA --> FF["Features"]
     FA --> FS["Shared"]
