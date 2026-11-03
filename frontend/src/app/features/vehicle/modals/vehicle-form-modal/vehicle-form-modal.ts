@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, input, OnChanges, output } from '@angular/core';
+import { Component, inject, input, OnChanges, output, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { VehicleInterface } from '../../models/vehicle';
@@ -10,6 +10,7 @@ import { VehicleMessagesService } from '../../i18n/vehicle-messages-service';
   standalone: true,
   imports: [ ReactiveFormsModule, CommonModule ],
   templateUrl: './vehicle-form-modal.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./vehicle-form-modal.scss'],
 })
 export class VehicleFormModalComponent implements OnChanges {
