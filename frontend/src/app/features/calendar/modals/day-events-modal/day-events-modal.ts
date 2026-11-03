@@ -1,4 +1,4 @@
-import { Component, inject, input, output } from '@angular/core';
+import { Component, inject, input, output, ChangeDetectionStrategy } from '@angular/core';
 
 import { EventInterface } from '../../models/event';
 import { EventMessagesService } from '../../i18n/event-messages-service';
@@ -18,6 +18,7 @@ import { CreateButtonComponent } from "../../../../shared/ui/buttons/create-butt
     CreateButtonComponent
   ],
   templateUrl: './day-events-modal.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './day-events-modal.scss',
 })
 
