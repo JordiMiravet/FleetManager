@@ -1,10 +1,11 @@
-import { Component, HostListener, input, output } from '@angular/core';
+import { Component, HostListener, input, output, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-notification-dropdown',
   standalone: true,
   imports: [],
   templateUrl: './notification-dropdown.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './notification-dropdown.scss',
 })
 export class NotificationDropdownComponent {
