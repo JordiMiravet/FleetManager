@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, input, output } from '@angular/core';
+import { Component, inject, input, output, ChangeDetectionStrategy } from '@angular/core';
 
 import { VehicleInvitation } from '../../models/invitation';
 import { InvitationMessagesService } from '../../i18n/invitation-messages-service';
@@ -9,6 +9,7 @@ import { InvitationMessagesService } from '../../i18n/invitation-messages-servic
   standalone: true,
   imports: [ CommonModule ],
   templateUrl: './invitation-card.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './invitation-card.scss',
 })
 export class InvitationCardComponent {
