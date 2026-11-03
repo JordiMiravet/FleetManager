@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, signal,} from '@angular/core';
+import { AfterViewInit, Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { TimePeriod } from '../../enums/time-period.enum';
 
@@ -19,6 +19,7 @@ import { HoursByWeekdayVehicleChartComponent } from "../hours-by-weekday-vehicle
     HoursByWeekdayVehicleChartComponent
   ],
   templateUrl: './graphics-view.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './graphics-view.scss',
 })
 export class GraphicsViewComponent implements AfterViewInit {
