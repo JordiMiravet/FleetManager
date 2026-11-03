@@ -117,7 +117,7 @@ Both applications need to be running to use the real backend API. The frontend c
 
 Start the frontend independently using mock data. This is the quickest way to try Fleet Manager without configuring or starting the backend.
 
-Prerequisites: Node.js v20 or higher and the Angular CLI (`npm install -g @angular/cli`).
+Prerequisites: Node.js v22.22.3 or higher and the Angular CLI (`npm install -g @angular/cli`).
 
 Clone the repository and install the frontend dependencies:
 
