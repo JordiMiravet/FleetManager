@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CalendarViewComponent } from '../../components/calendar-view/calendar-view';
 
 @Component({
@@ -6,6 +6,7 @@ import { CalendarViewComponent } from '../../components/calendar-view/calendar-v
   standalone: true,
   imports: [ CalendarViewComponent ],
   templateUrl: './calendar-page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './calendar-page.scss',
 })
 export class CalendarPageComponent {
