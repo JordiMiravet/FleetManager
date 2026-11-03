@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { VehicleViewComponent } from '../../components/vehicle-view/vehicle-view';
 
 @Component({
@@ -6,6 +6,7 @@ import { VehicleViewComponent } from '../../components/vehicle-view/vehicle-view
   standalone: true,
   imports: [ VehicleViewComponent ],
   templateUrl: './vehicle-page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './vehicle-page.scss',
 })
 export class VehiclePageComponent {
