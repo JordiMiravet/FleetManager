@@ -1,4 +1,4 @@
-import { Component, inject, input, output } from '@angular/core';
+import { Component, inject, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { VehicleInterface } from '../../../vehicle/models/vehicle';
 import { MapMessagesService } from '../../i18n/map-messages-service';
 
@@ -7,6 +7,7 @@ import { MapMessagesService } from '../../i18n/map-messages-service';
   standalone: true,
   imports: [],
   templateUrl: './details-panel.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './details-panel.scss',
 })
 export class DetailsPanelComponent {
