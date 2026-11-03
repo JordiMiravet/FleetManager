@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { Auth } from '@angular/fire/auth';
 
 import { HoursByWeekdayVehicleChartComponent } from './hours-by-weekday-vehicle-chart';
@@ -40,7 +40,7 @@ describe('HoursByWeekdayVehicleChartComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ HoursByWeekdayVehicleChartComponent ],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         { provide: Auth, useValue: authMock },
         GraphicsService,
         VehicleService,
