@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { InvitationService } from '../../data-access/invitation-service';
 
@@ -14,6 +14,7 @@ import { InvitationMessagesService } from '../../i18n/invitation-messages-servic
     InvitationCardComponent
   ],
   templateUrl: './notification-bell.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './notification-bell.scss',
 })
 export class NotificationBellComponent {
