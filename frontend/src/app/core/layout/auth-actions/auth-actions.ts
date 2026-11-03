@@ -1,4 +1,4 @@
-import { Component, inject, Signal, signal } from '@angular/core';
+import { Component, inject, Signal, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
 import { AuthService } from '../../../features/auth/data-access/auth-service';
@@ -14,6 +14,7 @@ import { AccountDrawerComponent } from '../account-drawer/account-drawer';
     AccountDrawerComponent 
   ],
   templateUrl: './auth-actions.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./auth-actions.scss'],
 })
 export class AuthActionsComponent {

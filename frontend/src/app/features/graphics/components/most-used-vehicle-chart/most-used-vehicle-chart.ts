@@ -1,4 +1,4 @@
-import { Component, effect, ElementRef, inject, input, OnDestroy, ViewChild } from '@angular/core';
+import { Component, effect, ElementRef, inject, input, OnDestroy, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import Chart from 'chart.js/auto';
 
 import { TimePeriod } from '../../enums/time-period.enum';
@@ -12,6 +12,7 @@ import { GraphicsMessagesService } from '../../i18n/graphics-messages-service';
   standalone: true,
   imports: [],
   templateUrl: './most-used-vehicle-chart.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './most-used-vehicle-chart.scss',
 })
 export class MostUsedVehicleChartComponent implements OnDestroy {

@@ -1,4 +1,4 @@
-import { Component, effect, inject, OnDestroy, OnInit, signal, ViewContainerRef } from '@angular/core';
+import { Component, effect, inject, OnDestroy, OnInit, signal, ViewContainerRef, ChangeDetectionStrategy } from '@angular/core';
 import * as L from 'leaflet';
 
 import { MapService } from '../../data-access/map-service';
@@ -21,6 +21,7 @@ import { VehicleAccessService } from '../../../../core/services/vehicle-access/v
     ConfirmModalComponent,
   ],
   templateUrl: './map-view.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './map-view.scss',
 })
 export class MapViewComponent implements OnInit, OnDestroy {

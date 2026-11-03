@@ -1,10 +1,11 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-create-button',
   standalone: true,
   imports: [],
   templateUrl: './create-button.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './create-button.scss',
 })
 export class CreateButtonComponent {

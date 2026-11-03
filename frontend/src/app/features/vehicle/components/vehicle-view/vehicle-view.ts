@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, computed, inject, OnInit, signal, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 
 import { VehicleInterface } from '../../models/vehicle';
@@ -34,6 +34,7 @@ import { CreateButtonComponent } from "../../../../shared/ui/buttons/create-butt
     VehicleTablePaginationComponent
   ],
   templateUrl: './vehicle-view.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './vehicle-view.scss',
 })
 export class VehicleViewComponent implements OnInit {

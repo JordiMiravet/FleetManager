@@ -1,4 +1,4 @@
-import { Component, inject, input, output } from '@angular/core';
+import { Component, inject, input, output, ChangeDetectionStrategy } from '@angular/core';
 
 import { VehicleInterface } from '../../models/vehicle';
 import { VehicleMessagesService } from '../../i18n/vehicle-messages-service';
@@ -8,6 +8,7 @@ import { VehicleMessagesService } from '../../i18n/vehicle-messages-service';
   standalone: true,
   imports: [],
   templateUrl: './vehicle-selector.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './vehicle-selector.scss',
 })
 export class VehicleSelectorComponent {

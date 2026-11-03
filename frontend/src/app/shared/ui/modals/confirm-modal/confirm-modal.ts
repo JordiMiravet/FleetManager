@@ -1,4 +1,4 @@
-import { Component, inject, input, output } from '@angular/core';
+import { Component, inject, input, output, ChangeDetectionStrategy } from '@angular/core';
 
 import { SharedUiMessagesService } from '../../i18n/shared-ui-messages-service';
 
@@ -7,6 +7,7 @@ import { SharedUiMessagesService } from '../../i18n/shared-ui-messages-service';
   standalone: true,
   imports: [],
   templateUrl: './confirm-modal.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './confirm-modal.scss',
 })
 export class ConfirmModalComponent {

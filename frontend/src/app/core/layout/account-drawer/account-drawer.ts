@@ -1,4 +1,4 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, inject, output, ChangeDetectionStrategy } from '@angular/core';
 
 import { LayoutMessagesService } from '../i18n/layout-messages-service';
 import { DarkModeToggleComponent } from '../../../shared/ui/buttons/dark-mode-toggle/dark-mode-toggle';
@@ -10,6 +10,7 @@ import { DarkModeToggleComponent } from '../../../shared/ui/buttons/dark-mode-to
     DarkModeToggleComponent 
   ],
   templateUrl: './account-drawer.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './account-drawer.scss',
 })
 export class AccountDrawerComponent {

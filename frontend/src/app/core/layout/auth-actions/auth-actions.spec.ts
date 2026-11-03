@@ -1,5 +1,5 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { provideRouter, Router } from '@angular/router';
 
 import { AuthActionsComponent } from './auth-actions';
@@ -13,12 +13,14 @@ class MockAuthService {
 
 @Component({
   selector: 'app-login-test',
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: '<p>Login Page</p>'
 })
 class LoginComponent {}
 
 @Component({
   selector: 'app-register-test',
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: '<p>Register Page</p>'
 })
 class RegisterComponent {}

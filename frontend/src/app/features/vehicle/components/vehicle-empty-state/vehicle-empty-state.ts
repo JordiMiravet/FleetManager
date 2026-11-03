@@ -1,4 +1,4 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, inject, output, ChangeDetectionStrategy } from '@angular/core';
 import { CreateButtonComponent } from "../../../../shared/ui/buttons/create-button/create-button";
 import { VehicleMessagesService } from '../../i18n/vehicle-messages-service';
 
@@ -7,6 +7,7 @@ import { VehicleMessagesService } from '../../i18n/vehicle-messages-service';
   standalone: true,
   imports: [CreateButtonComponent],
   templateUrl: './vehicle-empty-state.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './vehicle-empty-state.scss',
 })
 export class VehicleEmptyStateComponent {

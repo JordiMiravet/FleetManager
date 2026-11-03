@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { Auth } from '@angular/fire/auth';
 import { environment } from '../../../../environments/environment';
@@ -52,7 +52,7 @@ describe('VehicleService', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         { provide: Auth, useValue: authMock },
         { provide: DataSourceService, useValue: dataSourceServiceMock },

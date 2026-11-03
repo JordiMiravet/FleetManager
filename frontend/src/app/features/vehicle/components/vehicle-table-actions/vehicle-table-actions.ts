@@ -1,4 +1,4 @@
-import { Component, inject, output, signal } from '@angular/core';
+import { Component, inject, output, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { SortDir, SortField, VehicleFilterState } from '../../types/vehicle-filter-state';
 import { VehicleMessagesService } from '../../i18n/vehicle-messages-service';
@@ -8,6 +8,7 @@ import { VehicleMessagesService } from '../../i18n/vehicle-messages-service';
   standalone: true,
   imports: [],
   templateUrl: './vehicle-table-actions.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './vehicle-table-actions.scss',
 })
 export class VehicleTableActionsComponent {

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { Auth } from '@angular/fire/auth';
 
 import { DayEventsModalComponent } from './day-events-modal';
@@ -80,7 +80,7 @@ const getEmptyState = (): HTMLElement => fixture.nativeElement.querySelector('.m
     await TestBed.configureTestingModule({
       imports: [DayEventsModalComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         { provide: Auth, useValue: mockAuth },
         { provide: VehicleService, useValue: createMockVehicleService() }
       ]

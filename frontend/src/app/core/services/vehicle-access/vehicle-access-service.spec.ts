@@ -7,7 +7,7 @@ import { InvitationService } from '../../../features/invitations/data-access/inv
 import { InvitationStatus } from '../../../features/invitations/enums/invitation-status.enum';
 import { VehicleInterface } from '../../../features/vehicle/models/vehicle';
 import { VehicleInvitation } from '../../../features/invitations/models/invitation';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { Auth } from '@angular/fire/auth';
 
 describe('VehicleAccessService', () => {
@@ -43,7 +43,7 @@ describe('VehicleAccessService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         { provide: Auth, useValue: authMock },
       ]
     });

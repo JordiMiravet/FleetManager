@@ -1,4 +1,4 @@
-import { Component, inject, input, output } from '@angular/core';
+import { Component, inject, input, output, ChangeDetectionStrategy } from '@angular/core';
 
 import { VehicleInterface } from '../../models/vehicle';
 
@@ -17,6 +17,7 @@ import { AuthorizationService } from '../../../../core/services/authorization/au
     UserButtonComponent
   ],
   templateUrl: './vehicle-table.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './vehicle-table.scss',
 })
 export class VehicleTableComponent {

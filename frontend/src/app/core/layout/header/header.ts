@@ -1,4 +1,4 @@
-import { Component, inject, Signal } from '@angular/core';
+import { Component, inject, Signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { AuthService } from '../../../features/auth/data-access/auth-service';
 
@@ -15,6 +15,7 @@ import { NotificationsComponent } from '../notifications/notifications';
     NotificationsComponent
   ],
   templateUrl: './header.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './header.scss',
 })
 export class HeaderComponent {

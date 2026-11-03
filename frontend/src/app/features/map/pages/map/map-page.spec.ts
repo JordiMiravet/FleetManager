@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Auth } from '@angular/fire/auth';
 import { By } from '@angular/platform-browser';
@@ -25,7 +25,7 @@ describe('MapPageComponent', () => {
       imports: [ MapPageComponent ],
       providers: [
         { provide: Auth, useValue: authMock },
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
       ]
     }).compileComponents();

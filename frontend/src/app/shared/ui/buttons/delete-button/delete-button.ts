@@ -1,4 +1,4 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, inject, output, ChangeDetectionStrategy } from '@angular/core';
 
 import { SharedUiMessagesService } from '../../i18n/shared-ui-messages-service';
 
@@ -7,6 +7,7 @@ import { SharedUiMessagesService } from '../../i18n/shared-ui-messages-service';
   standalone: true,
   imports: [],
   templateUrl: './delete-button.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './delete-button.scss',
 })
 export class DeleteButtonComponent {

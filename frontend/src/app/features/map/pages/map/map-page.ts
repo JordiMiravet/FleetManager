@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MapContainerComponent } from '../../components/map-container/map-container';
 
 @Component({
@@ -6,6 +6,7 @@ import { MapContainerComponent } from '../../components/map-container/map-contai
   standalone: true,
   imports: [ MapContainerComponent ],
   templateUrl: './map-page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './map-page.scss',
 })
 export class MapPageComponent {

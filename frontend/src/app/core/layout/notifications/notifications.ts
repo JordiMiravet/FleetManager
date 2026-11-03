@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { NotificationBellComponent } from '../../../features/invitations/components/notification-bell/notification-bell';
 
@@ -7,6 +7,7 @@ import { NotificationBellComponent } from '../../../features/invitations/compone
   standalone: true,
   imports: [ NotificationBellComponent ],
   templateUrl: './notifications.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './notifications.scss',
 })
 export class NotificationsComponent {

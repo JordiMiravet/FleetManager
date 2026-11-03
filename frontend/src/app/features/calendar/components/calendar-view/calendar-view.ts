@@ -1,5 +1,5 @@
 
-import { Component, signal, computed, ViewChild, ViewEncapsulation, inject, AfterViewInit, effect } from '@angular/core';
+import { Component, signal, computed, ViewChild, ViewEncapsulation, inject, AfterViewInit, effect, ChangeDetectionStrategy } from '@angular/core';
 
 import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
 import { EventClickArg, EventInput } from '@fullcalendar/core';
@@ -34,6 +34,7 @@ import { CalendarModalState } from '../../enums/calendar-modal-state.enum';
   ],
   templateUrl: './calendar-view.html',
   styleUrl: './calendar-view.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   encapsulation: ViewEncapsulation.None,
 })
 export class CalendarViewComponent implements AfterViewInit {

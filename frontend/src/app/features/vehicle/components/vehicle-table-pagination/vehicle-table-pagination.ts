@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { VehicleService } from '../../data-access/vehicle-service';
 import { VehicleMessagesService } from '../../i18n/vehicle-messages-service';
 
@@ -7,6 +7,7 @@ import { VehicleMessagesService } from '../../i18n/vehicle-messages-service';
   standalone: true,
   imports: [],
   templateUrl: './vehicle-table-pagination.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './vehicle-table-pagination.scss',
 })
 export class VehicleTablePaginationComponent {
