@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './core/layout/header/header';
 
@@ -9,6 +9,7 @@ import { HeaderComponent } from './core/layout/header/header';
     HeaderComponent 
   ],
   templateUrl: './app.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./app.scss']
 })
 export class App {
