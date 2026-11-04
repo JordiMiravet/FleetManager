@@ -57,3 +57,13 @@ The upgrade must preserve the existing behavior of the application. No new featu
 - **Move to `OnPush` during the upgrade:** it could introduce screens that do not update, which is hard to detect across dozens of components. It was rejected in favor of keeping `Eager` explicit and migrating later, feature by feature.
 - **Migrate from Karma to Vitest during the upgrade:** it is a separate change with its own risks, so it was rejected.
 - **Use Node.js 24 or 26:** both are supported or likely to be, but moving to the 22 line changed the least while meeting the Angular 22 requirement.
+
+## Consequences
+
+- The frontend runs on Angular 22 with TypeScript 6.0.3, AngularFire `22.0.0-rc.0`, FullCalendar 6.1.22 and Angular CDK 22.2.
+- The documentation lists Node.js v22.22.3 as the minimum version.
+- The unit test suite passes with 1,017 tests and the same coverage as before the upgrade (Statements 98.57%, Branches 93.02%, Functions 97.81%, Lines 98.71%).
+- The production build completes without errors. It reports two warnings that were already present before the upgrade: the initial bundle exceeds the 500 kB budget and `leaflet` is not an ES module. The initial bundle grew from 592.03 kB to 622.01 kB during the second step.
+- The main application flows were verified manually in both API and mock modes.
+- Components keep an explicit `Eager` change detection strategy. This is a transitional state, not a final design.
+
