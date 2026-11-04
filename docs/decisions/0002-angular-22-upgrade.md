@@ -18,3 +18,9 @@ Upgrade the frontend from Angular 20 to Angular 22 in two independent steps, eac
 2. **Angular 21 → 22 (task #624).**
 
 The upgrade must preserve the existing behavior of the application. No new features, visual changes or functional modifications are included.
+
+### Migration approach
+
+- Use `ng update` and apply the automatic migrations provided by each major version.
+- Verify the build, the unit tests, the coverage and the main application flows after each step, before merging.
+- Make one commit per file or per dependency change, so every change can be reviewed and reverted on its own.
