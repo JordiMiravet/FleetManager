@@ -67,3 +67,11 @@ The upgrade must preserve the existing behavior of the application. No new featu
 - The main application flows were verified manually in both API and mock modes.
 - Components keep an explicit `Eager` change detection strategy. This is a transitional state, not a final design.
 
+### Follow-ups
+
+- Move `@angular/fire` from the release candidate to the stable 22 release when it is published.
+- Migrate components from `Eager` to `OnPush` progressively, feature by feature, verifying each one.
+- Evaluate migrating the unit-test runner from Karma to Vitest.
+- Review the initial bundle size and the `leaflet` module format warning.
+
+Future major upgrades should follow the same approach: one major version at a time, official migrations, no behavior changes and verification before merging.
