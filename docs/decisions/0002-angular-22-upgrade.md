@@ -41,3 +41,9 @@ The upgrade must preserve the existing behavior of the application. No new featu
 - **Control flow:** in the first step, the official migration converts the templates to the `@if` / `@for` syntax and removes the `CommonModule` imports that are no longer needed.
 - **TypeScript diagnostics:** the extended diagnostics `nullishCoalescingNotNullable` and `optionalChainNotNullable` are suppressed in the application and spec configurations, as set by the Angular 22 migration.
 - **Zone.js:** the application keeps using `provideZoneChangeDetection`, which was already present in the application configuration.
+
+### Optional migrations not applied
+
+- `use-application-builder`: the project already uses the new build system.
+- `router-current-navigation`: a modernization that is not required by the upgrade.
+- `migrate-karma-to-vitest`: it replaces the whole unit-test runner, so it is outside the scope of a version upgrade.
