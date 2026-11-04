@@ -55,7 +55,7 @@ flowchart TD
     BA --> EVT["Events"]
 ```
 
-The decisions behind this structure are documented in [ADR 0001](decisions/0001-monorepo-structure.md). The rest of this guide describes the architecture of the frontend application.
+The decisions behind this structure are documented in [ADR 0001](decisions/0001-monorepo-structure.md). The decision to upgrade the frontend to Angular 22 is documented in [ADR 0002](decisions/0002-angular-22-upgrade.md). The rest of this guide describes the architecture of the frontend application.
 
 ## System Architecture
 
