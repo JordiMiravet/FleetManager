@@ -77,3 +77,7 @@ The upgrade must preserve the existing behavior of the application. No new featu
 - Review the initial bundle size and the `leaflet` module format warning.
 
 Future major upgrades should follow the same approach: one major version at a time, official migrations, no behavior changes and verification before merging.
+
+---
+
+[↑ Back to top](#adr-0002-upgrade-the-frontend-to-angular-22)
