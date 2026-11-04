@@ -4,7 +4,7 @@ Back to the [README](../../README.md).
 
 - **Status:** Accepted
 - **Date:** 2026-11-04
-- **Related:** Epic #<epic-number>, tasks #623 and #624
+- **Related:** Epic #622, tasks #623 and #624
 
 ## Context
 
