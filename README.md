@@ -279,7 +279,7 @@ The testing strategy, how to run the tests for a specific feature, and the curre
 
 ## Documentation
 
-Detailed guides are available in the [`docs`](docs) folder, along with the contribution guidelines at the repository root:
+The following table provides an overview of the project's documentation, including detailed guides in the [`docs`](docs) folder and additional guidelines and policies at the repository root:
 
 | Guide | Description |
 | --- | --- |
