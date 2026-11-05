@@ -55,7 +55,9 @@ flowchart TD
     BA --> EVT["Events"]
 ```
 
-The decisions behind this structure are documented in [ADR 0001](decisions/0001-monorepo-structure.md). The decision to upgrade the frontend to Angular 22 is documented in [ADR 0002](decisions/0002-angular-22-upgrade.md). The rest of this guide describes the architecture of the frontend application.
+The architectural decisions behind Fleet Manager are documented as Architecture Decision Records (ADRs). The [ADR index](decisions/index.md) provides a centralized overview of all documented decisions, including their status and date.
+
+The rest of this guide describes the architecture of the frontend application.
 
 ## System Architecture
 
