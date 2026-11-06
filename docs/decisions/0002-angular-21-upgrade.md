@@ -45,12 +45,10 @@ Upgrade the frontend from Angular 20 to Angular 21 as an independent step, with 
 ## Alternatives considered
 
 - **Stay on Angular 20:** avoids the migration work, but the project would fall behind on supported versions and compatible dependencies.
-- **Stop at Angular 21 and wait for a stable AngularFire 22:** the lowest-risk option, since Angular 21 remained a supported version. It was not chosen because the project only uses AngularFire for authentication and the release candidate is official, so the risk was considered acceptable. The cost is a pre-release dependency that has to be replaced later.
-- **Force the installation (`--force` or `--legacy-peer-deps`):** it would have allowed Angular 22 with AngularFire 21, but it produces a dependency tree that is not supported by the packages' declared ranges. It was rejected.
-- **Upgrade to FullCalendar 7 at the same time:** it supports Angular 22, but it requires changing imports and adding dependencies. It was postponed to avoid mixing unrelated breaking changes.
-- **Move to `OnPush` during the upgrade:** it could introduce screens that do not update, which is hard to detect across dozens of components. It was rejected in favor of keeping `Eager` explicit and migrating later, feature by feature.
-- **Migrate from Karma to Vitest during the upgrade:** it is a separate change with its own risks, so it was rejected.
-- **Use Node.js 24 or 26:** both are supported or likely to be, but moving to the 22 line changed the least while meeting the Angular 22 requirement.
+- **Upgrade directly from Angular 20 to Angular 22:** not supported by `ng update`, which only upgrades one major version at a time.
+- **Update all outdated dependencies together with Angular:** it would have mixed unrelated breaking changes, making it hard to identify the cause of any failure.
+- **Apply the optional migrations:** they are not required to run on Angular 21 and would have increased the size and risk of the change.
+- **Use `npm audit fix` to reduce reported vulnerabilities:** it can change dependency versions outside the scope of the upgrade, so it was left for a separate task.
 
 ## Consequences
 
