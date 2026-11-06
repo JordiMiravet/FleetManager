@@ -52,3 +52,25 @@ Upgrade the frontend from Angular 21 to Angular 22 as an independent step, with 
 - **Migrate from Karma to Vitest during the upgrade:** it is a separate change with its own risks, so it was rejected.
 - **Use Node.js 24:** Angular 22 supports it, but the 22 line required the smallest change. Node.js 26 was not verified against the toolchain.
 
+## Consequences
+
+- The frontend runs on Angular 22 with TypeScript 6.0.3, AngularFire `22.0.0-rc.0`, FullCalendar 6.1.22 and Angular CDK 22.2.
+- The documentation lists Node.js v22.22.3 as the minimum version.
+- The unit test suite passes with 1,017 tests and the same coverage as before the upgrade (Statements 98.57%, Branches 93.02%, Functions 97.81%, Lines 98.71%).
+- The production build completes without errors. It reports the same two warnings as before: the initial bundle exceeds the 500 kB budget and `leaflet` is not an ES module. The initial bundle grew from 592.03 kB to 622.01 kB, and the cause was not investigated.
+- `ng serve` gives priority to the `PORT` environment variable over the configured port.
+- The main application flows were verified manually in both API and mock modes.
+- Components keep an explicit `Eager` change detection strategy. This is a transitional state, not a final design.
+
+### Follow-ups
+
+- Move `@angular/fire` from the release candidate to the stable 22 release when it is published.
+- Migrate components from `Eager` to `OnPush` progressively, feature by feature, verifying each one.
+- Evaluate migrating the unit-test runner from Karma to Vitest.
+- Review the initial bundle size and the `leaflet` module format warning.
+
+Future major upgrades should follow the same approach: one major version at a time, official migrations, no behavior changes and verification before merging.
+
+---
+
+[↑ Back to top](#adr-0003-upgrade-the-frontend-to-angular-22)
