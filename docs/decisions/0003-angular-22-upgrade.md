@@ -42,3 +42,13 @@ Upgrade the frontend from Angular 21 to Angular 22 as an independent step, with 
 
 - `migrate-karma-to-vitest`: it replaces the whole unit-test runner, so it is outside the scope of a version upgrade.
 - `use-application-builder`: the project already uses the new build system.
+
+## Alternatives considered
+
+- **Stop at Angular 21 and wait for a stable AngularFire 22:** the lowest-risk option, since Angular 21 remained a supported version. It was not chosen because the project only uses AngularFire for authentication and the release candidate is official, so the risk was considered acceptable. The cost is a pre-release dependency that has to be replaced later.
+- **Force the installation (`--force` or `--legacy-peer-deps`):** it would have allowed Angular 22 with AngularFire 21, but it produces a dependency tree that is not supported by the packages' declared ranges. It was rejected.
+- **Upgrade to FullCalendar 7 at the same time:** it supports Angular 22, but it requires changing imports and adding dependencies. It was postponed to avoid mixing unrelated breaking changes.
+- **Move to `OnPush` during the upgrade:** it could introduce screens that do not update, which is hard to detect across dozens of components. It was rejected in favor of keeping `Eager` explicit and migrating later, feature by feature.
+- **Migrate from Karma to Vitest during the upgrade:** it is a separate change with its own risks, so it was rejected.
+- **Use Node.js 24:** Angular 22 supports it, but the 22 line required the smallest change. Node.js 26 was not verified against the toolchain.
+
