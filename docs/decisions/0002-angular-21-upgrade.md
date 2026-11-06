@@ -1,6 +1,6 @@
 # ADR 0002: Upgrade the frontend to Angular 21
 
-Back to the [README](../../README.md).
+Back to the [ADR index](index.md).
 
 - **Status:** Accepted
 - **Date:** 2026-11-02

@@ -1,6 +1,6 @@
 # ADR 0003: Upgrade the frontend to Angular 22
 
-Back to the [README](../../README.md).
+Back to the [ADR index](index.md).
 
 - **Status:** Accepted
 - **Date:** 2026-11-03
