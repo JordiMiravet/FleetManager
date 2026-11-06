@@ -30,3 +30,15 @@ Upgrade the frontend from Angular 21 to Angular 22 as an independent step, with 
 - **TypeScript:** 6.0.3, as required by Angular 22.
 - **Node.js:** Angular 22 requires Node.js v22.22.3 or v24.15.0 and later. The project uses the 22 line (verified with v22.23.4) to avoid mixing a larger runtime change with the framework upgrade. The documentation lists v22.22.3 as the minimum version.
 - **Angular CDK:** updated to the stable 22.2 line, although the source code does not import it directly.
+
+### Decisions that preserve existing behavior
+
+- **Change detection:** Angular 22 changes the default change detection strategy. The official migration sets `ChangeDetectionStrategy.Eager` explicitly on 40 components and one test component, so they keep the behavior they had before. Each file is a separate commit.
+- **HTTP client:** the official migration adds `withXhr()` to `provideHttpClient` in the application configuration and in 16 specs, so the XHR backend is kept explicitly.
+- **TypeScript diagnostics:** the extended diagnostics `nullishCoalescingNotNullable` and `optionalChainNotNullable` are suppressed in the application and spec configurations, as set by the migration.
+- **Strict templates:** it is enabled by default in Angular 22. The build reported no new errors, so no configuration change was needed.
+
+### Optional migrations not applied
+
+- `migrate-karma-to-vitest`: it replaces the whole unit-test runner, so it is outside the scope of a version upgrade.
+- `use-application-builder`: the project already uses the new build system.
