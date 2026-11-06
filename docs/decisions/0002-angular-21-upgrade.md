@@ -52,22 +52,17 @@ Upgrade the frontend from Angular 20 to Angular 21 as an independent step, with 
 
 ## Consequences
 
-- The frontend runs on Angular 22 with TypeScript 6.0.3, AngularFire `22.0.0-rc.0`, FullCalendar 6.1.22 and Angular CDK 22.2.
-- The documentation lists Node.js v22.22.3 as the minimum version.
+- The frontend runs on Angular 21 with TypeScript 5.9, AngularFire 21.0.0 and Angular CDK 21.2.
 - The unit test suite passes with 1,017 tests and the same coverage as before the upgrade (Statements 98.57%, Branches 93.02%, Functions 97.81%, Lines 98.71%).
-- The production build completes without errors. It reports two warnings that were already present before the upgrade: the initial bundle exceeds the 500 kB budget and `leaflet` is not an ES module. The initial bundle grew from 592.03 kB to 622.01 kB during the second step.
+- The production build completes without errors. It reports two warnings: the initial bundle exceeds the 500 kB budget (592.03 kB) and `leaflet` is not an ES module. Neither was addressed in this step.
 - The main application flows were verified manually in both API and mock modes.
-- Components keep an explicit `Eager` change detection strategy. This is a transitional state, not a final design.
+- Seven templates now use the built-in control flow syntax.
 
 ### Follow-ups
 
-- Move `@angular/fire` from the release candidate to the stable 22 release when it is published.
-- Migrate components from `Eager` to `OnPush` progressively, feature by feature, verifying each one.
-- Evaluate migrating the unit-test runner from Karma to Vitest.
-- Review the initial bundle size and the `leaflet` module format warning.
-
-Future major upgrades should follow the same approach: one major version at a time, official migrations, no behavior changes and verification before merging.
+- Continue to Angular 22, documented in [ADR 0003](0003-angular-22-upgrade.md).
+- Review whether the Angular CDK dependency is still needed, since the source code does not import it.
 
 ---
 
-[↑ Back to top](#adr-0002-upgrade-the-frontend-to-angular-22)
+[↑ Back to top](#adr-0002-upgrade-the-frontend-to-angular-21)
