@@ -1,6 +1,6 @@
 # ADR 0001: Monorepo structure
 
-Back to the [README](../../README.md).
+Back to the [ADR index](index.md).
 
 - **Status:** Accepted
 - **Date:** 2026-10-27
