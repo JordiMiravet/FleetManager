@@ -33,17 +33,14 @@ Upgrade the frontend from Angular 20 to Angular 21 as an independent step, with 
 
 ### Decisions that preserve existing behavior
 
-- **Change detection:** Angular 22 changes the default change detection strategy. The official migration sets `ChangeDetectionStrategy.Eager` explicitly on every component (40 components and one test component), so they keep the behavior they had before.
-- **HTTP client:** the official migration adds `withXhr()` to `provideHttpClient` in the application configuration and in 16 specs, so the XHR backend is kept explicitly.
-- **Control flow:** in the first step, the official migration converts the templates to the `@if` / `@for` syntax and removes the `CommonModule` imports that are no longer needed.
-- **TypeScript diagnostics:** the extended diagnostics `nullishCoalescingNotNullable` and `optionalChainNotNullable` are suppressed in the application and spec configurations, as set by the Angular 22 migration.
-- **Zone.js:** the application keeps using `provideZoneChangeDetection`, which was already present in the application configuration.
+- **Control flow:** the official migration converts the templates of seven components to the `@if` / `@for` syntax and removes the `CommonModule` imports that are no longer needed. Each component is a separate commit.
+- **Zone.js:** the application already provided `provideZoneChangeDetection` in its configuration, so no change was needed.
+- **Host binding type checking:** it is enabled by default in Angular 21. The build reported no new errors, so no configuration change was needed.
 
 ### Optional migrations not applied
 
 - `use-application-builder`: the project already uses the new build system.
 - `router-current-navigation`: a modernization that is not required by the upgrade.
-- `migrate-karma-to-vitest`: it replaces the whole unit-test runner, so it is outside the scope of a version upgrade.
 
 ## Alternatives considered
 
