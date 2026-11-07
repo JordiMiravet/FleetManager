@@ -33,7 +33,7 @@ Upgrade the frontend from Angular 20 to Angular 21 as an independent step, with 
 
 ### Decisions that preserve existing behavior
 
-- **Control flow:** the official migration converts the templates of seven components to the `@if` / `@for` syntax and removes the `CommonModule` imports that are no longer needed. Each component is a separate commit.
+- **Control flow:** the official migration to the built-in control flow syntax (`@if` / `@for`) only modified the component classes of seven components, removing the `CommonModule` imports that were no longer needed. No template files changed. Each component is a separate commit.
 - **Zone.js:** the application already provided `provideZoneChangeDetection` in its configuration, so no change was needed.
 - **Host binding type checking:** it is enabled by default in Angular 21. The build reported no new errors, so no configuration change was needed.
 
