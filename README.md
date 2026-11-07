@@ -64,6 +64,7 @@ The application follows a modular architecture based on reusable components and 
   - Total accumulated usage hours per vehicle.
   - Most-used vehicle.
   - Distribution of usage hours by day of the week.
+  - Filter by period: This Month, This Year, and All Time.
 
 Fleet Manager provides a centralized solution for managing vehicles, planning usage, and analyzing vehicle activity through an integrated platform.
 
