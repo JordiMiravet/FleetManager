@@ -56,7 +56,7 @@ Upgrade the frontend from Angular 20 to Angular 21 as an independent step, with 
 - The unit test suite passes with 1,017 tests and the same coverage as before the upgrade (Statements 98.57%, Branches 93.02%, Functions 97.81%, Lines 98.71%).
 - The production build completes without errors. It reports two warnings: the initial bundle exceeds the 500 kB budget (592.03 kB) and `leaflet` is not an ES module. Neither was addressed in this step.
 - The main application flows were verified manually in both API and mock modes.
-- Seven templates now use the built-in control flow syntax.
+- Seven components no longer import `CommonModule`.
 
 ### Follow-ups
 
