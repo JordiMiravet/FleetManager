@@ -268,7 +268,7 @@ The following section showcases the main features of the application through ani
 
 ## Tests
 
-The project uses Jasmine and Karma for unit testing Angular components and services, and aims to keep test coverage above 90%. Run all frontend unit tests from the `frontend/` folder with:
+The project uses Jasmine and Karma for unit testing Angular components and services, and Jest for the NestJS backend. The frontend aims to keep test coverage above 90%. Run all frontend unit tests from the `frontend/` folder with:
 
 ```bash
 ng test
