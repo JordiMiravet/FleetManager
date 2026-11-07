@@ -29,7 +29,7 @@ Back to the [README](../README.md#installation).
 
 - Node.js v22.22.3 or higher
 - Angular CLI (`npm install -g @angular/cli`)
-- MongoDB running
+- MongoDB running (a local instance or a MongoDB Atlas cluster; set its connection string in `MONGO_URI`, see [Backend](#3-backend))
 
 ## 1. Clone the repository
 
