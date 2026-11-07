@@ -146,6 +146,8 @@ http://localhost:4200
 - Real credentials are not included in the repository.
 - Each developer must use their own Firebase project.
 
+After starting the application, follow the [Usage Guide](usage.md) to explore its features.
+
 ---
 
 [↑ Back to top](#installation)
