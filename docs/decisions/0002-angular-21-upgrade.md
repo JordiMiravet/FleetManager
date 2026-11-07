@@ -4,7 +4,7 @@ Back to the [ADR index](index.md).
 
 - **Status:** Accepted
 - **Date:** 2026-11-02
-- **Related:** Epic #622, task #623
+- **Related:** Epic #622, task #623. Followed by [ADR 0003](0003-angular-22-upgrade.md).
 
 ## Context
 
