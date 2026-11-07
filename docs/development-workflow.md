@@ -6,6 +6,8 @@ The short version lives in the [README](../README.md#development-workflow). This
 
 Contribution guidelines, including how to report issues and propose changes, are documented in [CONTRIBUTING.md](../CONTRIBUTING.md).
 
+For project setup instructions, see the [Installation Guide](installation.md). For architectural information, see the [Architecture Guide](architecture.md).
+
 ## Table of Contents
 
 - [Development Workflow](#development-workflow)
