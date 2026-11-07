@@ -77,7 +77,7 @@ Fleet Manager provides a centralized solution for managing vehicles, planning us
 | UI libraries and visualization | `PrimeNG`, `Leaflet`, `FullCalendar`, `Chart.js` |
 | Backend | `NestJS`, `MongoDB` |
 | Authentication | `Firebase Authentication` |
-| Testing | `Jasmine & Karma` |
+| Testing | `Jasmine & Karma`, `Jest` |
 
 ---
 
