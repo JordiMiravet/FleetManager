@@ -6,7 +6,7 @@ This directory contains the Architecture Decision Records (ADRs) documenting sig
 
 Each record describes the context behind a decision, the chosen approach, the alternatives considered and its consequences.
 
-The overall structure of the project is described in the [architecture guide](../architecture.md).
+For a broader explanation of the system structure, see the [Architecture Guide](../architecture.md).
 
 ## Decisions
 
