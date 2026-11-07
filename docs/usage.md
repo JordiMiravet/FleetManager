@@ -1,8 +1,6 @@
 # Usage
 
-This guide describes how to use Fleet Manager step by step. For a summary of what the application does, see [Main Features](../README.md#main-features).
-
-For setup instructions, see the [Installation Guide](installation.md).
+This guide describes how to use Fleet Manager step by step. For a summary of what the application does, see [Main Features](../README.md#main-features). To install and start the application first, see the [Installation Guide](installation.md).
 
 Back to the [README](../README.md#usage).
 
