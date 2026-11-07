@@ -57,6 +57,8 @@ flowchart TD
 
 The architectural decisions behind Fleet Manager are documented as Architecture Decision Records (ADRs). The [ADR index](decisions/index.md) provides a centralized overview of all documented decisions, including their status and date.
 
+The planned architectural improvements are tracked in the [project roadmap](roadmap.md).
+
 The rest of this guide describes the architecture of the frontend application.
 
 ## System Architecture
