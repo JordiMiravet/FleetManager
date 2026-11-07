@@ -11,6 +11,7 @@ Back to the [README](../README.md#tests).
     - [Frontend Tests](#frontend-tests)
     - [Backend Tests](#backend-tests)
   - [Coverage](#coverage)
+  - [Related Documentation](#related-documentation)
 
 ## Testing Strategy
 
@@ -82,6 +83,12 @@ Lines        : 98.71% ( 999/1012 )
 
 TOTAL: 1017 SUCCESS
 ```
+
+## Related Documentation
+
+- [Installation Guide](installation.md)
+- [Architecture Guide](architecture.md)
+- [Development Workflow](development-workflow.md)
 
 ---
 
