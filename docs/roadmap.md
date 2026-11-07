@@ -98,7 +98,6 @@ Back to the [README](../README.md#roadmap).
 
 - [Architecture Guide](architecture.md)
 - [Testing Guide](testing.md)
-- [Development Workflow](development-workflow.md)
 
 ---
 
