@@ -6,8 +6,6 @@ Back to the [ADR index](index.md).
 - **Date:** 2026-11-02
 - **Related:** Epic #622, task #623
 
-For the subsequent Angular upgrade, see [ADR 0003](0003-angular-22-upgrade.md).
-
 ## Context
 
 The frontend of Fleet Manager was running on Angular 20, which was approaching the end of its support window. Staying on a supported framework version keeps the project compatible with maintained versions of Node.js, TypeScript and the libraries it depends on.
