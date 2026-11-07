@@ -4,8 +4,7 @@ Back to the [ADR index](index.md).
 
 - **Status:** Accepted
 - **Date:** 2026-10-27
-
-For the current repository structure, see the [Architecture Guide](../architecture.md).
+- **Related:** [Architecture guide](../architecture.md)
 
 ## Context
 
