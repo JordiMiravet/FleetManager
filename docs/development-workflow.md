@@ -402,6 +402,9 @@ git commit -m "docs(readme): document development workflow (#234)"
 git push --set-upstream origin docs/234-development-workflow
 ```
 
+For project setup instructions, see the [Installation Guide](installation.md). 
+For architectural information, see the [Architecture Guide](architecture.md).
+
 ---
 
 [↑ Back to top](#development-workflow)
