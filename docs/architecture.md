@@ -130,6 +130,8 @@ This includes:
 
 Resources placed in `shared` are intended to be reused across multiple features without containing business-specific logic.
 
+For information about the planned architectural improvements, see the [Project Roadmap](roadmap.md).
+
 ## Project Structure
 
 Fleet Manager is organized as a monorepo containing two independent applications: an Angular frontend and a NestJS backend. Each application has its own source code, dependencies, configuration, and development commands.
