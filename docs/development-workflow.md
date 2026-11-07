@@ -6,6 +6,8 @@ The short version lives in the [README](../README.md#development-workflow). This
 
 Contribution guidelines, including how to report issues and propose changes, are documented in [CONTRIBUTING.md](../CONTRIBUTING.md).
 
+For project setup instructions, see the [Installation Guide](installation.md). For architectural information, see the [Architecture Guide](architecture.md).
+
 ## Table of Contents
 
 - [Development Workflow](#development-workflow)
@@ -98,6 +100,17 @@ feat(vehicle): add vehicle filtering (#145)
 fix(calendar): prevent overlapping events (#182)
 docs(readme): document development workflow (#234)
 ```
+
+Common types:
+
+- `feat`: a new feature.
+- `fix`: a bug fix.
+- `docs`: documentation changes.
+- `test`: adding or updating tests.
+- `refactor`: code changes that neither fix a bug nor add a feature.
+- `chore`: maintenance tasks such as dependency updates.
+
+Branch names use the same types, with `feature` written in full instead of `feat`.
 
 To keep commits consistent:
 

@@ -4,7 +4,7 @@ Back to the [ADR index](index.md).
 
 - **Status:** Accepted
 - **Date:** 2026-11-02
-- **Related:** Epic #622, task #623
+- **Related:** Epic #622, task #623. Followed by [ADR 0003](0003-angular-22-upgrade.md).
 
 ## Context
 
@@ -33,7 +33,7 @@ Upgrade the frontend from Angular 20 to Angular 21 as an independent step, with 
 
 ### Decisions that preserve existing behavior
 
-- **Control flow:** the official migration converts the templates of seven components to the `@if` / `@for` syntax and removes the `CommonModule` imports that are no longer needed. Each component is a separate commit.
+- **Control flow:** the official migration to the built-in control flow syntax (`@if` / `@for`) only modified the component classes of seven components, removing the `CommonModule` imports that were no longer needed. No template files changed. Each component is a separate commit.
 - **Zone.js:** the application already provided `provideZoneChangeDetection` in its configuration, so no change was needed.
 - **Host binding type checking:** it is enabled by default in Angular 21. The build reported no new errors, so no configuration change was needed.
 
@@ -56,7 +56,7 @@ Upgrade the frontend from Angular 20 to Angular 21 as an independent step, with 
 - The unit test suite passes with 1,017 tests and the same coverage as before the upgrade (Statements 98.57%, Branches 93.02%, Functions 97.81%, Lines 98.71%).
 - The production build completes without errors. It reports two warnings: the initial bundle exceeds the 500 kB budget (592.03 kB) and `leaflet` is not an ES module. Neither was addressed in this step.
 - The main application flows were verified manually in both API and mock modes.
-- Seven templates now use the built-in control flow syntax.
+- Seven components no longer import `CommonModule`.
 
 ### Follow-ups
 

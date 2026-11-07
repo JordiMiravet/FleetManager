@@ -8,7 +8,7 @@ Back to the [ADR index](index.md).
 
 ## Context
 
-After upgrading to Angular 21 ([ADR 0002](0002-angular-21-upgrade.md)), the frontend was upgraded to Angular 22, the latest major version at the time. Angular 20 was approaching the end of its support window, and Angular 22 was already available.
+After upgrading to Angular 21 ([ADR 0002](0002-angular-21-upgrade.md)), the frontend was upgraded to Angular 22, the latest major version at the time. This completes the upgrade started in ADR 0002, which was motivated by the end of the support window of Angular 20.
 
 The upgrade affects several dependencies and changes some framework defaults, such as change detection and strict template type checking. It also raises the minimum Node.js and TypeScript versions.
 

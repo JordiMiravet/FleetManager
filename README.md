@@ -14,6 +14,7 @@
 ![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
 ![Firebase Auth](https://img.shields.io/badge/Firebase_Auth-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
+![Jest](https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white)
 
 ## Table of Contents
 
@@ -63,6 +64,7 @@ The application follows a modular architecture based on reusable components and 
   - Total accumulated usage hours per vehicle.
   - Most-used vehicle.
   - Distribution of usage hours by day of the week.
+  - Filter by period: This Month, This Year, and All Time.
 
 Fleet Manager provides a centralized solution for managing vehicles, planning usage, and analyzing vehicle activity through an integrated platform.
 
@@ -76,7 +78,7 @@ Fleet Manager provides a centralized solution for managing vehicles, planning us
 | UI libraries and visualization | `PrimeNG`, `Leaflet`, `FullCalendar`, `Chart.js` |
 | Backend | `NestJS`, `MongoDB` |
 | Authentication | `Firebase Authentication` |
-| Testing | `Jasmine & Karma` |
+| Testing | `Jasmine & Karma`, `Jest` |
 
 ---
 
@@ -267,7 +269,7 @@ The following section showcases the main features of the application through ani
 
 ## Tests
 
-The project uses Jasmine and Karma for unit testing Angular components and services, and aims to keep test coverage above 90%. Run all frontend unit tests from the `frontend/` folder with:
+The project uses Jasmine and Karma for unit testing Angular components and services, and Jest for the NestJS backend. The frontend aims to keep test coverage above 90%. Run all frontend unit tests from the `frontend/` folder with:
 
 ```bash
 ng test
@@ -285,7 +287,7 @@ The following table provides an overview of the project's documentation, includi
 | --- | --- |
 | [Installation](docs/installation.md) | Full setup of the frontend and the backend, including Firebase and environment configuration. |
 | [Architecture Decision Records](docs/decisions/index.md) | Documented architectural decisions, including their context and consequences. |
-| [Usage](docs/usage.md) | Step-by-step guide to using the application. |
+| [Usage](docs/usage.md) | Step-by-step guide to using the application, from registration to vehicles, map, calendar and statistics. |
 | [Architecture](docs/architecture.md) | Feature-based architecture and project structure. |
 | [Testing](docs/testing.md) | Testing strategy, how to run the tests, and current coverage. |
 | [Development Workflow](docs/development-workflow.md) | Conventions for epics, tasks, branches, commits, and pull requests. |

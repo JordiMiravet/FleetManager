@@ -11,6 +11,7 @@ Back to the [README](../README.md#tests).
     - [Frontend Tests](#frontend-tests)
     - [Backend Tests](#backend-tests)
   - [Coverage](#coverage)
+  - [Related Documentation](#related-documentation)
 
 ## Testing Strategy
 
@@ -74,14 +75,20 @@ Current test coverage:
 
 ```text
 =============================== Coverage summary ===============================
-Statements   : 98.57% ( 1108/1124 )
+Statements   : 98.57% ( 1107/1123 )
 Branches     : 93.02% ( 200/215 )
 Functions    : 97.81% ( 314/321 )
-Lines        : 98.71% ( 999/1012 )
+Lines        : 98.71% ( 998/1011 )
 ================================================================================
 
 TOTAL: 1017 SUCCESS
 ```
+
+## Related Documentation
+
+- [Installation Guide](installation.md)
+- [Architecture Guide](architecture.md)
+- [Development Workflow](development-workflow.md)
 
 ---
 

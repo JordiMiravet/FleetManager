@@ -4,6 +4,7 @@ Back to the [ADR index](index.md).
 
 - **Status:** Accepted
 - **Date:** 2026-10-27
+- **Related:** [Architecture guide](../architecture.md)
 
 ## Context
 
