@@ -287,7 +287,7 @@ The following table provides an overview of the project's documentation, includi
 | --- | --- |
 | [Installation](docs/installation.md) | Full setup of the frontend and the backend, including Firebase and environment configuration. |
 | [Architecture Decision Records](docs/decisions/index.md) | Documented architectural decisions, including their context and consequences. |
-| [Usage](docs/usage.md) | Step-by-step guide to using the application. |
+| [Usage](docs/usage.md) | Step-by-step guide to using the application, from registration to vehicles, map, calendar and statistics. |
 | [Architecture](docs/architecture.md) | Feature-based architecture and project structure. |
 | [Testing](docs/testing.md) | Testing strategy, how to run the tests, and current coverage. |
 | [Development Workflow](docs/development-workflow.md) | Conventions for epics, tasks, branches, commits, and pull requests. |
