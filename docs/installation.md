@@ -141,6 +141,8 @@ Open the application in your browser:
 http://localhost:4200
 ```
 
+Once the application is running, consult the [Usage Guide](usage.md) for instructions on its main features.
+
 ## Notes
 
 - Real credentials are not included in the repository.
