@@ -13,7 +13,7 @@ async function bootstrap() {
     app.get<ConfigService<EnvironmentVariables, true>>(ConfigService);
 
   app.enableCors({
-    origin: 'http://localhost:4200',
+    origin: configService.get('CORS_ORIGIN', { infer: true }),
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
