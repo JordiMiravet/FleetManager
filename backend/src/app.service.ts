@@ -7,7 +7,7 @@ export class AppService {
   constructor(@InjectConnection() private readonly connection: Connection) {}
 
   async checkConnection(): Promise<string> {
-    // Por probar : 0 = disconnected / 1 = connected / 2 = connecting
+    // Mongoose connection states: 0 = disconnected, 1 = connected, 2 = connecting, 3 = disconnecting
     const status = this.connection.readyState;
 
     switch (status) {
