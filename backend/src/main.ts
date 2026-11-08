@@ -1,14 +1,21 @@
 import 'reflect-metadata';
+// Firebase Admin still reads process.env when it is imported, so the .env file
+// must be loaded first. It is replaced by the configuration service in the
+// Firebase task.
 import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
+import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { EnvironmentVariables } from './config/environment-variables';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const configService =
+    app.get<ConfigService<EnvironmentVariables, true>>(ConfigService);
 
   app.enableCors({
-    origin: 'http://localhost:4200',
+    origin: configService.get('CORS_ORIGIN', { infer: true }),
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
@@ -21,6 +28,6 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(configService.get('PORT', { infer: true }));
 }
 bootstrap();
