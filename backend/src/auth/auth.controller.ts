@@ -1,23 +1,13 @@
-import { Controller, Post, Headers, HttpException } from '@nestjs/common';
-import admin from './firebase/firebase-admin';
+import { Controller, Post, UseGuards } from '@nestjs/common';
+import type { AuthenticatedUser } from './authenticated-request';
+import { CurrentUser } from './current-user.decorator';
+import { FirebaseAuthGuard } from './firebase-auth.guard';
 
 @Controller('auth')
 export class AuthController {
   @Post('verify')
-  async verifyToken(
-    @Headers('authorization') authHeader: string,
-  ): Promise<any> {
-    if (!authHeader) {
-      throw new HttpException('No token provided', 401);
-    }
-
-    const token = authHeader.replace('Bearer ', '');
-
-    try {
-      const decoded = await admin.auth().verifyIdToken(token);
-      return { message: 'User verified', user: decoded };
-    } catch (err) {
-      throw new HttpException('Token invalid', 401);
-    }
+  @UseGuards(FirebaseAuthGuard)
+  verifyToken(@CurrentUser() user: AuthenticatedUser) {
+    return { message: 'User verified', user };
   }
 }
