@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { FirebaseModule } from './auth/firebase/firebase.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -21,6 +22,7 @@ import { validateEnvironment } from './config/validate-environment';
         uri: configService.get('MONGO_URI', { infer: true }),
       }),
     }),
+    FirebaseModule,
     AuthModule,
     VehicleModule,
     EventsModule,
