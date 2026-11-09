@@ -4,10 +4,13 @@ import type {
   AuthenticatedUser,
 } from './authenticated-request';
 
-export const CurrentUser = createParamDecorator(
-  (field: keyof AuthenticatedUser | undefined, context: ExecutionContext) => {
-    const user = context.switchToHttp().getRequest<AuthenticatedRequest>().user;
+export const CurrentUser: (
+  field?: keyof AuthenticatedUser,
+) => ParameterDecorator = createParamDecorator<
+  keyof AuthenticatedUser | undefined,
+  unknown
+>((field, context: ExecutionContext) => {
+  const user = context.switchToHttp().getRequest<AuthenticatedRequest>().user;
 
-    return field ? user?.[field] : user;
-  },
-);
+  return field ? user?.[field] : user;
+});
