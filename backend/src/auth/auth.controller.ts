@@ -7,7 +7,10 @@ import { FirebaseAuthGuard } from './firebase-auth.guard';
 export class AuthController {
   @Post('verify')
   @UseGuards(FirebaseAuthGuard)
-  verifyToken(@CurrentUser() user: AuthenticatedUser) {
+  verifyToken(@CurrentUser() user: AuthenticatedUser): {
+    message: string;
+    user: AuthenticatedUser;
+  } {
     return { message: 'User verified', user };
   }
 }
