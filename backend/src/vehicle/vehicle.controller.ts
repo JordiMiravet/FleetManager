@@ -7,7 +7,6 @@ import {
   Param,
   Body,
   UseGuards,
-  Request,
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
@@ -15,32 +14,32 @@ import { VehicleService } from './vehicle.service';
 import { CreateVehicleDto } from './dtos/create-vehicle.dto';
 import { UpdateVehicleDto } from './dtos/update-vehicle.dto';
 import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
-import admin from '../auth/firebase/firebase-admin';
-
-interface RequestWithUser {
-  user?: admin.auth.DecodedIdToken;
-}
+import { CurrentUser } from '../auth/current-user.decorator';
+import { FirebaseService } from '../auth/firebase/firebase.service';
 
 @Controller('vehicles')
 @UseGuards(FirebaseAuthGuard)
 export class VehicleController {
-  constructor(private readonly vehicleService: VehicleService) {}
+  constructor(
+    private readonly vehicleService: VehicleService,
+    private readonly firebaseService: FirebaseService,
+  ) {}
 
   @Get()
-  getAll(@Request() req: RequestWithUser) {
-    const userId = req.user!.uid;
+  getAll(@CurrentUser('uid') userId: string) {
     return this.vehicleService.findAll(userId);
   }
 
   @Get(':id')
-  getOne(@Param('id') id: string, @Request() req: RequestWithUser) {
-    const userId = req.user!.uid;
+  getOne(@Param('id') id: string, @CurrentUser('uid') userId: string) {
     return this.vehicleService.findOne(id, userId);
   }
 
   @Post()
-  create(@Body() vehicle: CreateVehicleDto, @Request() req: RequestWithUser) {
-    const userId = req.user!.uid;
+  create(
+    @Body() vehicle: CreateVehicleDto,
+    @CurrentUser('uid') userId: string,
+  ) {
     return this.vehicleService.create(vehicle, userId);
   }
 
@@ -48,15 +47,13 @@ export class VehicleController {
   update(
     @Param('id') id: string,
     @Body() vehicle: UpdateVehicleDto,
-    @Request() req: RequestWithUser,
+    @CurrentUser('uid') userId: string,
   ) {
-    const userId = req.user!.uid;
     return this.vehicleService.update(id, vehicle, userId);
   }
 
   @Delete(':id')
-  delete(@Param('id') id: string, @Request() req: RequestWithUser) {
-    const userId = req.user!.uid;
+  delete(@Param('id') id: string, @CurrentUser('uid') userId: string) {
     return this.vehicleService.delete(id, userId);
   }
 
@@ -64,10 +61,8 @@ export class VehicleController {
   async addUserByEmail(
     @Param('id') vehicleId: string,
     @Body('email') email: string,
-    @Request() req: RequestWithUser,
+    @CurrentUser('uid') ownerId: string,
   ) {
-    const ownerId = req.user!.uid;
-
     const vehicle = await this.vehicleService.findOne(vehicleId, ownerId);
     if (!vehicle) {
       throw new HttpException(
@@ -77,7 +72,7 @@ export class VehicleController {
     }
 
     try {
-      const userRecord = await admin.auth().getUserByEmail(email);
+      const userRecord = await this.firebaseService.getUserByEmail(email);
 
       if (userRecord.uid === ownerId) {
         throw new HttpException(
@@ -112,10 +107,8 @@ export class VehicleController {
   async removeUser(
     @Param('id') vehicleId: string,
     @Param('userId') userIdToRemove: string,
-    @Request() req: RequestWithUser,
+    @CurrentUser('uid') currentUserId: string,
   ) {
-    const currentUserId = req.user!.uid;
-
     const vehicle = await this.vehicleService.findOne(vehicleId, currentUserId);
     if (!vehicle) {
       throw new HttpException('Vehicle not found', HttpStatus.NOT_FOUND);
