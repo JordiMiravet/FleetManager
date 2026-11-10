@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { Vehicle, VehicleDocument } from './schemas/vehicle.schema';
 import { CreateVehicleDto } from './dtos/create-vehicle.dto';
 import { UpdateVehicleDto } from './dtos/update-vehicle.dto';
+import { VehicleAccessService } from './access/vehicle-access.service';
 import { Event } from '../events/schemas/event.schema';
 
 @Injectable()
@@ -11,23 +12,15 @@ export class VehicleService {
   constructor(
     @InjectModel(Vehicle.name) private vehicleModel: Model<VehicleDocument>,
     @InjectModel(Event.name) private eventModel: Model<Event>,
+    private readonly vehicleAccessService: VehicleAccessService,
   ) {}
 
   async findAll(userId: string): Promise<Vehicle[]> {
-    return this.vehicleModel
-      .find({
-        $or: [{ userId: userId }, { 'users.userId': userId }],
-      })
-      .exec();
+    return this.vehicleAccessService.findAccessibleVehicles(userId);
   }
 
   async findOne(_id: string, userId: string): Promise<Vehicle | null> {
-    return this.vehicleModel
-      .findOne({
-        _id,
-        $or: [{ userId: userId }, { 'users.userId': userId }],
-      })
-      .exec();
+    return this.vehicleAccessService.findAccessibleVehicle(_id, userId);
   }
 
   async create(vehicleDto: CreateVehicleDto, userId: string): Promise<Vehicle> {
@@ -54,10 +47,7 @@ export class VehicleService {
 
     return this.vehicleModel
       .findOneAndUpdate(
-        {
-          _id,
-          $or: [{ userId: userId }, { 'users.userId': userId }],
-        },
+        { _id, ...this.vehicleAccessService.buildAccessFilter(userId) },
         updateData,
         { new: true },
       )
