@@ -5,13 +5,13 @@ import { Vehicle, VehicleDocument } from './schemas/vehicle.schema';
 import { CreateVehicleDto } from './dtos/create-vehicle.dto';
 import { UpdateVehicleDto } from './dtos/update-vehicle.dto';
 import { VehicleAccessService } from './access/vehicle-access.service';
-import { Event } from '../events/schemas/event.schema';
+import { EventsService } from '../events/events.service';
 
 @Injectable()
 export class VehicleService {
   constructor(
     @InjectModel(Vehicle.name) private vehicleModel: Model<VehicleDocument>,
-    @InjectModel(Event.name) private eventModel: Model<Event>,
+    private readonly eventsService: EventsService,
     private readonly vehicleAccessService: VehicleAccessService,
   ) {}
 
@@ -55,7 +55,7 @@ export class VehicleService {
   }
 
   async delete(_id: string, userId: string): Promise<Vehicle | null> {
-    await this.eventModel.deleteMany({ vehicleId: _id, userId }).exec();
+    await this.eventsService.deleteByVehicle(_id, userId);
     return this.vehicleModel.findOneAndDelete({ _id, userId }).exec();
   }
 
