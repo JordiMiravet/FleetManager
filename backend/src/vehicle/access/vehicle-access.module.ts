@@ -1,0 +1,13 @@
+import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
+import { Vehicle, VehicleSchema } from '../schemas/vehicle.schema';
+import { VehicleAccessService } from './vehicle-access.service';
+
+@Module({
+  imports: [
+    MongooseModule.forFeature([{ name: Vehicle.name, schema: VehicleSchema }]),
+  ],
+  providers: [VehicleAccessService],
+  exports: [VehicleAccessService],
+})
+export class VehicleAccessModule {}
