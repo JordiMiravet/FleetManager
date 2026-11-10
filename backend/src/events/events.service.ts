@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Event } from './schemas/event.schema';
-import { Vehicle } from '../vehicle/schemas/vehicle.schema';
+import { VehicleAccessService } from '../vehicle/access/vehicle-access.service';
 import { CreateEventDto } from './dtos/create-event.dto';
 import { UpdateEventDto } from './dtos/update-event.dto';
 
@@ -10,18 +10,12 @@ import { UpdateEventDto } from './dtos/update-event.dto';
 export class EventsService {
   constructor(
     @InjectModel(Event.name) private eventModel: Model<Event>,
-    @InjectModel(Vehicle.name) private vehicleModel: Model<Vehicle>,
+    private readonly vehicleAccessService: VehicleAccessService,
   ) {}
 
   async findAll(userId: string): Promise<Event[]> {
-    const vehicles = await this.vehicleModel
-      .find({
-        $or: [{ userId: userId }, { 'users.userId': userId }],
-      })
-      .select('_id')
-      .exec();
-
-    const vehicleIds = vehicles.map((v) => v._id.toString());
+    const vehicleIds =
+      await this.vehicleAccessService.findAccessibleVehicleIds(userId);
 
     return this.eventModel
       .find({
@@ -31,14 +25,8 @@ export class EventsService {
   }
 
   async findOne(id: string, userId: string): Promise<Event> {
-    const vehicles = await this.vehicleModel
-      .find({
-        $or: [{ userId: userId }, { 'users.userId': userId }],
-      })
-      .select('_id')
-      .exec();
-
-    const vehicleIds = vehicles.map((v) => v._id.toString());
+    const vehicleIds =
+      await this.vehicleAccessService.findAccessibleVehicleIds(userId);
 
     const event = await this.eventModel
       .findOne({
