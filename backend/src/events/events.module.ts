@@ -12,5 +12,6 @@ import { VehicleAccessModule } from '../vehicle/access/vehicle-access.module';
   ],
   controllers: [EventsController],
   providers: [EventsService],
+  exports: [EventsService],
 })
 export class EventsModule {}
