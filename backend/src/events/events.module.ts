@@ -4,6 +4,7 @@ import { EventsController } from './events.controller';
 import { EventsService } from './events.service';
 import { Event, EventSchema } from './schemas/event.schema';
 import { Vehicle, VehicleSchema } from '../vehicle/schemas/vehicle.schema';
+import { VehicleAccessModule } from '../vehicle/access/vehicle-access.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { Vehicle, VehicleSchema } from '../vehicle/schemas/vehicle.schema';
       { name: Event.name, schema: EventSchema },
       { name: Vehicle.name, schema: VehicleSchema },
     ]),
+    VehicleAccessModule,
   ],
   controllers: [EventsController],
   providers: [EventsService],
