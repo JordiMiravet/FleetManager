@@ -1,8 +1,4 @@
 import 'reflect-metadata';
-// Firebase Admin still reads process.env when it is imported, so the .env file
-// must be loaded first. It is replaced by the configuration service in the
-// Firebase task.
-import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';

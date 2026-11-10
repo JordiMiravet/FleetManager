@@ -7,17 +7,12 @@ import {
   Body,
   Param,
   UseGuards,
-  Request,
 } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { CreateEventDto } from './dtos/create-event.dto';
 import { UpdateEventDto } from './dtos/update-event.dto';
 import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
-import admin from '../auth/firebase/firebase-admin';
-
-interface RequestWithUser {
-  user?: admin.auth.DecodedIdToken;
-}
+import { CurrentUser } from '../auth/current-user.decorator';
 
 @Controller('events')
 @UseGuards(FirebaseAuthGuard)
@@ -25,23 +20,20 @@ export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
   @Get()
-  async findAll(@Request() req: RequestWithUser) {
-    const userId = req.user!.uid;
+  async findAll(@CurrentUser('uid') userId: string) {
     return this.eventsService.findAll(userId);
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string, @Request() req: RequestWithUser) {
-    const userId = req.user!.uid;
+  async findOne(@Param('id') id: string, @CurrentUser('uid') userId: string) {
     return this.eventsService.findOne(id, userId);
   }
 
   @Post()
   async create(
     @Body() createEventDto: CreateEventDto,
-    @Request() req: RequestWithUser,
+    @CurrentUser('uid') userId: string,
   ) {
-    const userId = req.user!.uid;
     return this.eventsService.create(createEventDto, userId);
   }
 
@@ -49,15 +41,13 @@ export class EventsController {
   async update(
     @Param('id') id: string,
     @Body() updateEventDto: UpdateEventDto,
-    @Request() req: RequestWithUser,
+    @CurrentUser('uid') userId: string,
   ) {
-    const userId = req.user!.uid;
     return this.eventsService.update(id, updateEventDto, userId);
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string, @Request() req: RequestWithUser) {
-    const userId = req.user!.uid;
+  async delete(@Param('id') id: string, @CurrentUser('uid') userId: string) {
     await this.eventsService.delete(id, userId);
     return { message: 'Event deleted successfully' };
   }
