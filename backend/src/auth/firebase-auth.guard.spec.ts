@@ -6,6 +6,12 @@ import {
 import { FirebaseAuthGuard } from './firebase-auth.guard';
 import { FirebaseService } from './firebase/firebase.service';
 
+// The real service imports @nestjs/config, an ES module that Jest cannot load
+// in this CommonJS setup. The guard only needs the class as an injection token.
+jest.mock('./firebase/firebase.service', () => ({
+  FirebaseService: class FirebaseService {},
+}));
+
 function createContext(request: object): ExecutionContext {
   return {
     switchToHttp: () => ({ getRequest: () => request }),
