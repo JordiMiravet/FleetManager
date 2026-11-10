@@ -74,4 +74,8 @@ export class EventsService {
       throw new NotFoundException(`Event with ID ${id} not found`);
     }
   }
+
+  async deleteByVehicle(vehicleId: string, userId: string): Promise<void> {
+    await this.eventModel.deleteMany({ vehicleId, userId }).exec();
+  }
 }
