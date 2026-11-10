@@ -29,7 +29,7 @@ interface FirebaseAdminMock {
   authMocks: { verifyIdToken: jest.Mock; getUserByEmail: jest.Mock };
 }
 
-const firebaseMock = jest.requireMock('firebase-admin') as FirebaseAdminMock;
+const firebaseMock = jest.requireMock<FirebaseAdminMock>('firebase-admin');
 
 const configValues: Record<string, string> = {
   FIREBASE_PROJECT_ID: 'project-id',
