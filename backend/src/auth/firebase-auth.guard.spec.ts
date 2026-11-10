@@ -21,13 +21,16 @@ function createContext(request: object): ExecutionContext {
 describe('FirebaseAuthGuard', () => {
   let guard: FirebaseAuthGuard;
   let verifyIdToken: jest.Mock;
+  let warnSpy: jest.SpyInstance;
 
   beforeEach(() => {
     verifyIdToken = jest.fn();
     guard = new FirebaseAuthGuard({
       verifyIdToken,
     } as unknown as FirebaseService);
-    jest.spyOn(Logger.prototype, 'warn').mockImplementation(() => undefined);
+    warnSpy = jest
+      .spyOn(Logger.prototype, 'warn')
+      .mockImplementation(() => undefined);
   });
 
   afterEach(() => {
@@ -70,7 +73,7 @@ describe('FirebaseAuthGuard', () => {
     await expect(guard.canActivate(context)).rejects.toThrow(
       new UnauthorizedException('Invalid token'),
     );
-    expect(Logger.prototype.warn).toHaveBeenCalled();
+    expect(warnSpy).toHaveBeenCalled();
   });
 
   it('accepts a valid token and stores the user in the request', async () => {
