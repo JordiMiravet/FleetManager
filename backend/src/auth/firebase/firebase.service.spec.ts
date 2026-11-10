@@ -2,6 +2,12 @@ import { ConfigService } from '@nestjs/config';
 import { EnvironmentVariables } from '../../config/environment-variables';
 import { FirebaseService } from './firebase.service';
 
+// @nestjs/config is published as an ES module, which Jest cannot load in this
+// CommonJS setup. Only the ConfigService token is needed in this spec.
+jest.mock('@nestjs/config', () => ({
+  ConfigService: class ConfigService {},
+}));
+
 jest.mock('firebase-admin', () => {
   const authMocks = { verifyIdToken: jest.fn(), getUserByEmail: jest.fn() };
   const app = { auth: () => authMocks };
