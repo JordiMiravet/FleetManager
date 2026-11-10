@@ -7,22 +7,20 @@ import {
   Param,
   Body,
   UseGuards,
-  HttpException,
-  HttpStatus,
 } from '@nestjs/common';
 import { VehicleService } from './vehicle.service';
+import { VehicleSharingService } from './vehicle-sharing.service';
 import { CreateVehicleDto } from './dtos/create-vehicle.dto';
 import { UpdateVehicleDto } from './dtos/update-vehicle.dto';
 import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
 import { CurrentUser } from '../auth/current-user.decorator';
-import { FirebaseService } from '../auth/firebase/firebase.service';
 
 @Controller('vehicles')
 @UseGuards(FirebaseAuthGuard)
 export class VehicleController {
   constructor(
     private readonly vehicleService: VehicleService,
-    private readonly firebaseService: FirebaseService,
+    private readonly vehicleSharingService: VehicleSharingService,
   ) {}
 
   @Get()
@@ -58,73 +56,24 @@ export class VehicleController {
   }
 
   @Post(':id/users')
-  async addUserByEmail(
+  addUserByEmail(
     @Param('id') vehicleId: string,
     @Body('email') email: string,
     @CurrentUser('uid') ownerId: string,
   ) {
-    const vehicle = await this.vehicleService.findOne(vehicleId, ownerId);
-    if (!vehicle) {
-      throw new HttpException(
-        'Vehicle not found or you are not the owner',
-        HttpStatus.NOT_FOUND,
-      );
-    }
-
-    try {
-      const userRecord = await this.firebaseService.getUserByEmail(email);
-
-      if (userRecord.uid === ownerId) {
-        throw new HttpException(
-          'You cannot add yourself',
-          HttpStatus.BAD_REQUEST,
-        );
-      }
-
-      await this.vehicleService.addUserToVehicle(
-        vehicleId,
-        userRecord.uid,
-        userRecord.email!,
-      );
-
-      return {
-        message: 'User added successfully',
-        userId: userRecord.uid,
-        email: userRecord.email,
-      };
-    } catch (error) {
-      if (error instanceof HttpException) {
-        throw error;
-      }
-      throw new HttpException(
-        'User not found with this email',
-        HttpStatus.NOT_FOUND,
-      );
-    }
+    return this.vehicleSharingService.addUserByEmail(vehicleId, email, ownerId);
   }
 
   @Delete(':id/users/:userId')
-  async removeUser(
+  removeUser(
     @Param('id') vehicleId: string,
     @Param('userId') userIdToRemove: string,
     @CurrentUser('uid') currentUserId: string,
   ) {
-    const vehicle = await this.vehicleService.findOne(vehicleId, currentUserId);
-    if (!vehicle) {
-      throw new HttpException('Vehicle not found', HttpStatus.NOT_FOUND);
-    }
-
-    const isOwner = vehicle.userId === currentUserId;
-    const isSelfRemoval = currentUserId === userIdToRemove;
-
-    if (!isOwner && !isSelfRemoval) {
-      throw new HttpException(
-        'You can only remove yourself or be the vehicle owner',
-        HttpStatus.FORBIDDEN,
-      );
-    }
-
-    await this.vehicleService.removeUserFromVehicle(vehicleId, userIdToRemove);
-    return { message: 'User removed successfully' };
+    return this.vehicleSharingService.removeUser(
+      vehicleId,
+      userIdToRemove,
+      currentUserId,
+    );
   }
 }
