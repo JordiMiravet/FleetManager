@@ -60,7 +60,7 @@ export class VehicleService {
       .exec();
 
     if (deletedVehicle) {
-      await this.eventsService.deleteByVehicle(_id, userId);
+      await this.eventsService.deleteByVehicle(_id);
     }
 
     return deletedVehicle;
