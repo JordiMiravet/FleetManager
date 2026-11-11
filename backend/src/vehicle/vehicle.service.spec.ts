@@ -30,6 +30,9 @@ describe('VehicleService', () => {
         exists,
       } as unknown as Model<VehicleDocument>,
       {
+        deleteByVehicle,
+      } as unknown as EventsService,
+      {
         findAccessibleVehicle,
         isOwner: (vehicle: { userId: string }, userId: string) =>
           vehicle.userId === userId,
@@ -37,7 +40,6 @@ describe('VehicleService', () => {
           $or: [{ userId }, { 'users.userId': userId }],
         }),
       } as unknown as VehicleAccessService,
-      { deleteByVehicle } as unknown as EventsService,
     );
   });
 
