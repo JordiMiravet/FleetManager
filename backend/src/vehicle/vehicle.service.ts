@@ -7,6 +7,8 @@ import { UpdateVehicleDto } from './dtos/update-vehicle.dto';
 import { VehicleAccessService } from './access/vehicle-access.service';
 import { EventsService } from '../events/events.service';
 
+const OWNER_ONLY_FIELDS = ['name', 'model', 'plate', 'imageUrl'] as const;
+
 @Injectable()
 export class VehicleService {
   constructor(
@@ -36,7 +38,22 @@ export class VehicleService {
     updatedVehicle: UpdateVehicleDto,
     userId: string,
   ): Promise<Vehicle | null> {
-    const updateData = { ...updatedVehicle } as Partial<Vehicle>;
+    const vehicle = await this.vehicleAccessService.findAccessibleVehicle(
+      _id,
+      userId,
+    );
+    if (!vehicle) {
+      return null;
+    }
+
+    const isOwner = this.vehicleAccessService.isOwner(vehicle, userId);
+    if (!isOwner) {
+      this.assertOnlyLocationChanges(vehicle, updatedVehicle);
+    }
+
+    const updateData: Partial<Vehicle> = isOwner
+      ? ({ ...updatedVehicle } as Partial<Vehicle>)
+      : {};
 
     if (updatedVehicle.location) {
       updateData.location = {
@@ -52,6 +69,24 @@ export class VehicleService {
         { new: true },
       )
       .exec();
+  }
+
+  private assertOnlyLocationChanges(
+    vehicle: Vehicle,
+    changes: UpdateVehicleDto,
+  ): void {
+    const changesOwnerOnlyField = OWNER_ONLY_FIELDS.some(
+      (field) =>
+        changes[field] !== undefined &&
+        (changes[field] ?? '') !== (vehicle[field] ?? ''),
+    );
+
+    if (changesOwnerOnlyField) {
+      throw new HttpException(
+        'Only the owner can edit the vehicle details',
+        HttpStatus.FORBIDDEN,
+      );
+    }
   }
 
   async delete(_id: string, userId: string): Promise<Vehicle | null> {
