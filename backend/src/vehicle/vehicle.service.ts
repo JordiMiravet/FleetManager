@@ -134,18 +134,12 @@ export class VehicleService {
     vehicleId: string,
     userId: string,
   ): Promise<void> {
-    const vehicle = await this.vehicleModel.findById(vehicleId);
-    if (!vehicle) {
+    const updatedVehicle = await this.vehicleModel
+      .findOneAndUpdate({ _id: vehicleId }, { $pull: { users: { userId } } })
+      .exec();
+
+    if (!updatedVehicle) {
       throw new HttpException('Vehicle not found', HttpStatus.NOT_FOUND);
     }
-
-    vehicle.users = vehicle.users.filter((user) => {
-      if (typeof user === 'string') {
-        return user !== userId;
-      }
-      return user.userId !== userId;
-    });
-
-    await vehicle.save();
   }
 }
