@@ -55,8 +55,15 @@ export class VehicleService {
   }
 
   async delete(_id: string, userId: string): Promise<Vehicle | null> {
-    await this.eventsService.deleteByVehicle(_id, userId);
-    return this.vehicleModel.findOneAndDelete({ _id, userId }).exec();
+    const deletedVehicle = await this.vehicleModel
+      .findOneAndDelete({ _id, userId })
+      .exec();
+
+    if (deletedVehicle) {
+      await this.eventsService.deleteByVehicle(_id, userId);
+    }
+
+    return deletedVehicle;
   }
 
   async addUserToVehicle(
