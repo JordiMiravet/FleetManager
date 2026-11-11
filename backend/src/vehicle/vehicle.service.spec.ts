@@ -196,4 +196,64 @@ describe('VehicleService', () => {
       expect(findOneAndUpdate).not.toHaveBeenCalled();
     });
   });
+
+  describe('addUserToVehicle', () => {
+    it('adds the user with a single conditional update', async () => {
+      findOneAndUpdate.mockReturnValue(resolvingQuery({ _id: 'vehicle-1' }));
+
+      await expect(
+        service.addUserToVehicle('vehicle-1', 'user-2', 'user@example.com'),
+      ).resolves.toBeUndefined();
+      expect(findOneAndUpdate).toHaveBeenCalledWith(
+        { _id: 'vehicle-1', 'users.userId': { $ne: 'user-2' } },
+        { $push: { users: { userId: 'user-2', email: 'user@example.com' } } },
+      );
+    });
+
+    it('rejects a user who already has access', async () => {
+      findOneAndUpdate.mockReturnValue(resolvingQuery(null));
+      exists.mockReturnValue(resolvingQuery({ _id: 'vehicle-1' }));
+
+      await expectHttpError(
+        service.addUserToVehicle('vehicle-1', 'user-2', 'user@example.com'),
+        HttpStatus.BAD_REQUEST,
+        'User already has access to this vehicle',
+      );
+    });
+
+    it('rejects a vehicle that does not exist', async () => {
+      findOneAndUpdate.mockReturnValue(resolvingQuery(null));
+      exists.mockReturnValue(resolvingQuery(null));
+
+      await expectHttpError(
+        service.addUserToVehicle('vehicle-1', 'user-2', 'user@example.com'),
+        HttpStatus.NOT_FOUND,
+        'Vehicle not found',
+      );
+    });
+  });
+
+  describe('removeUserFromVehicle', () => {
+    it('removes the user with a single update', async () => {
+      findOneAndUpdate.mockReturnValue(resolvingQuery({ _id: 'vehicle-1' }));
+
+      await expect(
+        service.removeUserFromVehicle('vehicle-1', 'user-2'),
+      ).resolves.toBeUndefined();
+      expect(findOneAndUpdate).toHaveBeenCalledWith(
+        { _id: 'vehicle-1' },
+        { $pull: { users: { userId: 'user-2' } } },
+      );
+    });
+
+    it('rejects a vehicle that does not exist', async () => {
+      findOneAndUpdate.mockReturnValue(resolvingQuery(null));
+
+      await expectHttpError(
+        service.removeUserFromVehicle('vehicle-1', 'user-2'),
+        HttpStatus.NOT_FOUND,
+        'Vehicle not found',
+      );
+    });
+  });
 });
