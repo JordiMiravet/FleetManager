@@ -75,7 +75,7 @@ export class EventsService {
     }
   }
 
-  async deleteByVehicle(vehicleId: string, userId: string): Promise<void> {
-    await this.eventModel.deleteMany({ vehicleId, userId }).exec();
+  async deleteByVehicle(vehicleId: string): Promise<void> {
+    await this.eventModel.deleteMany({ vehicleId }).exec();
   }
 }

@@ -24,11 +24,11 @@ export class VehicleSharingService {
   async addUserByEmail(
     vehicleId: string,
     email: string,
-    ownerId: string,
+    userId: string,
   ): Promise<{ message: string; userId: string; email?: string }> {
     const vehicle = await this.vehicleAccessService.findAccessibleVehicle(
       vehicleId,
-      ownerId,
+      userId,
     );
     if (!vehicle) {
       throw new HttpException(
@@ -37,9 +37,16 @@ export class VehicleSharingService {
       );
     }
 
+    if (!this.vehicleAccessService.isOwner(vehicle, userId)) {
+      throw new HttpException(
+        'Only the owner can share the vehicle',
+        HttpStatus.FORBIDDEN,
+      );
+    }
+
     const userRecord = await this.findUserByEmail(email);
 
-    if (userRecord.uid === ownerId) {
+    if (userRecord.uid === userId) {
       throw new HttpException(
         'You cannot add yourself',
         HttpStatus.BAD_REQUEST,
