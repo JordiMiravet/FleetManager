@@ -106,25 +106,28 @@ export class VehicleService {
     userId: string,
     email: string,
   ): Promise<void> {
-    const vehicle = await this.vehicleModel.findById(vehicleId);
-    if (!vehicle) {
+    const updatedVehicle = await this.vehicleModel
+      .findOneAndUpdate(
+        { _id: vehicleId, 'users.userId': { $ne: userId } },
+        { $push: { users: { userId, email } } },
+      )
+      .exec();
+
+    if (updatedVehicle) {
+      return;
+    }
+
+    const vehicleExists = await this.vehicleModel
+      .exists({ _id: vehicleId })
+      .exec();
+    if (!vehicleExists) {
       throw new HttpException('Vehicle not found', HttpStatus.NOT_FOUND);
     }
 
-    const normalizedUsers = vehicle.users.map((user) =>
-      typeof user === 'string' ? user : user.userId,
+    throw new HttpException(
+      'User already has access to this vehicle',
+      HttpStatus.BAD_REQUEST,
     );
-
-    if (normalizedUsers.includes(userId)) {
-      throw new HttpException(
-        'User already has access to this vehicle',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
-    vehicle.users = vehicle.users.filter((user) => typeof user !== 'string');
-    vehicle.users.push({ userId, email });
-    await vehicle.save();
   }
 
   async removeUserFromVehicle(
