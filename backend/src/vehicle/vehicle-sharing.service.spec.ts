@@ -85,6 +85,18 @@ describe('VehicleSharingService', () => {
       expect(getUserByEmail).not.toHaveBeenCalled();
     });
 
+    it('rejects a shared user who is not the owner', async () => {
+      findAccessibleVehicle.mockResolvedValue(vehicle);
+
+      await expectHttpError(
+        service.addUserByEmail('vehicle-1', 'user@example.com', 'user-2'),
+        HttpStatus.FORBIDDEN,
+        'Only the owner can share the vehicle',
+      );
+      expect(getUserByEmail).not.toHaveBeenCalled();
+      expect(addUserToVehicle).not.toHaveBeenCalled();
+    });
+
     it('reports an unknown email as not found', async () => {
       findAccessibleVehicle.mockResolvedValue(vehicle);
       getUserByEmail.mockRejectedValue(
