@@ -1,10 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+
 import { Event } from './schemas/event.schema';
-import { VehicleAccessService } from '../vehicle/access/vehicle-access.service';
 import { CreateEventDto } from './dtos/create-event.dto';
 import { UpdateEventDto } from './dtos/update-event.dto';
+
+import { Vehicle } from '../vehicle/schemas/vehicle.schema';
+import { VehicleAccessService } from '../vehicle/access/vehicle-access.service';
 
 @Injectable()
 export class EventsService {
@@ -43,6 +46,8 @@ export class EventsService {
   }
 
   async create(createEventDto: CreateEventDto, userId: string): Promise<Event> {
+    await this.findAccessibleVehicleOrFail(createEventDto.vehicleId, userId);
+
     const newEvent = new this.eventModel({
       ...createEventDto,
       userId,
@@ -77,5 +82,21 @@ export class EventsService {
 
   async deleteByVehicle(vehicleId: string): Promise<void> {
     await this.eventModel.deleteMany({ vehicleId }).exec();
+  }
+
+  private async findAccessibleVehicleOrFail(
+    vehicleId: string,
+    userId: string,
+  ): Promise<Vehicle> {
+    const vehicle = await this.vehicleAccessService.findAccessibleVehicle(
+      vehicleId,
+      userId,
+    );
+
+    if (!vehicle) {
+      throw new NotFoundException('Vehicle not found');
+    }
+
+    return vehicle;
   }
 }
