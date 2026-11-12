@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
@@ -48,7 +52,15 @@ export class EventsService {
 
   async create(createEventDto: CreateEventDto, userId: string): Promise<Event> {
     await this.findAccessibleVehicleOrFail(createEventDto.vehicleId, userId);
+
     assertValidTimeRange(createEventDto.hourStart, createEventDto.hourEnd);
+
+    await this.assertNoOverlap(
+      createEventDto.vehicleId,
+      createEventDto.date,
+      createEventDto.hourStart,
+      createEventDto.hourEnd,
+    );
 
     const newEvent = new this.eventModel({
       ...createEventDto,
@@ -100,5 +112,29 @@ export class EventsService {
     }
 
     return vehicle;
+  }
+
+  private async assertNoOverlap(
+    vehicleId: string,
+    date: string,
+    hourStart: string,
+    hourEnd: string,
+    excludedEventId?: string,
+  ): Promise<void> {
+    const overlappingEvent = await this.eventModel
+      .exists({
+        vehicleId,
+        date,
+        hourStart: { $lt: hourEnd },
+        hourEnd: { $gt: hourStart },
+        ...(excludedEventId ? { _id: { $ne: excludedEventId } } : {}),
+      })
+      .exec();
+
+    if (overlappingEvent) {
+      throw new ConflictException(
+        'The vehicle already has an event in that time range',
+      );
+    }
   }
 }
