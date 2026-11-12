@@ -76,7 +76,8 @@ export class EventsService {
     updateEventDto: UpdateEventDto,
     userId: string,
   ): Promise<Event> {
-    await this.findModifiableEvent(id, userId);
+    const event = await this.findModifiableEvent(id, userId);
+    await this.validateSchedulingChanges(id, event, updateEventDto, userId);
 
     const updatedEvent = await this.eventModel
       .findByIdAndUpdate(id, updateEventDto, { new: true })
@@ -171,5 +172,35 @@ export class EventsService {
     }
 
     return event;
+  }
+
+  private async validateSchedulingChanges(
+    id: string,
+    event: Event,
+    changes: UpdateEventDto,
+    userId: string,
+  ): Promise<void> {
+    const vehicleId = changes.vehicleId ?? event.vehicleId;
+    const date = changes.date ?? event.date;
+    const hourStart = changes.hourStart ?? event.hourStart;
+    const hourEnd = changes.hourEnd ?? event.hourEnd;
+
+    const movesToAnotherVehicle = vehicleId !== event.vehicleId;
+    const schedulingChanged =
+      movesToAnotherVehicle ||
+      date !== event.date ||
+      hourStart !== event.hourStart ||
+      hourEnd !== event.hourEnd;
+
+    if (movesToAnotherVehicle) {
+      await this.findAccessibleVehicleOrFail(vehicleId, userId);
+    }
+
+    if (!schedulingChanged) {
+      return;
+    }
+
+    assertValidTimeRange(hourStart, hourEnd);
+    await this.assertNoOverlap(vehicleId, date, hourStart, hourEnd, id);
   }
 }
