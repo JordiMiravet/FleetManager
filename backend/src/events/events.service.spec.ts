@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   ConflictException,
+  ForbiddenException,
   NotFoundException,
 } from '@nestjs/common';
 import { Model } from 'mongoose';
@@ -42,6 +43,15 @@ describe('EventsService', () => {
     hourStart: '09:00',
     hourEnd: '10:00',
     vehicleId: 'vehicle-1',
+  };
+  const storedEvent = {
+    _id: 'event-1',
+    userId: 'user-2',
+    vehicleId: 'vehicle-1',
+    title: 'Trip',
+    date: '2026-11-10',
+    hourStart: '09:00',
+    hourEnd: '10:00',
   };
 
   let save: jest.Mock;
@@ -154,6 +164,148 @@ describe('EventsService', () => {
         'The vehicle already has an event in that time range',
       );
       expect(save).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('update', () => {
+    const updatedEvent = { _id: 'event-1', updated: true };
+
+    beforeEach(() => {
+      findAccessibleVehicle.mockResolvedValue(ownerVehicle);
+      eventModel.findById.mockReturnValue(resolvingQuery(storedEvent));
+      eventModel.findByIdAndUpdate.mockReturnValue(
+        resolvingQuery(updatedEvent),
+      );
+      eventModel.exists.mockReturnValue(resolvingQuery(null));
+    });
+
+    it('lets the creator update the event', async () => {
+      await expect(
+        service.update('event-1', { title: 'New' }, 'user-2'),
+      ).resolves.toBe(updatedEvent);
+
+      expect(findAccessibleVehicle).toHaveBeenCalledWith('vehicle-1', 'user-2');
+      expect(eventModel.findByIdAndUpdate).toHaveBeenCalledWith(
+        'event-1',
+        { title: 'New' },
+        { new: true },
+      );
+    });
+
+    it('lets the owner of the vehicle update an event created by someone else', async () => {
+      await expect(
+        service.update('event-1', { title: 'New' }, 'owner-1'),
+      ).resolves.toBe(updatedEvent);
+    });
+
+    it('rejects a user with access who is neither the creator nor the owner', async () => {
+      await expectRejection(
+        service.update('event-1', { title: 'New' }, 'user-3'),
+        ForbiddenException,
+        'Only the creator of the event or the owner of the vehicle can modify it',
+      );
+      expect(eventModel.findByIdAndUpdate).not.toHaveBeenCalled();
+    });
+
+    it('reports an event that does not exist as not found', async () => {
+      eventModel.findById.mockReturnValue(resolvingQuery(null));
+
+      await expectRejection(
+        service.update('event-1', { title: 'New' }, 'user-2'),
+        NotFoundException,
+        'Event with ID event-1 not found',
+      );
+    });
+
+    it('reports an event of an inaccessible vehicle as not found', async () => {
+      findAccessibleVehicle.mockResolvedValue(null);
+
+      await expectRejection(
+        service.update('event-1', { title: 'New' }, 'stranger'),
+        NotFoundException,
+        'Event with ID event-1 not found',
+      );
+      expect(eventModel.findByIdAndUpdate).not.toHaveBeenCalled();
+    });
+
+    it('rejects moving the event to a vehicle the user cannot access', async () => {
+      findAccessibleVehicle.mockImplementation((vehicleId: string) =>
+        Promise.resolve(vehicleId === 'vehicle-2' ? null : ownerVehicle),
+      );
+
+      await expectRejection(
+        service.update('event-1', { vehicleId: 'vehicle-2' }, 'user-2'),
+        NotFoundException,
+        'Vehicle not found',
+      );
+      expect(eventModel.findByIdAndUpdate).not.toHaveBeenCalled();
+    });
+
+    it('checks the overlaps in the new vehicle when moving the event', async () => {
+      await service.update('event-1', { vehicleId: 'vehicle-2' }, 'user-2');
+
+      expect(eventModel.exists).toHaveBeenCalledWith({
+        vehicleId: 'vehicle-2',
+        date: '2026-11-10',
+        hourStart: { $lt: '10:00' },
+        hourEnd: { $gt: '09:00' },
+        _id: { $ne: 'event-1' },
+      });
+    });
+
+    it('validates the new end time against the stored start time', async () => {
+      await expectRejection(
+        service.update('event-1', { hourEnd: '08:00' }, 'user-2'),
+        BadRequestException,
+        'The end time must be after the start time',
+      );
+      expect(eventModel.findByIdAndUpdate).not.toHaveBeenCalled();
+    });
+
+    it('ignores the event itself when looking for overlaps', async () => {
+      await service.update('event-1', { hourEnd: '11:00' }, 'user-2');
+
+      expect(eventModel.exists).toHaveBeenCalledWith({
+        vehicleId: 'vehicle-1',
+        date: '2026-11-10',
+        hourStart: { $lt: '11:00' },
+        hourEnd: { $gt: '09:00' },
+        _id: { $ne: 'event-1' },
+      });
+    });
+
+    it('rejects a change that overlaps another event', async () => {
+      eventModel.exists.mockReturnValue(resolvingQuery({ _id: 'other-event' }));
+
+      await expectRejection(
+        service.update('event-1', { hourEnd: '11:00' }, 'user-2'),
+        ConflictException,
+        'The vehicle already has an event in that time range',
+      );
+      expect(eventModel.findByIdAndUpdate).not.toHaveBeenCalled();
+    });
+
+    it('does not validate the scheduling when only the title changes', async () => {
+      await service.update('event-1', { title: 'New' }, 'user-2');
+
+      expect(eventModel.exists).not.toHaveBeenCalled();
+    });
+
+    it('does not validate the scheduling when the stored values are resent', async () => {
+      await service.update(
+        'event-1',
+        {
+          title: 'Trip',
+          date: '2026-11-10',
+          hourStart: '09:00',
+          hourEnd: '10:00',
+          vehicleId: 'vehicle-1',
+        },
+        'user-2',
+      );
+
+      expect(eventModel.exists).not.toHaveBeenCalled();
+      expect(findAccessibleVehicle).toHaveBeenCalledTimes(1);
     });
   });
 });
