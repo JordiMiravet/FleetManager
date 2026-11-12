@@ -5,6 +5,7 @@ import { Model } from 'mongoose';
 import { Event } from './schemas/event.schema';
 import { CreateEventDto } from './dtos/create-event.dto';
 import { UpdateEventDto } from './dtos/update-event.dto';
+import { assertValidTimeRange } from './event-time';
 
 import { Vehicle } from '../vehicle/schemas/vehicle.schema';
 import { VehicleAccessService } from '../vehicle/access/vehicle-access.service';
@@ -47,6 +48,7 @@ export class EventsService {
 
   async create(createEventDto: CreateEventDto, userId: string): Promise<Event> {
     await this.findAccessibleVehicleOrFail(createEventDto.vehicleId, userId);
+    assertValidTimeRange(createEventDto.hourStart, createEventDto.hourEnd);
 
     const newEvent = new this.eventModel({
       ...createEventDto,
