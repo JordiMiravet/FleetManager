@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   ConflictException,
-  ForbiddenException,
   NotFoundException,
 } from '@nestjs/common';
 import { Model } from 'mongoose';
@@ -77,8 +76,6 @@ describe('EventsService', () => {
       eventModel as unknown as Model<Event>,
       {
         findAccessibleVehicle,
-        isOwner: (vehicle: { userId: string }, userId: string) =>
-          vehicle.userId === userId,
       } as unknown as VehicleAccessService,
     );
   });
@@ -192,19 +189,17 @@ describe('EventsService', () => {
       );
     });
 
-    it('lets the owner of the vehicle update an event created by someone else', async () => {
+    it('lets any user with access to the vehicle update an event created by someone else', async () => {
       await expect(
-        service.update('event-1', { title: 'New' }, 'owner-1'),
-      ).resolves.toBe(updatedEvent);
-    });
-
-    it('rejects a user with access who is neither the creator nor the owner', async () => {
-      await expectRejection(
         service.update('event-1', { title: 'New' }, 'user-3'),
-        ForbiddenException,
-        'Only the creator of the event or the owner of the vehicle can modify it',
+      ).resolves.toBe(updatedEvent);
+
+      expect(findAccessibleVehicle).toHaveBeenCalledWith('vehicle-1', 'user-3');
+      expect(eventModel.findByIdAndUpdate).toHaveBeenCalledWith(
+        'event-1',
+        { title: 'New' },
+        { new: true },
       );
-      expect(eventModel.findByIdAndUpdate).not.toHaveBeenCalled();
     });
 
     it('reports an event that does not exist as not found', async () => {
