@@ -1,5 +1,6 @@
 import {
   ConflictException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -75,8 +76,10 @@ export class EventsService {
     updateEventDto: UpdateEventDto,
     userId: string,
   ): Promise<Event> {
+    await this.findModifiableEvent(id, userId);
+
     const updatedEvent = await this.eventModel
-      .findOneAndUpdate({ _id: id, userId }, updateEventDto, { new: true })
+      .findByIdAndUpdate(id, updateEventDto, { new: true })
       .exec();
 
     if (!updatedEvent) {
@@ -136,5 +139,37 @@ export class EventsService {
         'The vehicle already has an event in that time range',
       );
     }
+  }
+
+  private async findModifiableEvent(
+    id: string,
+    userId: string,
+  ): Promise<Event> {
+    const event = await this.eventModel.findById(id).exec();
+
+    if (!event) {
+      throw new NotFoundException(`Event with ID ${id} not found`);
+    }
+
+    const vehicle = await this.vehicleAccessService.findAccessibleVehicle(
+      event.vehicleId,
+      userId,
+    );
+
+    if (!vehicle) {
+      throw new NotFoundException(`Event with ID ${id} not found`);
+    }
+
+    const canModify =
+      event.userId === userId ||
+      this.vehicleAccessService.isOwner(vehicle, userId);
+
+    if (!canModify) {
+      throw new ForbiddenException(
+        'Only the creator of the event or the owner of the vehicle can modify it',
+      );
+    }
+
+    return event;
   }
 }
