@@ -308,4 +308,66 @@ describe('EventsService', () => {
       expect(findAccessibleVehicle).toHaveBeenCalledTimes(1);
     });
   });
+
+  describe('delete', () => {
+    beforeEach(() => {
+      findAccessibleVehicle.mockResolvedValue(ownerVehicle);
+      eventModel.findById.mockReturnValue(resolvingQuery(storedEvent));
+      eventModel.deleteOne.mockReturnValue(resolvingQuery({ deletedCount: 1 }));
+    });
+
+    it('lets the creator delete the event', async () => {
+      await expect(
+        service.delete('event-1', 'user-2'),
+      ).resolves.toBeUndefined();
+
+      expect(eventModel.deleteOne).toHaveBeenCalledWith({ _id: 'event-1' });
+    });
+
+    it('lets the owner of the vehicle delete an event created by someone else', async () => {
+      await expect(
+        service.delete('event-1', 'owner-1'),
+      ).resolves.toBeUndefined();
+    });
+
+    it('rejects a user with access who is neither the creator nor the owner', async () => {
+      await expectRejection(
+        service.delete('event-1', 'user-3'),
+        ForbiddenException,
+        'Only the creator of the event or the owner of the vehicle can modify it',
+      );
+      expect(eventModel.deleteOne).not.toHaveBeenCalled();
+    });
+
+    it('reports an event that does not exist as not found', async () => {
+      eventModel.findById.mockReturnValue(resolvingQuery(null));
+
+      await expectRejection(
+        service.delete('event-1', 'user-2'),
+        NotFoundException,
+        'Event with ID event-1 not found',
+      );
+    });
+
+    it('reports an event of an inaccessible vehicle as not found', async () => {
+      findAccessibleVehicle.mockResolvedValue(null);
+
+      await expectRejection(
+        service.delete('event-1', 'stranger'),
+        NotFoundException,
+        'Event with ID event-1 not found',
+      );
+      expect(eventModel.deleteOne).not.toHaveBeenCalled();
+    });
+
+    it('reports as not found an event that was already deleted', async () => {
+      eventModel.deleteOne.mockReturnValue(resolvingQuery({ deletedCount: 0 }));
+
+      await expectRejection(
+        service.delete('event-1', 'user-2'),
+        NotFoundException,
+        'Event with ID event-1 not found',
+      );
+    });
+  });
 });
