@@ -319,19 +319,13 @@ describe('EventsService', () => {
       expect(eventModel.deleteOne).toHaveBeenCalledWith({ _id: 'event-1' });
     });
 
-    it('lets the owner of the vehicle delete an event created by someone else', async () => {
+    it('lets any user with access to the vehicle delete an event created by someone else', async () => {
       await expect(
-        service.delete('event-1', 'owner-1'),
-      ).resolves.toBeUndefined();
-    });
-
-    it('rejects a user with access who is neither the creator nor the owner', async () => {
-      await expectRejection(
         service.delete('event-1', 'user-3'),
-        ForbiddenException,
-        'Only the creator of the event or the owner of the vehicle can modify it',
-      );
-      expect(eventModel.deleteOne).not.toHaveBeenCalled();
+      ).resolves.toBeUndefined();
+
+      expect(findAccessibleVehicle).toHaveBeenCalledWith('vehicle-1', 'user-3');
+      expect(eventModel.deleteOne).toHaveBeenCalledWith({ _id: 'event-1' });
     });
 
     it('reports an event that does not exist as not found', async () => {
