@@ -91,7 +91,9 @@ export class EventsService {
   }
 
   async delete(id: string, userId: string): Promise<void> {
-    const result = await this.eventModel.deleteOne({ _id: id, userId }).exec();
+    await this.findModifiableEvent(id, userId);
+
+    const result = await this.eventModel.deleteOne({ _id: id }).exec();
 
     if (result.deletedCount === 0) {
       throw new NotFoundException(`Event with ID ${id} not found`);
