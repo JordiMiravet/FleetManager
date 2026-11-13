@@ -1,30 +1,28 @@
+import 'reflect-metadata';
 import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  MaxLength,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-
-class LocationDto {
-  @IsNotEmpty()
-  lat: number;
-
-  @IsNotEmpty()
-  lng: number;
-}
+import { LocationDto } from './location.dto';
 
 export class CreateVehicleDto {
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
+  @MaxLength(100)
   name: string;
 
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
+  @MaxLength(100)
   model: string;
 
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
+  @MaxLength(20)
   plate: string;
 
   @IsNotEmpty()
@@ -34,5 +32,6 @@ export class CreateVehicleDto {
 
   @IsOptional()
   @IsString()
+  @MaxLength(2048)
   imageUrl?: string;
 }
