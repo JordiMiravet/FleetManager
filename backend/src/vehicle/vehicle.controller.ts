@@ -12,6 +12,7 @@ import { VehicleService } from './vehicle.service';
 import { VehicleSharingService } from './vehicle-sharing.service';
 import { CreateVehicleDto } from './dtos/create-vehicle.dto';
 import { UpdateVehicleDto } from './dtos/update-vehicle.dto';
+import { AddVehicleUserDto } from './dtos/add-vehicle-user.dto';
 import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
 import { CurrentUser } from '../auth/current-user.decorator';
 
@@ -58,10 +59,14 @@ export class VehicleController {
   @Post(':id/users')
   addUserByEmail(
     @Param('id') vehicleId: string,
-    @Body('email') email: string,
+    @Body() body: AddVehicleUserDto,
     @CurrentUser('uid') ownerId: string,
   ) {
-    return this.vehicleSharingService.addUserByEmail(vehicleId, email, ownerId);
+    return this.vehicleSharingService.addUserByEmail(
+      vehicleId,
+      body.email,
+      ownerId,
+    );
   }
 
   @Delete(':id/users/:userId')
