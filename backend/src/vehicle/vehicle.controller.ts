@@ -12,8 +12,10 @@ import { VehicleService } from './vehicle.service';
 import { VehicleSharingService } from './vehicle-sharing.service';
 import { CreateVehicleDto } from './dtos/create-vehicle.dto';
 import { UpdateVehicleDto } from './dtos/update-vehicle.dto';
+import { AddVehicleUserDto } from './dtos/add-vehicle-user.dto';
 import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
 import { CurrentUser } from '../auth/current-user.decorator';
+import { ParseMongoIdPipe } from '../common/pipes/parse-mongo-id.pipe';
 
 @Controller('vehicles')
 @UseGuards(FirebaseAuthGuard)
@@ -29,7 +31,10 @@ export class VehicleController {
   }
 
   @Get(':id')
-  getOne(@Param('id') id: string, @CurrentUser('uid') userId: string) {
+  getOne(
+    @Param('id', ParseMongoIdPipe) id: string,
+    @CurrentUser('uid') userId: string,
+  ) {
     return this.vehicleService.findOne(id, userId);
   }
 
@@ -43,7 +48,7 @@ export class VehicleController {
 
   @Put(':id')
   update(
-    @Param('id') id: string,
+    @Param('id', ParseMongoIdPipe) id: string,
     @Body() vehicle: UpdateVehicleDto,
     @CurrentUser('uid') userId: string,
   ) {
@@ -51,22 +56,29 @@ export class VehicleController {
   }
 
   @Delete(':id')
-  delete(@Param('id') id: string, @CurrentUser('uid') userId: string) {
+  delete(
+    @Param('id', ParseMongoIdPipe) id: string,
+    @CurrentUser('uid') userId: string,
+  ) {
     return this.vehicleService.delete(id, userId);
   }
 
   @Post(':id/users')
   addUserByEmail(
-    @Param('id') vehicleId: string,
-    @Body('email') email: string,
+    @Param('id', ParseMongoIdPipe) vehicleId: string,
+    @Body() body: AddVehicleUserDto,
     @CurrentUser('uid') ownerId: string,
   ) {
-    return this.vehicleSharingService.addUserByEmail(vehicleId, email, ownerId);
+    return this.vehicleSharingService.addUserByEmail(
+      vehicleId,
+      body.email,
+      ownerId,
+    );
   }
 
   @Delete(':id/users/:userId')
   removeUser(
-    @Param('id') vehicleId: string,
+    @Param('id', ParseMongoIdPipe) vehicleId: string,
     @Param('userId') userIdToRemove: string,
     @CurrentUser('uid') currentUserId: string,
   ) {

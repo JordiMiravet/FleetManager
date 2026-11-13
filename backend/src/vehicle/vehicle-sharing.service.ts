@@ -3,8 +3,9 @@ import { FirebaseService } from '../auth/firebase/firebase.service';
 import { VehicleAccessService } from './access/vehicle-access.service';
 import { VehicleService } from './vehicle.service';
 
-// An invalid email is reported as not found until the request validation
-// rejects it before reaching Firebase (task #645).
+// An email that Firebase rejects as invalid cannot belong to any user, so it is
+// reported like an unknown email. Malformed emails are normally rejected earlier
+// by the request validation.
 const USER_NOT_FOUND_CODES = ['auth/user-not-found', 'auth/invalid-email'];
 
 function isUserNotFoundError(error: unknown): boolean {
