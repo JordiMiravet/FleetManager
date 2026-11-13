@@ -13,6 +13,7 @@ import { CreateEventDto } from './dtos/create-event.dto';
 import { UpdateEventDto } from './dtos/update-event.dto';
 import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
 import { CurrentUser } from '../auth/current-user.decorator';
+import { ParseMongoIdPipe } from '../common/pipes/parse-mongo-id.pipe';
 
 @Controller('events')
 @UseGuards(FirebaseAuthGuard)
@@ -25,7 +26,10 @@ export class EventsController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string, @CurrentUser('uid') userId: string) {
+  async findOne(
+    @Param('id', ParseMongoIdPipe) id: string,
+    @CurrentUser('uid') userId: string,
+  ) {
     return this.eventsService.findOne(id, userId);
   }
 
@@ -39,7 +43,7 @@ export class EventsController {
 
   @Put(':id')
   async update(
-    @Param('id') id: string,
+    @Param('id', ParseMongoIdPipe) id: string,
     @Body() updateEventDto: UpdateEventDto,
     @CurrentUser('uid') userId: string,
   ) {
@@ -47,7 +51,10 @@ export class EventsController {
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string, @CurrentUser('uid') userId: string) {
+  async delete(
+    @Param('id', ParseMongoIdPipe) id: string,
+    @CurrentUser('uid') userId: string,
+  ) {
     await this.eventsService.delete(id, userId);
     return { message: 'Event deleted successfully' };
   }
