@@ -57,8 +57,8 @@ export class VehicleService {
 
     if (updatedVehicle.location) {
       updateData.location = {
-        lat: updatedVehicle.location.lat!,
-        lng: updatedVehicle.location.lng!,
+        lat: updatedVehicle.location.lat,
+        lng: updatedVehicle.location.lng,
       };
     }
 
