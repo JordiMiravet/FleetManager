@@ -1,4 +1,5 @@
 import {
+  ForbiddenException,
   HttpException,
   HttpStatus,
   Injectable,
@@ -109,14 +110,27 @@ export class VehicleService {
     }
   }
 
-  async delete(_id: string, userId: string): Promise<Vehicle | null> {
+  async delete(_id: string, userId: string): Promise<Vehicle> {
+    const vehicle = await this.vehicleAccessService.findAccessibleVehicle(
+      _id,
+      userId,
+    );
+    if (!vehicle) {
+      throw new NotFoundException('Vehicle not found');
+    }
+
+    if (!this.vehicleAccessService.isOwner(vehicle, userId)) {
+      throw new ForbiddenException('Only the owner can delete the vehicle');
+    }
+
     const deletedVehicle = await this.vehicleModel
       .findOneAndDelete({ _id, userId })
       .exec();
-
-    if (deletedVehicle) {
-      await this.eventsService.deleteByVehicle(_id);
+    if (!deletedVehicle) {
+      throw new NotFoundException('Vehicle not found');
     }
+
+    await this.eventsService.deleteByVehicle(_id);
 
     return deletedVehicle;
   }
