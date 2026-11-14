@@ -51,13 +51,13 @@ export class VehicleService {
     _id: string,
     updatedVehicle: UpdateVehicleDto,
     userId: string,
-  ): Promise<Vehicle | null> {
+  ): Promise<Vehicle> {
     const vehicle = await this.vehicleAccessService.findAccessibleVehicle(
       _id,
       userId,
     );
     if (!vehicle) {
-      return null;
+      throw new NotFoundException('Vehicle not found');
     }
 
     const isOwner = this.vehicleAccessService.isOwner(vehicle, userId);
@@ -76,13 +76,19 @@ export class VehicleService {
       };
     }
 
-    return this.vehicleModel
+    const savedVehicle = await this.vehicleModel
       .findOneAndUpdate(
         { _id, ...this.vehicleAccessService.buildAccessFilter(userId) },
         updateData,
         { new: true },
       )
       .exec();
+
+    if (!savedVehicle) {
+      throw new NotFoundException('Vehicle not found');
+    }
+
+    return savedVehicle;
   }
 
   private assertOnlyLocationChanges(

@@ -127,13 +127,26 @@ describe('VehicleService', () => {
       findOneAndUpdate.mockReturnValue(resolvingQuery({ updated: true }));
     });
 
-    it('returns null without updating when the vehicle is not accessible', async () => {
+    it('reports a vehicle the user cannot access as not found', async () => {
       findAccessibleVehicle.mockResolvedValue(null);
 
-      await expect(
+      await expectHttpError(
         service.update('vehicle-1', { name: 'New' }, 'stranger'),
-      ).resolves.toBeNull();
+        HttpStatus.NOT_FOUND,
+        'Vehicle not found',
+      );
       expect(findOneAndUpdate).not.toHaveBeenCalled();
+    });
+
+    it('reports as not found a vehicle that was deleted during the update', async () => {
+      findAccessibleVehicle.mockResolvedValue(vehicle);
+      findOneAndUpdate.mockReturnValue(resolvingQuery(null));
+
+      await expectHttpError(
+        service.update('vehicle-1', { name: 'New' }, 'owner-1'),
+        HttpStatus.NOT_FOUND,
+        'Vehicle not found',
+      );
     });
 
     it('lets the owner update every field', async () => {
