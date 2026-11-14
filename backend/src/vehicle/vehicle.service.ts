@@ -1,4 +1,10 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  ForbiddenException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Vehicle, VehicleDocument } from './schemas/vehicle.schema';
@@ -21,8 +27,17 @@ export class VehicleService {
     return this.vehicleAccessService.findAccessibleVehicles(userId);
   }
 
-  async findOne(_id: string, userId: string): Promise<Vehicle | null> {
-    return this.vehicleAccessService.findAccessibleVehicle(_id, userId);
+  async findOne(_id: string, userId: string): Promise<Vehicle> {
+    const vehicle = await this.vehicleAccessService.findAccessibleVehicle(
+      _id,
+      userId,
+    );
+
+    if (!vehicle) {
+      throw new NotFoundException('Vehicle not found');
+    }
+
+    return vehicle;
   }
 
   async create(vehicleDto: CreateVehicleDto, userId: string): Promise<Vehicle> {
@@ -37,13 +52,13 @@ export class VehicleService {
     _id: string,
     updatedVehicle: UpdateVehicleDto,
     userId: string,
-  ): Promise<Vehicle | null> {
+  ): Promise<Vehicle> {
     const vehicle = await this.vehicleAccessService.findAccessibleVehicle(
       _id,
       userId,
     );
     if (!vehicle) {
-      return null;
+      throw new NotFoundException('Vehicle not found');
     }
 
     const isOwner = this.vehicleAccessService.isOwner(vehicle, userId);
@@ -62,13 +77,19 @@ export class VehicleService {
       };
     }
 
-    return this.vehicleModel
+    const savedVehicle = await this.vehicleModel
       .findOneAndUpdate(
         { _id, ...this.vehicleAccessService.buildAccessFilter(userId) },
         updateData,
         { new: true },
       )
       .exec();
+
+    if (!savedVehicle) {
+      throw new NotFoundException('Vehicle not found');
+    }
+
+    return savedVehicle;
   }
 
   private assertOnlyLocationChanges(
@@ -89,14 +110,27 @@ export class VehicleService {
     }
   }
 
-  async delete(_id: string, userId: string): Promise<Vehicle | null> {
+  async delete(_id: string, userId: string): Promise<Vehicle> {
+    const vehicle = await this.vehicleAccessService.findAccessibleVehicle(
+      _id,
+      userId,
+    );
+    if (!vehicle) {
+      throw new NotFoundException('Vehicle not found');
+    }
+
+    if (!this.vehicleAccessService.isOwner(vehicle, userId)) {
+      throw new ForbiddenException('Only the owner can delete the vehicle');
+    }
+
     const deletedVehicle = await this.vehicleModel
       .findOneAndDelete({ _id, userId })
       .exec();
-
-    if (deletedVehicle) {
-      await this.eventsService.deleteByVehicle(_id);
+    if (!deletedVehicle) {
+      throw new NotFoundException('Vehicle not found');
     }
+
+    await this.eventsService.deleteByVehicle(_id);
 
     return deletedVehicle;
   }

@@ -1,15 +1,18 @@
 import { Module } from '@nestjs/common';
+import { APP_FILTER } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { FirebaseModule } from './auth/firebase/firebase.module';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
-import { VehicleModule } from './vehicle/vehicle.module';
+import { FirebaseModule } from './auth/firebase/firebase.module';
 import { AuthModule } from './auth/auth.module';
-import { EventsModule } from './events/events.module';
 import { EnvironmentVariables } from './config/environment-variables';
 import { validateEnvironment } from './config/validate-environment';
+import { AllExceptionsFilter } from './common/errors/all-exceptions.filter';
+import { VehicleModule } from './vehicle/vehicle.module';
+import { EventsModule } from './events/events.module';
 
 @Module({
   imports: [
@@ -28,6 +31,9 @@ import { validateEnvironment } from './config/validate-environment';
     EventsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    { provide: APP_FILTER, useClass: AllExceptionsFilter },
+  ],
 })
 export class AppModule {}
