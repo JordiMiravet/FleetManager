@@ -60,6 +60,31 @@ describe('VehicleService', () => {
     );
   });
 
+  describe('findOne', () => {
+    it('returns the vehicle when the user can access it', async () => {
+      const vehicle = { _id: 'vehicle-1', userId: 'owner-1' };
+      findAccessibleVehicle.mockResolvedValue(vehicle);
+
+      await expect(service.findOne('vehicle-1', 'owner-1')).resolves.toBe(
+        vehicle,
+      );
+      expect(findAccessibleVehicle).toHaveBeenCalledWith(
+        'vehicle-1',
+        'owner-1',
+      );
+    });
+
+    it('reports a vehicle the user cannot access as not found', async () => {
+      findAccessibleVehicle.mockResolvedValue(null);
+
+      await expectHttpError(
+        service.findOne('vehicle-1', 'stranger'),
+        HttpStatus.NOT_FOUND,
+        'Vehicle not found',
+      );
+    });
+  });
+
   describe('delete', () => {
     it('deletes the vehicle and all its events when the user is the owner', async () => {
       const vehicle = { _id: 'vehicle-1', userId: 'owner-1' };

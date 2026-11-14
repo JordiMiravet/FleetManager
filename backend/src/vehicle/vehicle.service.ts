@@ -1,4 +1,9 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Vehicle, VehicleDocument } from './schemas/vehicle.schema';
@@ -21,8 +26,17 @@ export class VehicleService {
     return this.vehicleAccessService.findAccessibleVehicles(userId);
   }
 
-  async findOne(_id: string, userId: string): Promise<Vehicle | null> {
-    return this.vehicleAccessService.findAccessibleVehicle(_id, userId);
+  async findOne(_id: string, userId: string): Promise<Vehicle> {
+    const vehicle = await this.vehicleAccessService.findAccessibleVehicle(
+      _id,
+      userId,
+    );
+
+    if (!vehicle) {
+      throw new NotFoundException('Vehicle not found');
+    }
+
+    return vehicle;
   }
 
   async create(vehicleDto: CreateVehicleDto, userId: string): Promise<Vehicle> {
