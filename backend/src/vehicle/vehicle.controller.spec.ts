@@ -72,4 +72,22 @@ describe('VehicleController', () => {
       ]);
     });
   });
+
+  describe('create', () => {
+    it('should create a vehicle for the user', async () => {
+      const dto = {
+        name: 'My Toyota',
+        brand: 'Toyota',
+        model: 'Corolla',
+        plate: '1234ABC',
+        location: { lat: 41.3851, lng: 2.1734 },
+      };
+      const vehicle = { id: 'vehicle-1', ...dto };
+      mockVehicleService.create.mockResolvedValue(vehicle);
+
+      await expect(controller.create(dto, 'user-1')).resolves.toEqual(vehicle);
+
+      expect(mockVehicleService.create.mock.calls).toEqual([[dto, 'user-1']]);
+    });
+  });
 });
