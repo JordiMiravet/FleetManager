@@ -88,4 +88,24 @@ describe('FirebaseService', () => {
       'user@example.com',
     );
   });
+
+  it('propagates errors when verifying an ID token', async () => {
+    const error = new Error('Invalid token');
+    firebaseMock.authMocks.verifyIdToken.mockRejectedValue(error);
+
+    const service = new FirebaseService(configService);
+
+    await expect(service.verifyIdToken('invalid-token')).rejects.toThrow(error);
+  });
+
+  it('propagates errors when getting a user by email', async () => {
+    const error = new Error('User not found');
+    firebaseMock.authMocks.getUserByEmail.mockRejectedValue(error);
+
+    const service = new FirebaseService(configService);
+
+    await expect(service.getUserByEmail('unknown@example.com')).rejects.toThrow(
+      error,
+    );
+  });
 });
