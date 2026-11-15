@@ -47,4 +47,19 @@ describe('EventsController', () => {
       expect(mockEventsService.findAll.mock.calls).toEqual([['user-1']]);
     });
   });
+
+  describe('findOne', () => {
+    it('should return an event belonging to the user', async () => {
+      const event = { id: 'event-1' };
+      mockEventsService.findOne.mockResolvedValue(event);
+
+      await expect(controller.findOne('event-1', 'user-1')).resolves.toEqual(
+        event,
+      );
+
+      expect(mockEventsService.findOne.mock.calls).toEqual([
+        ['event-1', 'user-1'],
+      ]);
+    });
+  });
 });
