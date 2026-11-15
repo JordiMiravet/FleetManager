@@ -139,4 +139,19 @@ describe('VehicleController', () => {
       ]);
     });
   });
+
+  describe('removeUser', () => {
+    it('should remove a user from a vehicle', async () => {
+      const result = { success: true };
+      mockVehicleSharingService.removeUser.mockResolvedValue(result);
+
+      await expect(
+        controller.removeUser('vehicle-1', 'user-2', 'owner-1'),
+      ).resolves.toEqual(result);
+
+      expect(mockVehicleSharingService.removeUser.mock.calls).toEqual([
+        ['vehicle-1', 'user-2', 'owner-1'],
+      ]);
+    });
+  });
 });
