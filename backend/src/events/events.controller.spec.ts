@@ -44,7 +44,18 @@ describe('EventsController', () => {
 
       await expect(controller.findAll('user-1')).resolves.toEqual(events);
 
-      expect(mockEventsService.findAll.mock.calls).toEqual([['user-1']]);
+      expect(mockEventsService.findAll).toHaveBeenCalledTimes(1);
+      expect(mockEventsService.findAll).toHaveBeenCalledWith('user-1');
+    });
+
+    it('should propagate errors from the service', async () => {
+      const error = new Error('Internal server error');
+      mockEventsService.findAll.mockRejectedValue(error);
+
+      await expect(controller.findAll('user-1')).rejects.toBe(error);
+
+      expect(mockEventsService.findAll).toHaveBeenCalledTimes(1);
+      expect(mockEventsService.findAll).toHaveBeenCalledWith('user-1');
     });
   });
 
@@ -57,9 +68,24 @@ describe('EventsController', () => {
         event,
       );
 
-      expect(mockEventsService.findOne.mock.calls).toEqual([
-        ['event-1', 'user-1'],
-      ]);
+      expect(mockEventsService.findOne).toHaveBeenCalledTimes(1);
+      expect(mockEventsService.findOne).toHaveBeenCalledWith(
+        'event-1',
+        'user-1',
+      );
+    });
+
+    it('should propagate errors from the service', async () => {
+      const error = new Error('Event not found');
+      mockEventsService.findOne.mockRejectedValue(error);
+
+      await expect(controller.findOne('event-1', 'user-1')).rejects.toBe(error);
+
+      expect(mockEventsService.findOne).toHaveBeenCalledTimes(1);
+      expect(mockEventsService.findOne).toHaveBeenCalledWith(
+        'event-1',
+        'user-1',
+      );
     });
   });
 
@@ -71,7 +97,19 @@ describe('EventsController', () => {
 
       await expect(controller.create(dto, 'user-1')).resolves.toEqual(event);
 
-      expect(mockEventsService.create.mock.calls).toEqual([[dto, 'user-1']]);
+      expect(mockEventsService.create).toHaveBeenCalledTimes(1);
+      expect(mockEventsService.create).toHaveBeenCalledWith(dto, 'user-1');
+    });
+
+    it('should propagate errors from the service', async () => {
+      const dto = {} as Parameters<EventsController['create']>[0];
+      const error = new Error('Vehicle not found');
+      mockEventsService.create.mockRejectedValue(error);
+
+      await expect(controller.create(dto, 'user-1')).rejects.toBe(error);
+
+      expect(mockEventsService.create).toHaveBeenCalledTimes(1);
+      expect(mockEventsService.create).toHaveBeenCalledWith(dto, 'user-1');
     });
   });
 
@@ -85,9 +123,29 @@ describe('EventsController', () => {
         controller.update('event-1', dto, 'user-1'),
       ).resolves.toEqual(event);
 
-      expect(mockEventsService.update.mock.calls).toEqual([
-        ['event-1', dto, 'user-1'],
-      ]);
+      expect(mockEventsService.update).toHaveBeenCalledTimes(1);
+      expect(mockEventsService.update).toHaveBeenCalledWith(
+        'event-1',
+        dto,
+        'user-1',
+      );
+    });
+
+    it('should propagate errors from the service', async () => {
+      const dto = {} as Parameters<EventsController['update']>[1];
+      const error = new Error('Event not found');
+      mockEventsService.update.mockRejectedValue(error);
+
+      await expect(controller.update('event-1', dto, 'user-1')).rejects.toBe(
+        error,
+      );
+
+      expect(mockEventsService.update).toHaveBeenCalledTimes(1);
+      expect(mockEventsService.update).toHaveBeenCalledWith(
+        'event-1',
+        dto,
+        'user-1',
+      );
     });
   });
 
@@ -99,9 +157,24 @@ describe('EventsController', () => {
         message: 'Event deleted successfully',
       });
 
-      expect(mockEventsService.delete.mock.calls).toEqual([
-        ['event-1', 'user-1'],
-      ]);
+      expect(mockEventsService.delete).toHaveBeenCalledTimes(1);
+      expect(mockEventsService.delete).toHaveBeenCalledWith(
+        'event-1',
+        'user-1',
+      );
+    });
+
+    it('should propagate errors from the service', async () => {
+      const error = new Error('Event not found');
+      mockEventsService.delete.mockRejectedValue(error);
+
+      await expect(controller.delete('event-1', 'user-1')).rejects.toBe(error);
+
+      expect(mockEventsService.delete).toHaveBeenCalledTimes(1);
+      expect(mockEventsService.delete).toHaveBeenCalledWith(
+        'event-1',
+        'user-1',
+      );
     });
   });
 });
