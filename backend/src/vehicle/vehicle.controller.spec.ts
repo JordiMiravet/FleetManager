@@ -90,4 +90,20 @@ describe('VehicleController', () => {
       expect(mockVehicleService.create.mock.calls).toEqual([[dto, 'user-1']]);
     });
   });
+
+  describe('update', () => {
+    it('should update a vehicle belonging to the user', async () => {
+      const dto = { model: 'Yaris' };
+      const vehicle = { id: 'vehicle-1', ...dto };
+      mockVehicleService.update.mockResolvedValue(vehicle);
+
+      await expect(
+        controller.update('vehicle-1', dto, 'user-1'),
+      ).resolves.toEqual(vehicle);
+
+      expect(mockVehicleService.update.mock.calls).toEqual([
+        ['vehicle-1', dto, 'user-1'],
+      ]);
+    });
+  });
 });
