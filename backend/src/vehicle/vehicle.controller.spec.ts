@@ -47,4 +47,14 @@ describe('VehicleController', () => {
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
+
+  describe('getAll', () => {
+    it('should return vehicles belonging to the user', async () => {
+      const vehicles = [{ id: 'vehicle-1' }];
+      mockVehicleService.findAll.mockResolvedValue(vehicles);
+
+      await expect(controller.getAll('user-1')).resolves.toEqual(vehicles);
+      expect(mockVehicleService.findAll.mock.calls).toEqual([['user-1']]);
+    });
+  });
 });
