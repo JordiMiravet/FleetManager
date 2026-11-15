@@ -57,4 +57,19 @@ describe('VehicleController', () => {
       expect(mockVehicleService.findAll.mock.calls).toEqual([['user-1']]);
     });
   });
+
+  describe('getOne', () => {
+    it('should return a vehicle belonging to the user', async () => {
+      const vehicle = { id: 'vehicle-1' };
+      mockVehicleService.findOne.mockResolvedValue(vehicle);
+
+      await expect(controller.getOne('vehicle-1', 'user-1')).resolves.toEqual(
+        vehicle,
+      );
+
+      expect(mockVehicleService.findOne.mock.calls).toEqual([
+        ['vehicle-1', 'user-1'],
+      ]);
+    });
+  });
 });
