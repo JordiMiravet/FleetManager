@@ -12,7 +12,8 @@ const OWNER_ONLY_FIELDS = ['name', 'model', 'plate', 'imageUrl'] as const;
 @Injectable()
 export class VehicleService {
   constructor(
-    @InjectModel(Vehicle.name) private vehicleModel: Model<VehicleDocument>,
+    @InjectModel(Vehicle.name)
+    private readonly vehicleModel: Model<VehicleDocument>,
     private readonly eventsService: EventsService,
     private readonly vehicleAccessService: VehicleAccessService,
   ) {}
