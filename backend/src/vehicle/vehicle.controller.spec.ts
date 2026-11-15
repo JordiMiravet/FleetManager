@@ -3,6 +3,14 @@ import { VehicleController } from './vehicle.controller';
 import { VehicleService } from './vehicle.service';
 import { VehicleSharingService } from './vehicle-sharing.service';
 
+jest.mock('./vehicle-sharing.service', () => ({
+  VehicleSharingService: class VehicleSharingService {},
+}));
+
+jest.mock('../auth/firebase-auth.guard', () => ({
+  FirebaseAuthGuard: class FirebaseAuthGuard {},
+}));
+
 describe('VehicleController', () => {
   let controller: VehicleController;
 
