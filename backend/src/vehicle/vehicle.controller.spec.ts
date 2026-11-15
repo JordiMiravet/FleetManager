@@ -106,4 +106,18 @@ describe('VehicleController', () => {
       ]);
     });
   });
+
+  describe('delete', () => {
+    it('should delete a vehicle belonging to the user', async () => {
+      mockVehicleService.delete.mockResolvedValue(undefined);
+
+      await expect(
+        controller.delete('vehicle-1', 'user-1'),
+      ).resolves.toBeUndefined();
+
+      expect(mockVehicleService.delete.mock.calls).toEqual([
+        ['vehicle-1', 'user-1'],
+      ]);
+    });
+  });
 });
