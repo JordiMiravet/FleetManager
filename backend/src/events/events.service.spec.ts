@@ -88,6 +88,33 @@ describe('EventsService', () => {
     );
   });
 
+  describe('findAll', () => {
+    it('returns only events belonging to vehicles accessible by the user', async () => {
+      const events = [storedEvent];
+
+      findAccessibleVehicleIds.mockResolvedValue(['vehicle-1']);
+      eventModel.find.mockReturnValue(resolvingQuery(events));
+
+      await expect(service.findAll('user-2')).resolves.toEqual(events);
+
+      expect(findAccessibleVehicleIds).toHaveBeenCalledWith('user-2');
+      expect(eventModel.find).toHaveBeenCalledWith({
+        vehicleId: { $in: ['vehicle-1'] },
+      });
+    });
+
+    it('returns an empty array when the user has no accessible vehicles', async () => {
+      findAccessibleVehicleIds.mockResolvedValue([]);
+      eventModel.find.mockReturnValue(resolvingQuery([]));
+
+      await expect(service.findAll('stranger')).resolves.toEqual([]);
+
+      expect(eventModel.find).toHaveBeenCalledWith({
+        vehicleId: { $in: [] },
+      });
+    });
+  });
+
   describe('deleteByVehicle', () => {
     it('deletes every event of the vehicle whoever created it', async () => {
       eventModel.deleteMany.mockReturnValue(
