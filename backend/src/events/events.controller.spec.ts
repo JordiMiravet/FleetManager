@@ -2,6 +2,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { EventsController } from './events.controller';
 import { EventsService } from './events.service';
 
+jest.mock('../auth/firebase-auth.guard', () => ({
+  FirebaseAuthGuard: class FirebaseAuthGuard {},
+}));
+
 describe('EventsController', () => {
   let controller: EventsController;
 
