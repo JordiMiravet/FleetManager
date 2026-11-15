@@ -17,7 +17,8 @@ import { VehicleAccessService } from '../vehicle/access/vehicle-access.service';
 @Injectable()
 export class EventsService {
   constructor(
-    @InjectModel(Event.name) private eventModel: Model<Event>,
+    @InjectModel(Event.name)
+    private readonly eventModel: Model<Event>,
     private readonly vehicleAccessService: VehicleAccessService,
   ) {}
 
