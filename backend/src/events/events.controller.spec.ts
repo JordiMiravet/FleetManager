@@ -74,4 +74,20 @@ describe('EventsController', () => {
       expect(mockEventsService.create.mock.calls).toEqual([[dto, 'user-1']]);
     });
   });
+
+  describe('update', () => {
+    it('should update an event belonging to the user', async () => {
+      const dto = {} as Parameters<EventsController['update']>[1];
+      const event = { id: 'event-1' };
+      mockEventsService.update.mockResolvedValue(event);
+
+      await expect(
+        controller.update('event-1', dto, 'user-1'),
+      ).resolves.toEqual(event);
+
+      expect(mockEventsService.update.mock.calls).toEqual([
+        ['event-1', dto, 'user-1'],
+      ]);
+    });
+  });
 });
