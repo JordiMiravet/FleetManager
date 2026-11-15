@@ -9,6 +9,8 @@ import { VehicleAccessService } from '../vehicle/access/vehicle-access.service';
 import { EventsService } from './events.service';
 
 interface EventModelMock extends jest.Mock {
+  find: jest.Mock;
+  findOne: jest.Mock;
   exists: jest.Mock;
   findById: jest.Mock;
   findByIdAndUpdate: jest.Mock;
@@ -57,12 +59,15 @@ describe('EventsService', () => {
   let eventModel: EventModelMock;
   let findAccessibleVehicle: jest.Mock;
   let service: EventsService;
+  let findAccessibleVehicleIds: jest.Mock;
 
   beforeEach(() => {
     save = jest.fn();
     eventModel = Object.assign(
       jest.fn().mockImplementation((data: object) => ({ ...data, save })),
       {
+        find: jest.fn(),
+        findOne: jest.fn(),
         exists: jest.fn(),
         findById: jest.fn(),
         findByIdAndUpdate: jest.fn(),
@@ -70,12 +75,15 @@ describe('EventsService', () => {
         deleteMany: jest.fn(),
       },
     );
+
     findAccessibleVehicle = jest.fn();
+    findAccessibleVehicleIds = jest.fn();
 
     service = new EventsService(
       eventModel as unknown as Model<Event>,
       {
         findAccessibleVehicle,
+        findAccessibleVehicleIds,
       } as unknown as VehicleAccessService,
     );
   });
