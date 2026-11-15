@@ -90,4 +90,18 @@ describe('EventsController', () => {
       ]);
     });
   });
+
+  describe('delete', () => {
+    it('should delete an event belonging to the user', async () => {
+      mockEventsService.delete.mockResolvedValue(undefined);
+
+      await expect(controller.delete('event-1', 'user-1')).resolves.toEqual({
+        message: 'Event deleted successfully',
+      });
+
+      expect(mockEventsService.delete.mock.calls).toEqual([
+        ['event-1', 'user-1'],
+      ]);
+    });
+  });
 });
