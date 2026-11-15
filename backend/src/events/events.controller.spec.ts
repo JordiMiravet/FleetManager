@@ -62,4 +62,16 @@ describe('EventsController', () => {
       ]);
     });
   });
+
+  describe('create', () => {
+    it('should create an event for the user', async () => {
+      const dto = {} as Parameters<EventsController['create']>[0];
+      const event = { id: 'event-1' };
+      mockEventsService.create.mockResolvedValue(event);
+
+      await expect(controller.create(dto, 'user-1')).resolves.toEqual(event);
+
+      expect(mockEventsService.create.mock.calls).toEqual([[dto, 'user-1']]);
+    });
+  });
 });
