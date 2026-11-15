@@ -58,8 +58,8 @@ describe('EventsService', () => {
   let save: jest.Mock;
   let eventModel: EventModelMock;
   let findAccessibleVehicle: jest.Mock;
-  let service: EventsService;
   let findAccessibleVehicleIds: jest.Mock;
+  let service: EventsService;
 
   beforeEach(() => {
     save = jest.fn();
@@ -151,20 +151,6 @@ describe('EventsService', () => {
         NotFoundException,
         'Event with ID unknown-event not found',
       );
-    });
-  });
-
-  describe('deleteByVehicle', () => {
-    it('deletes every event of the vehicle whoever created it', async () => {
-      eventModel.deleteMany.mockReturnValue(
-        resolvingQuery({ deletedCount: 2 }),
-      );
-
-      await service.deleteByVehicle('vehicle-1');
-
-      expect(eventModel.deleteMany).toHaveBeenCalledWith({
-        vehicleId: 'vehicle-1',
-      });
     });
   });
 
@@ -441,6 +427,20 @@ describe('EventsService', () => {
         NotFoundException,
         'Event with ID event-1 not found',
       );
+    });
+  });
+
+  describe('deleteByVehicle', () => {
+    it('deletes every event of the vehicle whoever created it', async () => {
+      eventModel.deleteMany.mockReturnValue(
+        resolvingQuery({ deletedCount: 2 }),
+      );
+
+      await service.deleteByVehicle('vehicle-1');
+
+      expect(eventModel.deleteMany).toHaveBeenCalledWith({
+        vehicleId: 'vehicle-1',
+      });
     });
   });
 });
