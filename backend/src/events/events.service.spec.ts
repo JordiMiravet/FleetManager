@@ -376,6 +376,16 @@ describe('EventsService', () => {
       expect(eventModel.exists).not.toHaveBeenCalled();
       expect(findAccessibleVehicle).toHaveBeenCalledTimes(1);
     });
+
+    it('reports an event that could not be updated as not found', async () => {
+      eventModel.findByIdAndUpdate.mockReturnValue(resolvingQuery(null));
+
+      await expectRejection(
+        service.update('event-1', { title: 'New' }, 'user-2'),
+        NotFoundException,
+        'Event with ID event-1 not found',
+      );
+    });
   });
 
   describe('delete', () => {
