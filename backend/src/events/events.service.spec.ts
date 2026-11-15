@@ -115,6 +115,45 @@ describe('EventsService', () => {
     });
   });
 
+  describe('findOne', () => {
+    it('returns an event belonging to an accessible vehicle', async () => {
+      findAccessibleVehicleIds.mockResolvedValue(['vehicle-1']);
+      eventModel.findOne.mockReturnValue(resolvingQuery(storedEvent));
+
+      await expect(service.findOne('event-1', 'user-2')).resolves.toEqual(
+        storedEvent,
+      );
+
+      expect(findAccessibleVehicleIds).toHaveBeenCalledWith('user-2');
+      expect(eventModel.findOne).toHaveBeenCalledWith({
+        _id: 'event-1',
+        vehicleId: { $in: ['vehicle-1'] },
+      });
+    });
+
+    it('rejects an event belonging to an inaccessible vehicle', async () => {
+      findAccessibleVehicleIds.mockResolvedValue(['vehicle-2']);
+      eventModel.findOne.mockReturnValue(resolvingQuery(null));
+
+      await expectRejection(
+        service.findOne('event-1', 'stranger'),
+        NotFoundException,
+        'Event with ID event-1 not found',
+      );
+    });
+
+    it('rejects an event that does not exist', async () => {
+      findAccessibleVehicleIds.mockResolvedValue(['vehicle-1']);
+      eventModel.findOne.mockReturnValue(resolvingQuery(null));
+
+      await expectRejection(
+        service.findOne('unknown-event', 'user-2'),
+        NotFoundException,
+        'Event with ID unknown-event not found',
+      );
+    });
+  });
+
   describe('deleteByVehicle', () => {
     it('deletes every event of the vehicle whoever created it', async () => {
       eventModel.deleteMany.mockReturnValue(
