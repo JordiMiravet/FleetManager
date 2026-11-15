@@ -120,4 +120,23 @@ describe('VehicleController', () => {
       ]);
     });
   });
+
+  describe('addUserByEmail', () => {
+    it('should add a user to a vehicle', async () => {
+      const result = { success: true };
+      mockVehicleSharingService.addUserByEmail.mockResolvedValue(result);
+
+      await expect(
+        controller.addUserByEmail(
+          'vehicle-1',
+          { email: 'user@example.com' },
+          'owner-1',
+        ),
+      ).resolves.toEqual(result);
+
+      expect(mockVehicleSharingService.addUserByEmail.mock.calls).toEqual([
+        ['vehicle-1', 'user@example.com', 'owner-1'],
+      ]);
+    });
+  });
 });
