@@ -340,6 +340,21 @@ describe('VehicleService', () => {
 
       expect(eventsDeleteByVehicle).not.toHaveBeenCalled();
     });
+
+    it('propagates errors when deleting vehicle events fails', async () => {
+      const vehicle = { _id: 'vehicle-1', userId: 'owner-1' };
+
+      vehicleModelFindOneAndDelete.mockReturnValue(resolvingQuery(vehicle));
+
+      const error = new Error('Failed to delete events');
+      eventsDeleteByVehicle.mockRejectedValue(error);
+
+      await expect(service.delete('vehicle-1', 'owner-1')).rejects.toThrow(
+        'Failed to delete events',
+      );
+
+      expect(eventsDeleteByVehicle).toHaveBeenCalledWith('vehicle-1');
+    });
   });
 
   describe('addUserToVehicle', () => {
