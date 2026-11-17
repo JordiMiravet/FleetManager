@@ -302,21 +302,19 @@ describe('VehicleService', () => {
       expect(vehicleModelFindOneAndUpdate).not.toHaveBeenCalled();
     });
 
-    it('allows a shared user when owner-only fields are empty and stored values are undefined', async () => {
-      vehicleAccessFindOne.mockResolvedValue({
+    it('allows a shared user when an owner-only field is undefined in both objects', async () => {
+      const vehicleWithoutImage = {
         ...vehicle,
         imageUrl: undefined,
-      });
+      };
 
-      await service.update(
-        'vehicle-1',
-        { imageUrl: undefined, location },
-        'user-2',
-      );
+      vehicleAccessFindOne.mockResolvedValue(vehicleWithoutImage);
+
+      await service.update('vehicle-1', { imageUrl: undefined }, 'user-2');
 
       expect(vehicleModelFindOneAndUpdate).toHaveBeenCalledWith(
         { _id: 'vehicle-1', ...accessFilterFor('user-2') },
-        { location },
+        {},
         { new: true },
       );
     });
@@ -345,6 +343,15 @@ describe('VehicleService', () => {
 
       await expect(service.delete('vehicle-1', 'user-2')).resolves.toBeNull();
 
+      expect(eventsDeleteByVehicle).not.toHaveBeenCalled();
+    });
+
+    it('returns null when the vehicle does not exist', async () => {
+      vehicleModelFindOneAndDelete.mockReturnValue(resolvingQuery(null));
+
+      const result = await service.delete('vehicle-1', 'owner-1');
+
+      expect(result).toBeNull();
       expect(eventsDeleteByVehicle).not.toHaveBeenCalled();
     });
 
