@@ -301,16 +301,59 @@ describe('VehicleService', () => {
 
       expect(vehicleModelFindOneAndUpdate).not.toHaveBeenCalled();
     });
+    it('allows a shared user when owner-only fields are omitted', async () => {
+      vehicleAccessFindOne.mockResolvedValue(vehicle);
 
-    it('allows a shared user when an owner-only field is undefined in both objects', async () => {
-      const vehicleWithoutImage = {
+      await service.update('vehicle-1', {}, 'user-2');
+
+      expect(vehicleModelFindOneAndUpdate).toHaveBeenCalledWith(
+        { _id: 'vehicle-1', ...accessFilterFor('user-2') },
+        {},
+        { new: true },
+      );
+    });
+
+    it('allows a shared user when an empty owner-only field matches an undefined stored value', async () => {
+      vehicleAccessFindOne.mockResolvedValue({
         ...vehicle,
         imageUrl: undefined,
-      };
+      });
 
-      vehicleAccessFindOne.mockResolvedValue(vehicleWithoutImage);
+      await service.update('vehicle-1', { imageUrl: '' }, 'user-2');
 
-      await service.update('vehicle-1', { imageUrl: undefined }, 'user-2');
+      expect(vehicleModelFindOneAndUpdate).toHaveBeenCalledWith(
+        { _id: 'vehicle-1', ...accessFilterFor('user-2') },
+        {},
+        { new: true },
+      );
+    });
+
+    it('allows a shared user when an owner-only field is null and stored value is empty', async () => {
+      vehicleAccessFindOne.mockResolvedValue({
+        ...vehicle,
+        imageUrl: '',
+      });
+
+      await service.update(
+        'vehicle-1',
+        { imageUrl: null as unknown as string },
+        'user-2',
+      );
+
+      expect(vehicleModelFindOneAndUpdate).toHaveBeenCalledWith(
+        { _id: 'vehicle-1', ...accessFilterFor('user-2') },
+        {},
+        { new: true },
+      );
+    });
+
+    it('allows a shared user when a stored owner-only field is null and submitted value is empty', async () => {
+      vehicleAccessFindOne.mockResolvedValue({
+        ...vehicle,
+        imageUrl: null,
+      });
+
+      await service.update('vehicle-1', { imageUrl: '' }, 'user-2');
 
       expect(vehicleModelFindOneAndUpdate).toHaveBeenCalledWith(
         { _id: 'vehicle-1', ...accessFilterFor('user-2') },
