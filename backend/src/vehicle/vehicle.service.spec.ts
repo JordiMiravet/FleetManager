@@ -313,6 +313,25 @@ describe('VehicleService', () => {
 
       expect(vehicleModelFindOneAndUpdate).not.toHaveBeenCalled();
     });
+
+    it('allows a shared user when owner-only fields are empty and stored values are undefined', async () => {
+      vehicleAccessFindOne.mockResolvedValue({
+        ...vehicle,
+        imageUrl: undefined,
+      });
+
+      await service.update(
+        'vehicle-1',
+        { imageUrl: undefined, location },
+        'user-2',
+      );
+
+      expect(vehicleModelFindOneAndUpdate).toHaveBeenCalledWith(
+        { _id: 'vehicle-1', ...accessFilterFor('user-2') },
+        { location },
+        { new: true },
+      );
+    });
   });
 
   describe('delete', () => {
