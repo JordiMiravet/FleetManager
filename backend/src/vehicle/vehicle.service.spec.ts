@@ -230,7 +230,7 @@ describe('VehicleService', () => {
         'vehicle-1',
         {
           name: 'Car',
-          model: 'Model',
+          model: 'Porsche',
           plate: '1234-ABC',
           imageUrl: 'image.png',
           location,
