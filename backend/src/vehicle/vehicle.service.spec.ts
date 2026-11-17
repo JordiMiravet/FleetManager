@@ -92,6 +92,33 @@ describe('VehicleService', () => {
     });
   });
 
+  describe('findOne', () => {
+    it('returns the accessible vehicle', async () => {
+      const vehicle = {
+        _id: 'vehicle-1',
+        userId: 'owner-1',
+        name: 'Tesla',
+      };
+
+      vehicleAccessFindOne.mockResolvedValue(vehicle);
+
+      await expect(service.findOne('vehicle-1', 'user-1')).resolves.toBe(
+        vehicle,
+      );
+
+      expect(vehicleAccessFindOne).toHaveBeenCalledTimes(1);
+      expect(vehicleAccessFindOne).toHaveBeenCalledWith('vehicle-1', 'user-1');
+    });
+
+    it('returns null when the vehicle is not accessible', async () => {
+      vehicleAccessFindOne.mockResolvedValue(null);
+
+      await expect(service.findOne('vehicle-1', 'user-1')).resolves.toBeNull();
+
+      expect(vehicleAccessFindOne).toHaveBeenCalledWith('vehicle-1', 'user-1');
+    });
+  });
+
   describe('update', () => {
     const vehicle = {
       _id: 'vehicle-1',
