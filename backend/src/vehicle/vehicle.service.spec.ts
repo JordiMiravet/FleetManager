@@ -30,6 +30,7 @@ describe('VehicleService', () => {
   let findOneAndDelete: jest.Mock;
   let exists: jest.Mock;
   let findAccessibleVehicle: jest.Mock;
+  let findAccessibleVehicles: jest.Mock;
   let deleteByVehicle: jest.Mock;
   let service: VehicleService;
 
@@ -38,6 +39,7 @@ describe('VehicleService', () => {
     findOneAndDelete = jest.fn();
     exists = jest.fn();
     findAccessibleVehicle = jest.fn();
+    findAccessibleVehicles = jest.fn();
     deleteByVehicle = jest.fn().mockResolvedValue(undefined);
 
     service = new VehicleService(
@@ -51,6 +53,7 @@ describe('VehicleService', () => {
       } as unknown as EventsService,
       {
         findAccessibleVehicle,
+        findAccessibleVehicles,
         isOwner: (vehicle: { userId: string }, userId: string) =>
           vehicle.userId === userId,
         buildAccessFilter: (userId: string) => ({
@@ -58,6 +61,30 @@ describe('VehicleService', () => {
         }),
       } as unknown as VehicleAccessService,
     );
+  });
+
+  describe('findAll', () => {
+    it('returns all vehicles accessible by the user', async () => {
+      const vehicles = [
+        { _id: 'vehicle-1', name: 'Tesla' },
+        { _id: 'vehicle-2', name: 'BMW' },
+      ];
+
+      findAccessibleVehicles.mockResolvedValue(vehicles);
+
+      await expect(service.findAll('user-1')).resolves.toBe(vehicles);
+
+      expect(findAccessibleVehicles).toHaveBeenCalledTimes(1);
+      expect(findAccessibleVehicles).toHaveBeenCalledWith('user-1');
+    });
+
+    it('returns an empty array when the user has no accessible vehicles', async () => {
+      findAccessibleVehicles.mockResolvedValue([]);
+
+      await expect(service.findAll('user-1')).resolves.toEqual([]);
+
+      expect(findAccessibleVehicles).toHaveBeenCalledWith('user-1');
+    });
   });
 
   describe('delete', () => {
