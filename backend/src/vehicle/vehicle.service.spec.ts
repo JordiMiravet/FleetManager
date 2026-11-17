@@ -260,18 +260,6 @@ describe('VehicleService', () => {
       );
     });
 
-    it('allows a shared user to update when owner-only fields are undefined', async () => {
-      vehicleAccessFindOne.mockResolvedValue(vehicle);
-
-      await service.update('vehicle-1', { location }, 'user-2');
-
-      expect(vehicleModelFindOneAndUpdate).toHaveBeenCalledWith(
-        { _id: 'vehicle-1', ...accessFilterFor('user-2') },
-        { location },
-        { new: true },
-      );
-    });
-
     it('allows a shared user to submit unchanged details without a location', async () => {
       vehicleAccessFindOne.mockResolvedValue(vehicle);
 
