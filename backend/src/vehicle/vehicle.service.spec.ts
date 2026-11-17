@@ -1,6 +1,7 @@
 import { Model } from 'mongoose';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { UpdateVehicleDto } from './dtos/update-vehicle.dto';
+import { CreateVehicleDto } from './dtos/create-vehicle.dto';
 import { EventsService } from '../events/events.service';
 import { VehicleAccessService } from './access/vehicle-access.service';
 import { VehicleDocument } from './schemas/vehicle.schema';
@@ -29,6 +30,7 @@ describe('VehicleService', () => {
   let vehicleModelFindOneAndUpdate: jest.Mock;
   let vehicleModelFindOneAndDelete: jest.Mock;
   let vehicleModelExists: jest.Mock;
+  let vehicleModelSave: jest.Mock;
 
   let vehicleAccessFindOne: jest.Mock;
   let vehicleAccessFindAll: jest.Mock;
@@ -37,22 +39,32 @@ describe('VehicleService', () => {
 
   let service: VehicleService;
 
+  const MockVehicleModel = jest
+    .fn()
+    .mockImplementation((data: Record<string, unknown>) => ({
+      ...data,
+      save: vehicleModelSave,
+    }));
+
   beforeEach(() => {
     vehicleModelFindOneAndUpdate = jest.fn();
     vehicleModelFindOneAndDelete = jest.fn();
     vehicleModelExists = jest.fn();
+    vehicleModelSave = jest.fn();
 
     vehicleAccessFindOne = jest.fn();
     vehicleAccessFindAll = jest.fn();
 
     eventsDeleteByVehicle = jest.fn().mockResolvedValue(undefined);
 
+    Object.assign(MockVehicleModel, {
+      findOneAndUpdate: vehicleModelFindOneAndUpdate,
+      findOneAndDelete: vehicleModelFindOneAndDelete,
+      exists: vehicleModelExists,
+    });
+
     service = new VehicleService(
-      {
-        findOneAndUpdate: vehicleModelFindOneAndUpdate,
-        findOneAndDelete: vehicleModelFindOneAndDelete,
-        exists: vehicleModelExists,
-      } as unknown as Model<VehicleDocument>,
+      MockVehicleModel as unknown as Model<VehicleDocument>,
       {
         deleteByVehicle: eventsDeleteByVehicle,
       } as unknown as EventsService,
@@ -71,8 +83,8 @@ describe('VehicleService', () => {
   describe('findAll', () => {
     it('returns all vehicles accessible by the user', async () => {
       const vehicles = [
-        { _id: 'vehicle-1', name: 'Tesla' },
-        { _id: 'vehicle-2', name: 'BMW' },
+        { _id: 'vehicle-1', name: 'Ferrari' },
+        { _id: 'vehicle-2', name: 'Pagani' },
       ];
 
       vehicleAccessFindAll.mockResolvedValue(vehicles);
@@ -97,7 +109,7 @@ describe('VehicleService', () => {
       const vehicle = {
         _id: 'vehicle-1',
         userId: 'owner-1',
-        name: 'Tesla',
+        name: 'Ferrari',
       };
 
       vehicleAccessFindOne.mockResolvedValue(vehicle);
@@ -119,12 +131,44 @@ describe('VehicleService', () => {
     });
   });
 
+  describe('create', () => {
+    it('creates a vehicle associated with the user', async () => {
+      const vehicleDto: CreateVehicleDto = {
+        name: 'Ferrari',
+        model: 'f8',
+        plate: '1234-ABC',
+        location: {
+          lat: 41.3851,
+          lng: 2.1734,
+        },
+      };
+
+      const savedVehicle = {
+        ...vehicleDto,
+        userId: 'user-1',
+      };
+
+      vehicleModelSave.mockResolvedValue(savedVehicle);
+
+      await expect(service.create(vehicleDto, 'user-1')).resolves.toBe(
+        savedVehicle,
+      );
+
+      expect(MockVehicleModel).toHaveBeenCalledWith({
+        ...vehicleDto,
+        userId: 'user-1',
+      });
+
+      expect(vehicleModelSave).toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe('update', () => {
     const vehicle = {
       _id: 'vehicle-1',
       userId: 'owner-1',
       name: 'Car',
-      model: 'Model',
+      model: 'Porsche',
       plate: '1234-ABC',
       imageUrl: 'image.png',
     };
