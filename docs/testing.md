@@ -123,10 +123,10 @@ Minimum threshold (global): statements 90%, branches 80%, functions 90%, lines 9
 Current unit test coverage:
 
 ```text
-Statements   : 97.66%
-Branches     : 88.04%
+Statements   : 97.91%
+Branches     : 88.36%
 Functions    : 100%
-Lines        : 98.42%
+Lines        : 98.6%
 
 TOTAL: 257 SUCCESS (24 test suites)
 ```
