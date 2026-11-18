@@ -89,6 +89,14 @@ describe('VehicleService', () => {
 
       expect(vehicleAccessFindAll).toHaveBeenCalledWith('user-1');
     });
+
+    it('returns an empty array when the user has no accessible vehicles', async () => {
+      vehicleAccessFindAll.mockResolvedValue([]);
+
+      await expect(service.findAll('user-1')).resolves.toEqual([]);
+
+      expect(vehicleAccessFindAll).toHaveBeenCalledWith('user-1');
+    });
   });
 
   describe('findOne', () => {
