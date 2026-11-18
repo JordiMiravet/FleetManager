@@ -28,6 +28,7 @@ describe('FirebaseAuthGuard', () => {
     guard = new FirebaseAuthGuard({
       verifyIdToken,
     } as unknown as FirebaseService);
+
     warnSpy = jest
       .spyOn(Logger.prototype, 'warn')
       .mockImplementation(() => undefined);
@@ -37,53 +38,81 @@ describe('FirebaseAuthGuard', () => {
     jest.restoreAllMocks();
   });
 
-  it('rejects a request without authorization header', async () => {
-    const context = createContext({ headers: {} });
+  describe('missing authorization', () => {
+    it('rejects a request without authorization header', async () => {
+      const context = createContext({ headers: {} });
 
-    await expect(guard.canActivate(context)).rejects.toThrow(
-      new UnauthorizedException('No token provided'),
-    );
-    expect(verifyIdToken).not.toHaveBeenCalled();
+      await expect(guard.canActivate(context)).rejects.toThrow(
+        new UnauthorizedException('No token provided'),
+      );
+      expect(verifyIdToken).not.toHaveBeenCalled();
+    });
   });
 
-  it('rejects an authorization header that is not a Bearer token', async () => {
-    const context = createContext({ headers: { authorization: 'Basic abc' } });
+  describe('invalid authorization', () => {
+    it('rejects an authorization header that is not a Bearer token', async () => {
+      const context = createContext({
+        headers: { authorization: 'Basic abc' },
+      });
 
-    await expect(guard.canActivate(context)).rejects.toThrow(
-      new UnauthorizedException('Invalid token'),
-    );
-    expect(verifyIdToken).not.toHaveBeenCalled();
-  });
-
-  it('rejects a Bearer header without a token', async () => {
-    const context = createContext({ headers: { authorization: 'Bearer' } });
-
-    await expect(guard.canActivate(context)).rejects.toThrow(
-      new UnauthorizedException('Invalid token'),
-    );
-    expect(verifyIdToken).not.toHaveBeenCalled();
-  });
-
-  it('rejects a token that Firebase cannot verify', async () => {
-    verifyIdToken.mockRejectedValue(new Error('expired'));
-    const context = createContext({
-      headers: { authorization: 'Bearer expired-token' },
+      await expect(guard.canActivate(context)).rejects.toThrow(
+        new UnauthorizedException('Invalid token'),
+      );
+      expect(verifyIdToken).not.toHaveBeenCalled();
     });
 
-    await expect(guard.canActivate(context)).rejects.toThrow(
-      new UnauthorizedException('Invalid token'),
-    );
-    expect(warnSpy).toHaveBeenCalled();
+    it('rejects a Bearer header without a token', async () => {
+      const context = createContext({
+        headers: { authorization: 'Bearer' },
+      });
+
+      await expect(guard.canActivate(context)).rejects.toThrow(
+        new UnauthorizedException('Invalid token'),
+      );
+      expect(verifyIdToken).not.toHaveBeenCalled();
+    });
   });
 
-  it('accepts a valid token and stores the user in the request', async () => {
-    verifyIdToken.mockResolvedValue({ uid: 'user-1' });
-    const request: { headers: object; user?: unknown } = {
-      headers: { authorization: 'Bearer valid-token' },
-    };
+  describe('token verification', () => {
+    it('accepts a valid token and stores the user in the request', async () => {
+      verifyIdToken.mockResolvedValue({ uid: 'user-1' });
+      const request: { headers: object; user?: unknown } = {
+        headers: { authorization: 'Bearer valid-token' },
+      };
 
-    await expect(guard.canActivate(createContext(request))).resolves.toBe(true);
-    expect(verifyIdToken).toHaveBeenCalledWith('valid-token');
-    expect(request.user).toEqual({ uid: 'user-1' });
+      await expect(guard.canActivate(createContext(request))).resolves.toBe(
+        true,
+      );
+
+      expect(verifyIdToken).toHaveBeenCalledWith('valid-token');
+      expect(request.user).toEqual({ uid: 'user-1' });
+    });
+
+    it('rejects a token that Firebase cannot verify', async () => {
+      verifyIdToken.mockRejectedValue(new Error('expired'));
+      const context = createContext({
+        headers: { authorization: 'Bearer expired-token' },
+      });
+
+      await expect(guard.canActivate(context)).rejects.toThrow(
+        new UnauthorizedException('Invalid token'),
+      );
+      expect(warnSpy).toHaveBeenCalled();
+    });
+
+    it('handles errors that are not Error instances', async () => {
+      verifyIdToken.mockRejectedValue('Firebase unavailable');
+      const context = createContext({
+        headers: { authorization: 'Bearer valid-format-token' },
+      });
+
+      await expect(guard.canActivate(context)).rejects.toThrow(
+        new UnauthorizedException('Invalid token'),
+      );
+
+      expect(warnSpy).toHaveBeenCalledWith(
+        'Token verification failed: Firebase unavailable',
+      );
+    });
   });
 });

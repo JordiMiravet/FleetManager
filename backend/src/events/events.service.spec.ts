@@ -9,6 +9,8 @@ import { VehicleAccessService } from '../vehicle/access/vehicle-access.service';
 import { EventsService } from './events.service';
 
 interface EventModelMock extends jest.Mock {
+  find: jest.Mock;
+  findOne: jest.Mock;
   exists: jest.Mock;
   findById: jest.Mock;
   findByIdAndUpdate: jest.Mock;
@@ -56,6 +58,7 @@ describe('EventsService', () => {
   let save: jest.Mock;
   let eventModel: EventModelMock;
   let findAccessibleVehicle: jest.Mock;
+  let findAccessibleVehicleIds: jest.Mock;
   let service: EventsService;
 
   beforeEach(() => {
@@ -63,6 +66,8 @@ describe('EventsService', () => {
     eventModel = Object.assign(
       jest.fn().mockImplementation((data: object) => ({ ...data, save })),
       {
+        find: jest.fn(),
+        findOne: jest.fn(),
         exists: jest.fn(),
         findById: jest.fn(),
         findByIdAndUpdate: jest.fn(),
@@ -70,27 +75,82 @@ describe('EventsService', () => {
         deleteMany: jest.fn(),
       },
     );
+
     findAccessibleVehicle = jest.fn();
+    findAccessibleVehicleIds = jest.fn();
 
     service = new EventsService(
       eventModel as unknown as Model<Event>,
       {
         findAccessibleVehicle,
+        findAccessibleVehicleIds,
       } as unknown as VehicleAccessService,
     );
   });
 
-  describe('deleteByVehicle', () => {
-    it('deletes every event of the vehicle whoever created it', async () => {
-      eventModel.deleteMany.mockReturnValue(
-        resolvingQuery({ deletedCount: 2 }),
+  describe('findAll', () => {
+    it('returns only events belonging to vehicles accessible by the user', async () => {
+      const events = [storedEvent];
+
+      findAccessibleVehicleIds.mockResolvedValue(['vehicle-1']);
+      eventModel.find.mockReturnValue(resolvingQuery(events));
+
+      await expect(service.findAll('user-2')).resolves.toEqual(events);
+
+      expect(findAccessibleVehicleIds).toHaveBeenCalledWith('user-2');
+      expect(eventModel.find).toHaveBeenCalledWith({
+        vehicleId: { $in: ['vehicle-1'] },
+      });
+    });
+
+    it('returns an empty array when the user has no accessible vehicles', async () => {
+      findAccessibleVehicleIds.mockResolvedValue([]);
+      eventModel.find.mockReturnValue(resolvingQuery([]));
+
+      await expect(service.findAll('stranger')).resolves.toEqual([]);
+
+      expect(eventModel.find).toHaveBeenCalledWith({
+        vehicleId: { $in: [] },
+      });
+    });
+  });
+
+  describe('findOne', () => {
+    it('returns an event belonging to an accessible vehicle', async () => {
+      findAccessibleVehicleIds.mockResolvedValue(['vehicle-1']);
+      eventModel.findOne.mockReturnValue(resolvingQuery(storedEvent));
+
+      await expect(service.findOne('event-1', 'user-2')).resolves.toEqual(
+        storedEvent,
       );
 
-      await service.deleteByVehicle('vehicle-1');
-
-      expect(eventModel.deleteMany).toHaveBeenCalledWith({
-        vehicleId: 'vehicle-1',
+      expect(findAccessibleVehicleIds).toHaveBeenCalledWith('user-2');
+      expect(eventModel.findOne).toHaveBeenCalledWith({
+        _id: 'event-1',
+        vehicleId: { $in: ['vehicle-1'] },
       });
+    });
+
+    it('rejects an event belonging to an inaccessible vehicle', async () => {
+      findAccessibleVehicleIds.mockResolvedValue(['vehicle-2']);
+      eventModel.findOne.mockReturnValue(resolvingQuery(null));
+
+      await expectRejection(
+        service.findOne('event-1', 'stranger'),
+        NotFoundException,
+        'Event with ID event-1 not found',
+      );
+    });
+
+    it('rejects an event that does not exist', async () => {
+      findAccessibleVehicleIds.mockResolvedValue(['vehicle-1']);
+      eventModel.findOne.mockReturnValue(resolvingQuery(null));
+
+      await expectRejection(
+        service.findOne('unknown-event', 'user-2'),
+        NotFoundException,
+        'Event with ID unknown-event not found',
+      );
     });
   });
 
@@ -302,6 +362,16 @@ describe('EventsService', () => {
       expect(eventModel.exists).not.toHaveBeenCalled();
       expect(findAccessibleVehicle).toHaveBeenCalledTimes(1);
     });
+
+    it('reports an event that could not be updated as not found', async () => {
+      eventModel.findByIdAndUpdate.mockReturnValue(resolvingQuery(null));
+
+      await expectRejection(
+        service.update('event-1', { title: 'New' }, 'user-2'),
+        NotFoundException,
+        'Event with ID event-1 not found',
+      );
+    });
   });
 
   describe('delete', () => {
@@ -357,6 +427,20 @@ describe('EventsService', () => {
         NotFoundException,
         'Event with ID event-1 not found',
       );
+    });
+  });
+
+  describe('deleteByVehicle', () => {
+    it('deletes every event of the vehicle whoever created it', async () => {
+      eventModel.deleteMany.mockReturnValue(
+        resolvingQuery({ deletedCount: 2 }),
+      );
+
+      await service.deleteByVehicle('vehicle-1');
+
+      expect(eventModel.deleteMany).toHaveBeenCalledWith({
+        vehicleId: 'vehicle-1',
+      });
     });
   });
 });

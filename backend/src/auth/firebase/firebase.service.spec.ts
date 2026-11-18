@@ -47,45 +47,78 @@ describe('FirebaseService', () => {
     firebaseMock.apps.length = 0;
   });
 
-  it('initializes Firebase Admin with the configured credentials', () => {
-    new FirebaseService(configService);
+  describe('initialization', () => {
+    it('initializes Firebase Admin with the configured credentials', () => {
+      new FirebaseService(configService);
 
-    expect(firebaseMock.credential.cert).toHaveBeenCalledWith({
-      projectId: 'project-id',
-      clientEmail: 'client@example.com',
-      privateKey: 'line1\nline2',
+      expect(firebaseMock.credential.cert).toHaveBeenCalledWith({
+        projectId: 'project-id',
+        clientEmail: 'client@example.com',
+        privateKey: 'line1\nline2',
+      });
+      expect(firebaseMock.initializeApp).toHaveBeenCalledTimes(1);
     });
-    expect(firebaseMock.initializeApp).toHaveBeenCalledTimes(1);
+
+    it('reuses the Firebase app when it is already initialized', () => {
+      firebaseMock.apps.push({});
+
+      new FirebaseService(configService);
+
+      expect(firebaseMock.initializeApp).not.toHaveBeenCalled();
+      expect(firebaseMock.app).toHaveBeenCalledTimes(1);
+    });
   });
 
-  it('reuses the Firebase app when it is already initialized', () => {
-    firebaseMock.apps.push({});
+  describe('verifyIdToken', () => {
+    it('verifies an ID token', async () => {
+      firebaseMock.authMocks.verifyIdToken.mockResolvedValue({ uid: 'user-1' });
+      const service = new FirebaseService(configService);
 
-    new FirebaseService(configService);
+      await expect(service.verifyIdToken('token')).resolves.toEqual({
+        uid: 'user-1',
+      });
+      expect(firebaseMock.authMocks.verifyIdToken).toHaveBeenCalledWith(
+        'token',
+      );
+    });
 
-    expect(firebaseMock.initializeApp).not.toHaveBeenCalled();
-    expect(firebaseMock.app).toHaveBeenCalledTimes(1);
+    it('propagates errors when verifying an ID token', async () => {
+      const error = new Error('Invalid token');
+      firebaseMock.authMocks.verifyIdToken.mockRejectedValue(error);
+
+      const service = new FirebaseService(configService);
+
+      await expect(service.verifyIdToken('invalid-token')).rejects.toThrow(
+        error,
+      );
+    });
   });
 
-  it('verifies an ID token', async () => {
-    firebaseMock.authMocks.verifyIdToken.mockResolvedValue({ uid: 'user-1' });
-    const service = new FirebaseService(configService);
+  describe('getUserByEmail', () => {
+    it('gets a user by email', async () => {
+      firebaseMock.authMocks.getUserByEmail.mockResolvedValue({
+        uid: 'user-2',
+      });
+      const service = new FirebaseService(configService);
 
-    await expect(service.verifyIdToken('token')).resolves.toEqual({
-      uid: 'user-1',
+      await expect(service.getUserByEmail('user@example.com')).resolves.toEqual(
+        { uid: 'user-2' },
+      );
+
+      expect(firebaseMock.authMocks.getUserByEmail).toHaveBeenCalledWith(
+        'user@example.com',
+      );
     });
-    expect(firebaseMock.authMocks.verifyIdToken).toHaveBeenCalledWith('token');
-  });
 
-  it('gets a user by email', async () => {
-    firebaseMock.authMocks.getUserByEmail.mockResolvedValue({ uid: 'user-2' });
-    const service = new FirebaseService(configService);
+    it('propagates errors when getting a user by email', async () => {
+      const error = new Error('User not found');
+      firebaseMock.authMocks.getUserByEmail.mockRejectedValue(error);
 
-    await expect(service.getUserByEmail('user@example.com')).resolves.toEqual({
-      uid: 'user-2',
+      const service = new FirebaseService(configService);
+
+      await expect(
+        service.getUserByEmail('unknown@example.com'),
+      ).rejects.toThrow(error);
     });
-    expect(firebaseMock.authMocks.getUserByEmail).toHaveBeenCalledWith(
-      'user@example.com',
-    );
   });
 });
