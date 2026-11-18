@@ -325,6 +325,38 @@ describe('VehicleService', () => {
     });
   });
 
+  describe('create', () => {
+    it('creates and saves a vehicle for the user', async () => {
+      const vehicleDto = {
+        name: 'Car',
+        model: 'Porsche',
+        plate: '1234-ABC',
+        location: {
+          lat: 41.3851,
+          lng: 2.1734,
+        },
+      };
+
+      const savedVehicle = {
+        ...vehicleDto,
+        userId: 'user-1',
+      };
+
+      vehicleModelSave.mockResolvedValue(savedVehicle);
+
+      await expect(service.create(vehicleDto, 'user-1')).resolves.toBe(
+        savedVehicle,
+      );
+
+      expect(MockVehicleModel).toHaveBeenCalledWith({
+        ...vehicleDto,
+        userId: 'user-1',
+      });
+
+      expect(vehicleModelSave).toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe('delete', () => {
     const vehicle = { _id: 'vehicle-1', userId: 'owner-1' };
 
