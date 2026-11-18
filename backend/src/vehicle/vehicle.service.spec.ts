@@ -79,6 +79,18 @@ describe('VehicleService', () => {
     );
   });
 
+  describe('findAll', () => {
+    it('returns all vehicles accessible by the user', async () => {
+      const vehicles = [{ _id: 'vehicle-1' }, { _id: 'vehicle-2' }];
+
+      vehicleAccessFindAll.mockResolvedValue(vehicles);
+
+      await expect(service.findAll('user-1')).resolves.toBe(vehicles);
+
+      expect(vehicleAccessFindAll).toHaveBeenCalledWith('user-1');
+    });
+  });
+
   describe('findOne', () => {
     it('returns the vehicle when the user can access it', async () => {
       const vehicle = { _id: 'vehicle-1', userId: 'owner-1' };
