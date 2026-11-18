@@ -10,7 +10,10 @@ Back to the [README](../README.md#tests).
   - [Running Tests](#running-tests)
     - [Frontend Tests](#frontend-tests)
     - [Backend Tests](#backend-tests)
+    - [Backend End-to-End Tests](#backend-end-to-end-tests)
   - [Coverage](#coverage)
+    - [Frontend Coverage](#frontend-coverage)
+    - [Backend Coverage](#backend-coverage)
   - [Related Documentation](#related-documentation)
 
 ## Testing Strategy
@@ -18,6 +21,11 @@ Back to the [README](../README.md#tests).
 The project uses Jasmine and Karma for unit testing Angular components and services, and Jest for testing the NestJS backend.
 
 Tests cover component rendering, user interactions, business logic, validation rules, error handling, and fallback scenarios. The goal is to ensure reliable behavior across the application's main features.
+
+The backend has two levels of tests:
+
+- **Unit tests** (`src/**/*.spec.ts`): controllers, services, DTOs, pipes and configuration in isolation.
+- **End-to-end tests** (`test/*.e2e-spec.ts`): the real HTTP routes, going through the global validation pipe, the authentication guard, the services and a real MongoDB.
 
 ## Running Tests
 
@@ -55,7 +63,7 @@ Run tests in watch mode:
 npm run test:watch
 ```
 
-Run tests with coverage:
+Run unit tests with coverage:
 
 ```bash
 npm run test:cov
@@ -67,9 +75,31 @@ Run end-to-end tests:
 npm run test:e2e
 ```
 
-The backend uses Jest for unit testing and end-to-end testing, with Supertest available for HTTP testing.
+### Backend End-to-End Tests
+
+The end-to-end tests boot the real `AppModule` and replace only the external dependencies:
+
+- **Database:** an in-memory MongoDB provided by `mongodb-memory-server`. No local MongoDB is needed. The first run downloads the MongoDB binary, so it needs an internet connection and may take longer.
+- **Authentication:** `FirebaseService` is replaced by an in-memory fake (`test/support/fake-firebase.service.ts`). The real `FirebaseAuthGuard` still runs, so missing, malformed and rejected tokens are tested as well.
+
+The global `ValidationPipe` is registered in the test application with the same options used in `main.ts`, so request validation behaves as in production.
+
+The tests are organized by resource:
+
+| File | Covers |
+| --- | --- |
+| `test/app.e2e-spec.ts` | Health check (`/check-db`) and unknown routes |
+| `test/auth.e2e-spec.ts` | `POST /auth/verify` and the 401 response of every protected route |
+| `test/vehicles.e2e-spec.ts` | Vehicle CRUD, owner versus shared-user permissions, sharing and removing users, validation |
+| `test/events.e2e-spec.ts` | Event CRUD, access through shared vehicles, time-range validation, overlap rules |
+
+Shared helpers live in `test/support/`. The e2e tests run serially (`maxWorkers: 1`) and use their own TypeScript configuration (`test/tsconfig.e2e.json`).
 
 ## Coverage
+
+Backend and frontend coverage are measured and reported separately.
+
+### Frontend Coverage
 
 Current test coverage:
 
@@ -82,6 +112,29 @@ Lines        : 98.71% ( 998/1011 )
 ================================================================================
 
 TOTAL: 1017 SUCCESS
+```
+
+### Backend Coverage
+
+Coverage is collected from the unit tests with `npm run test:cov` and written to `backend/coverage/backend/`. The command fails if the global coverage drops below the configured threshold. Test helpers (`**/testing/**`), spec files and `main.ts` are excluded from the measurement.
+
+Minimum threshold (global): statements 90%, branches 80%, functions 90%, lines 90%.
+
+Current unit test coverage:
+
+```text
+Statements   : 97.66%
+Branches     : 88.04%
+Functions    : 100%
+Lines        : 98.42%
+
+TOTAL: 257 SUCCESS (24 test suites)
+```
+
+The end-to-end tests are not included in this coverage report. They are run separately:
+
+```text
+TOTAL: 104 SUCCESS, 1 TODO (4 test suites)
 ```
 
 ## Related Documentation
