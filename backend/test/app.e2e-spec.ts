@@ -1,25 +1,22 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
-import { App } from 'supertest/types';
-import { AppModule } from './../src/app.module';
+import { createTestApp, type TestApp } from './support/test-app';
 
-describe('AppController (e2e)', () => {
-  let app: INestApplication<App>;
+describe('App (e2e)', () => {
+  let t: TestApp;
 
-  beforeEach(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    app = moduleFixture.createNestApplication();
-    await app.init();
+  beforeAll(async () => {
+    t = await createTestApp();
   });
 
-  it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
+  afterAll(async () => {
+    await t.close();
+  });
+
+  it('GET /check-db reports the database connection state', () => {
+    return request(t.http).get('/check-db').expect(200).expect('Connected');
+  });
+
+  it('returns 404 for an unknown route', () => {
+    return request(t.http).get('/does-not-exist').expect(404);
   });
 });
