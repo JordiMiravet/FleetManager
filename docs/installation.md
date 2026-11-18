@@ -102,11 +102,13 @@ Create a `.env` file in the `backend/` folder. You can start from the provided e
 
 ```env
 PORT=3000
-MONGO_URI=mongodb://localhost:27017/whereismycar
+MONGO_URI=mongodb://localhost:27017/fleetmanager
 
 FIREBASE_PROJECT_ID=your_project_id
 FIREBASE_CLIENT_EMAIL=your_client_email
 FIREBASE_PRIVATE_KEY=your_private_key
+
+CORS_ORIGIN=http://localhost:4200
 ```
 
 Firebase credentials can be obtained from:
