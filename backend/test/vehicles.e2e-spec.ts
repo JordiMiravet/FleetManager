@@ -109,14 +109,10 @@ describe('Vehicles (e2e)', () => {
       }
     });
 
-    it('returns an empty response to a user without access', async () => {
+    it('returns 404 when the user has no access to the vehicle', async () => {
       const vehicle = await createVehicle(t, owner.uid);
 
-      const res = await as(t, stranger.uid)
-        .get(`/vehicles/${vehicle._id}`)
-        .expect(200);
-
-      expect(res.text).toBe('');
+      await as(t, stranger.uid).get(`/vehicles/${vehicle._id}`).expect(404);
     });
 
     it('returns 400 for an invalid id', async () => {
@@ -173,15 +169,18 @@ describe('Vehicles (e2e)', () => {
       expect(unchanged.body.name).toBe('Van');
     });
 
-    it('does not modify a vehicle the user cannot access', async () => {
+    it('returns 404 when the user has no access to the vehicle', async () => {
       const vehicle = await createVehicle(t, owner.uid, { name: 'Van' });
 
       const res = await as(t, stranger.uid)
         .put(`/vehicles/${vehicle._id}`)
         .send({ name: 'Hijacked' })
-        .expect(200);
+        .expect(404);
 
-      expect(res.text).toBe('');
+      expect(res.body).toMatchObject({
+        message: 'Vehicle not found',
+      });
+
       const unchanged = await as(t, owner.uid).get(`/vehicles/${vehicle._id}`);
       expect(unchanged.body.name).toBe('Van');
     });
@@ -206,21 +205,22 @@ describe('Vehicles (e2e)', () => {
         .expect(200);
 
       expect(res.body._id).toBe(vehicle._id);
-      expect(
-        (await as(t, owner.uid).get(`/vehicles/${vehicle._id}`)).text,
-      ).toBe('');
+      await as(t, owner.uid).get(`/vehicles/${vehicle._id}`).expect(404);
       await as(t, owner.uid).get(`/events/${event._id}`).expect(404);
     });
 
-    it('does not let a shared user delete the vehicle', async () => {
+    it('returns 403 when a shared user tries to delete the vehicle', async () => {
       const vehicle = await createVehicle(t, owner.uid);
       await shareVehicle(t, vehicle._id, owner.uid, guest.email);
 
       const res = await as(t, guest.uid)
         .delete(`/vehicles/${vehicle._id}`)
-        .expect(200);
+        .expect(403);
 
-      expect(res.text).toBe('');
+      expect(res.body).toMatchObject({
+        message: 'Only the owner can delete the vehicle',
+      });
+
       await as(t, owner.uid).get(`/vehicles/${vehicle._id}`).expect(200);
     });
   });
@@ -327,9 +327,7 @@ describe('Vehicles (e2e)', () => {
         .expect(200);
 
       expect(res.body).toEqual({ message: 'User removed successfully' });
-      expect(
-        (await as(t, guest.uid).get(`/vehicles/${vehicle._id}`)).text,
-      ).toBe('');
+      await as(t, guest.uid).get(`/vehicles/${vehicle._id}`).expect(404);
     });
 
     it('lets a shared user remove themself', async () => {
@@ -340,9 +338,7 @@ describe('Vehicles (e2e)', () => {
         .delete(`/vehicles/${vehicle._id}/users/${guest.uid}`)
         .expect(200);
 
-      expect(
-        (await as(t, guest.uid).get(`/vehicles/${vehicle._id}`)).text,
-      ).toBe('');
+      await as(t, guest.uid).get(`/vehicles/${vehicle._id}`).expect(404);
     });
 
     it('returns 403 when a shared user removes someone else', async () => {
