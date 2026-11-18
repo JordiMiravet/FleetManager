@@ -1,7 +1,6 @@
 import { Model } from 'mongoose';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { UpdateVehicleDto } from './dtos/update-vehicle.dto';
-import { CreateVehicleDto } from './dtos/create-vehicle.dto';
 import { EventsService } from '../events/events.service';
 import { VehicleAccessService } from './access/vehicle-access.service';
 import { VehicleDocument } from './schemas/vehicle.schema';
@@ -83,19 +82,16 @@ describe('VehicleService', () => {
   describe('findOne', () => {
     it('returns the vehicle when the user can access it', async () => {
       const vehicle = { _id: 'vehicle-1', userId: 'owner-1' };
-      findAccessibleVehicle.mockResolvedValue(vehicle);
+      vehicleAccessFindOne.mockResolvedValue(vehicle);
 
       await expect(service.findOne('vehicle-1', 'owner-1')).resolves.toBe(
         vehicle,
       );
-      expect(findAccessibleVehicle).toHaveBeenCalledWith(
-        'vehicle-1',
-        'owner-1',
-      );
+      expect(vehicleAccessFindOne).toHaveBeenCalledWith('vehicle-1', 'owner-1');
     });
 
     it('reports a vehicle the user cannot access as not found', async () => {
-      findAccessibleVehicle.mockResolvedValue(null);
+      vehicleAccessFindOne.mockResolvedValue(null);
 
       await expectHttpError(
         service.findOne('vehicle-1', 'stranger'),
@@ -128,19 +124,19 @@ describe('VehicleService', () => {
     });
 
     it('reports a vehicle the user cannot access as not found', async () => {
-      findAccessibleVehicle.mockResolvedValue(null);
+      vehicleAccessFindOne.mockResolvedValue(null);
 
       await expectHttpError(
         service.update('vehicle-1', { name: 'New' }, 'stranger'),
         HttpStatus.NOT_FOUND,
         'Vehicle not found',
       );
-      expect(findOneAndUpdate).not.toHaveBeenCalled();
+      expect(vehicleModelFindOneAndUpdate).not.toHaveBeenCalled();
     });
 
     it('reports as not found a vehicle that was deleted during the update', async () => {
-      findAccessibleVehicle.mockResolvedValue(vehicle);
-      findOneAndUpdate.mockReturnValue(resolvingQuery(null));
+      vehicleAccessFindOne.mockResolvedValue(vehicle);
+      vehicleModelFindOneAndUpdate.mockReturnValue(resolvingQuery(null));
 
       await expectHttpError(
         service.update('vehicle-1', { name: 'New' }, 'owner-1'),
@@ -318,9 +314,10 @@ describe('VehicleService', () => {
   });
 
   describe('delete', () => {
-    it('deletes the vehicle and all its events when the user is the owner', async () => {
-      const vehicle = { _id: 'vehicle-1', userId: 'owner-1' };
+    const vehicle = { _id: 'vehicle-1', userId: 'owner-1' };
 
+    it('deletes the vehicle and all its events when the user is the owner', async () => {
+      vehicleAccessFindOne.mockResolvedValue(vehicle);
       vehicleModelFindOneAndDelete.mockReturnValue(resolvingQuery(vehicle));
 
       await expect(service.delete('vehicle-1', 'owner-1')).resolves.toBe(
@@ -335,90 +332,58 @@ describe('VehicleService', () => {
       expect(eventsDeleteByVehicle).toHaveBeenCalledWith('vehicle-1');
     });
 
-    it('does not delete anything when the user is not the owner', async () => {
-      vehicleModelFindOneAndDelete.mockReturnValue(resolvingQuery(null));
-
-      await expect(service.delete('vehicle-1', 'user-2')).resolves.toBeNull();
-
-      expect(eventsDeleteByVehicle).not.toHaveBeenCalled();
-    });
-
-    it('returns null when the vehicle does not exist', async () => {
-      vehicleModelFindOneAndDelete.mockReturnValue(resolvingQuery(null));
-
-      const result = await service.delete('vehicle-1', 'owner-1');
-
-      expect(result).toBeNull();
-      expect(eventsDeleteByVehicle).not.toHaveBeenCalled();
-    });
-
-    it('propagates errors when deleting vehicle events fails', async () => {
-      const vehicle = { _id: 'vehicle-1', userId: 'owner-1' };
-
-      vehicleModelFindOneAndDelete.mockReturnValue(resolvingQuery(vehicle));
-
-      const error = new Error('Failed to delete events');
-      eventsDeleteByVehicle.mockRejectedValue(error);
-
-      await expect(service.delete('vehicle-1', 'owner-1')).rejects.toThrow(
-        'Failed to delete events',
-      );
-
-      expect(eventsDeleteByVehicle).toHaveBeenCalledWith('vehicle-1');
-    });
-  });
-
-  describe('delete', () => {
-    const vehicle = { _id: 'vehicle-1', userId: 'owner-1' };
-
-    it('deletes the vehicle and all its events when the user is the owner', async () => {
-      findAccessibleVehicle.mockResolvedValue(vehicle);
-      findOneAndDelete.mockReturnValue(resolvingQuery(vehicle));
-
-      await expect(service.delete('vehicle-1', 'owner-1')).resolves.toBe(
-        vehicle,
-      );
-      expect(findOneAndDelete).toHaveBeenCalledWith({
-        _id: 'vehicle-1',
-        userId: 'owner-1',
-      });
-      expect(deleteByVehicle).toHaveBeenCalledWith('vehicle-1');
-    });
-
     it('reports a vehicle the user cannot access as not found', async () => {
-      findAccessibleVehicle.mockResolvedValue(null);
+      vehicleAccessFindOne.mockResolvedValue(null);
 
       await expectHttpError(
         service.delete('vehicle-1', 'stranger'),
         HttpStatus.NOT_FOUND,
         'Vehicle not found',
       );
-      expect(findOneAndDelete).not.toHaveBeenCalled();
-      expect(deleteByVehicle).not.toHaveBeenCalled();
+
+      expect(vehicleModelFindOneAndDelete).not.toHaveBeenCalled();
+      expect(eventsDeleteByVehicle).not.toHaveBeenCalled();
     });
 
     it('rejects a shared user who is not the owner', async () => {
-      findAccessibleVehicle.mockResolvedValue(vehicle);
+      vehicleAccessFindOne.mockResolvedValue(vehicle);
 
       await expectHttpError(
         service.delete('vehicle-1', 'user-2'),
         HttpStatus.FORBIDDEN,
         'Only the owner can delete the vehicle',
       );
-      expect(findOneAndDelete).not.toHaveBeenCalled();
-      expect(deleteByVehicle).not.toHaveBeenCalled();
+
+      expect(vehicleModelFindOneAndDelete).not.toHaveBeenCalled();
+      expect(eventsDeleteByVehicle).not.toHaveBeenCalled();
     });
 
-    it('does not delete the events when the vehicle was already deleted', async () => {
-      findAccessibleVehicle.mockResolvedValue(vehicle);
-      findOneAndDelete.mockReturnValue(resolvingQuery(null));
+    it('does not delete events when the vehicle was already deleted', async () => {
+      vehicleAccessFindOne.mockResolvedValue(vehicle);
+      vehicleModelFindOneAndDelete.mockReturnValue(resolvingQuery(null));
 
       await expectHttpError(
         service.delete('vehicle-1', 'owner-1'),
         HttpStatus.NOT_FOUND,
         'Vehicle not found',
       );
-      expect(deleteByVehicle).not.toHaveBeenCalled();
+
+      expect(eventsDeleteByVehicle).not.toHaveBeenCalled();
+    });
+
+    it('propagates errors when deleting vehicle events fails', async () => {
+      vehicleAccessFindOne.mockResolvedValue(vehicle);
+      vehicleModelFindOneAndDelete.mockReturnValue(resolvingQuery(vehicle));
+
+      eventsDeleteByVehicle.mockRejectedValue(
+        new Error('Failed to delete events'),
+      );
+
+      await expect(service.delete('vehicle-1', 'owner-1')).rejects.toThrow(
+        'Failed to delete events',
+      );
+
+      expect(eventsDeleteByVehicle).toHaveBeenCalledWith('vehicle-1');
     });
   });
 
