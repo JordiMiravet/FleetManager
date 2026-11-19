@@ -65,3 +65,14 @@ Events belong to a vehicle, not to the user who created them:
 - **Only the owner can manage events:** it would block the main use of sharing a vehicle, which is scheduling its usage. It was rejected.
 - **Delete the events before the vehicle:** a failure after the events are deleted would leave a vehicle without its events. Deleting the vehicle first was chosen, so a failure can never do that.
 - **Enforce the rules only in the frontend:** the API can be called without the interface, so the server must enforce them. The frontend rules are kept and the server applies the same ones.
+
+## Consequences
+
+- The vehicle ownership, sharing and event authorization rules are enforced by the backend, and the access rule exists in a single place.
+- Routes, methods and successful responses are unchanged. The behavior changes only for requests that were not allowed or not valid, such as events for inaccessible vehicles, owner-only actions by shared users, invalid time ranges, overlaps and duplicated plates.
+- The backend is covered by unit tests (278 passing in 26 suites, with Statements 97.91%, Branches 88.36%, Functions 100% and Lines 98.6%) and by end-to-end tests that run against an in-memory MongoDB with a fake Firebase service (104 passing and 1 todo). A minimum coverage threshold is enforced.
+- Events are shared among everyone with access to the vehicle: any of them can edit or delete any event.
+- A count query on the development database found no vehicles with users in the old string format, so the branches that handled it were removed without a data migration.
+- The overlap check and the creation of an event are two separate operations, so two simultaneous requests could both pass the check. A database constraint is not possible with the current schema, so this remains a known limitation.
+- If the deletion of the events fails after the vehicle has been deleted, the events are left without a vehicle and are no longer returned by the API.
+- The frontend does not handle error responses when creating, editing, moving or deleting vehicles, so a rejected request is silently ignored. Showing feedback is a frontend change, outside the scope of this decision.
