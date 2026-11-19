@@ -54,3 +54,14 @@ Events belong to a vehicle, not to the user who created them:
 - The environment variables are validated at startup, and the request bodies and the `:id` route parameters are validated with DTOs and an id pipe, so invalid requests are rejected with 400.
 - A global exception filter keeps the response of HTTP exceptions, maps database errors (duplicated keys to 409, cast and validation errors to 400) and returns a generic message for unexpected errors, which are logged with their stack.
 - The vehicle service throws `NotFoundException` instead of returning an empty successful response, as the events service already did.
+
+## Alternatives considered
+
+- **Keep the shared-access query in every service:** it required no change, but the rule that decides who can access a vehicle would remain duplicated in five places and could diverge. It was rejected.
+- **Make the vehicle and events modules depend on each other (`forwardRef`):** it would have allowed events to call the vehicle service, but it creates a circular dependency that is hard to reason about. It was rejected in favor of a one-way dependency plus the shared access module.
+- **Delete the events through an event emitter (`@nestjs/event-emitter`):** it fully decouples the modules, but it adds a package and makes the deletion implicit. It was rejected because a direct call from vehicles to events is simpler and explicit.
+- **Merge vehicles and events into a single module:** it removes the dependency, but it mixes two domains with different rules. It was rejected.
+- **Only the creator of an event can edit or delete it (previous behavior):** it was rejected because everyone with access to the vehicle can see its events, and the README states that users with granted access can manage usage events.
+- **Only the owner can manage events:** it would block the main use of sharing a vehicle, which is scheduling its usage. It was rejected.
+- **Delete the events before the vehicle:** a failure after the events are deleted would leave a vehicle without its events. Deleting the vehicle first was chosen, so a failure can never do that.
+- **Enforce the rules only in the frontend:** the API can be called without the interface, so the server must enforce them. The frontend rules are kept and the server applies the same ones.
