@@ -17,3 +17,8 @@ The NestJS backend worked, but several rules documented for the application were
 - Errors were reported inconsistently: a duplicated plate ended in a generic 500 error, and missing vehicles returned an empty successful response.
 
 The improvement had to be done without changing routes, methods or the shape of successful responses, and without modifying the frontend.
+
+## Decision
+
+Enforce the authorization rules on the server, centralize the access logic in a single module, keep controllers thin and report errors consistently. The changes were made in independent tasks (#640 to #647), each with its own pull request.
+
