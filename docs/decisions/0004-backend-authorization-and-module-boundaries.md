@@ -76,3 +76,12 @@ Events belong to a vehicle, not to the user who created them:
 - The overlap check and the creation of an event are two separate operations, so two simultaneous requests could both pass the check. A database constraint is not possible with the current schema, so this remains a known limitation.
 - If the deletion of the events fails after the vehicle has been deleted, the events are left without a vehicle and are no longer returned by the API.
 - The frontend does not handle error responses when creating, editing, moving or deleting vehicles, so a rejected request is silently ignored. Showing feedback is a frontend change, outside the scope of this decision.
+
+### Follow-ups
+
+- Evaluate a relational database, if the data model and its relationships justify the migration.
+- Guarantee that two simultaneous requests cannot create overlapping events, with a database-level constraint or a transaction.
+- Add feedback for rejected requests in the frontend forms.
+- Remove the `dotenv` dependency, which the backend no longer imports.
+
+Future changes to the authorization rules should be made on the server first, keeping the frontend rules aligned with them, and covered by unit and end-to-end tests.
