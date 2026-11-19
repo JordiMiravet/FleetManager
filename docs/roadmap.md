@@ -86,7 +86,10 @@ The first improvement phase of the backend is completed:
 
 Pending improvements:
 
-- Improve API contracts and data validation as the application evolves.
+- Evaluate a relational database, if the data model and its relationships justify the migration.
+- Guarantee that two simultaneous requests cannot create overlapping events, with a database-level constraint or a transaction.
+- Remove the `dotenv` dependency, which the backend no longer imports.
+- Keep improving the API contracts as the application evolves.
 - Review data models and persistence strategies when new requirements arise.
 - Maintain clear separation of responsibilities between frontend and backend.
 
