@@ -74,6 +74,18 @@ Back to the [README](../README.md#roadmap).
 
 **Status:** Planned
 
+The first improvement phase of the backend is completed:
+
+- Validated configuration of the environment variables, with explicit errors at startup.
+- Firebase Admin encapsulated in an injectable service, and the authentication logic unified.
+- Vehicle access logic centralized in a single module, decoupling the vehicle and events modules.
+- Vehicle ownership, sharing and event authorization rules enforced on the server.
+- Request validation completed for vehicles and events, and invalid ids rejected.
+- Consistent error handling, with a global exception filter and proper status codes.
+- Backend unit and end-to-end tests covering the authorization and validation rules.
+
+Pending improvements:
+
 - Improve API contracts and data validation as the application evolves.
 - Review data models and persistence strategies when new requirements arise.
 - Maintain clear separation of responsibilities between frontend and backend.
