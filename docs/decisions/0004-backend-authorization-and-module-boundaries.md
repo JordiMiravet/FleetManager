@@ -32,3 +32,13 @@ The rules documented in the README are enforced by the backend:
 - **Deleting a vehicle:** the ownership is part of the deletion filter, so nothing is deleted when the user is not the owner. A shared user receives 403. When the vehicle is deleted, all its events are deleted, whoever created them.
 - **Sharing and unsharing:** adding and removing a shared user are single atomic updates (`$push` with a "not already shared" condition, and `$pull`) instead of reading the vehicle, checking it and saving it.
 
+### Event editing and scheduling rule
+
+Events belong to a vehicle, not to the user who created them:
+
+- Creating an event, or moving it to another vehicle, requires access to that vehicle.
+- Every user with access to the vehicle of an event can edit and delete it. Editing or deleting the vehicle itself remains owner-only.
+- The end time must be after the start time (400), and an event cannot overlap another event of the same vehicle and date (409). Events that only touch each other are allowed, and the event being updated is ignored in the overlap check.
+- When updating, the vehicle, date and times are validated only if they actually change, so editing the title of an existing event is never blocked.
+- Dates use the `YYYY-MM-DD` format and times the `HH:mm` format, the ones the frontend already sends.
+
