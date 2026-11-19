@@ -111,6 +111,17 @@ FIREBASE_PRIVATE_KEY=your_private_key
 CORS_ORIGIN=http://localhost:4200
 ```
 
+The backend validates these variables when it starts and stops with an explicit message if a required one is missing or invalid.
+
+| Variable | Required | Default | Description |
+| --- | --- | --- | --- |
+| `PORT` | No | `3000` | Port where the API listens. |
+| `MONGO_URI` | Yes | – | MongoDB connection string. |
+| `FIREBASE_PROJECT_ID` | Yes | – | Project id of the Firebase service account. |
+| `FIREBASE_CLIENT_EMAIL` | Yes | – | Client email of the Firebase service account. |
+| `FIREBASE_PRIVATE_KEY` | Yes | – | Private key of the Firebase service account. |
+| `CORS_ORIGIN` | No | `http://localhost:4200` | Origin allowed by CORS. Change it if the frontend runs on another host or port. |
+
 Firebase credentials can be obtained from:
 
 Firebase Console → Project Settings → Service Accounts → Generate new private key.
