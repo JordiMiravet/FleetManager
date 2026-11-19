@@ -48,3 +48,9 @@ Events belong to a vehicle, not to the user who created them:
 - **Vehicles depend on events, not the other way round:** the vehicle module imports the events module and calls the events service to delete the events of a deleted vehicle. The events module no longer registers the vehicle model and the vehicle module no longer registers the event model. There are no circular module dependencies.
 - **`VehicleSharingService`:** holds the logic of sharing and unsharing a vehicle, so the controller only delegates to services and no longer depends on Firebase.
 - **`FirebaseModule`:** a global module that initializes Firebase Admin from the validated configuration and exposes token verification and user lookup by email. Only Firebase errors that mean the user cannot be found are reported as 404.
+
+### Validation and errors
+
+- The environment variables are validated at startup, and the request bodies and the `:id` route parameters are validated with DTOs and an id pipe, so invalid requests are rejected with 400.
+- A global exception filter keeps the response of HTTP exceptions, maps database errors (duplicated keys to 409, cast and validation errors to 400) and returns a generic message for unexpected errors, which are logged with their stack.
+- The vehicle service throws `NotFoundException` instead of returning an empty successful response, as the events service already did.
