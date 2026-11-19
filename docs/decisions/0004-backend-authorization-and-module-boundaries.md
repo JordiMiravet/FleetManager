@@ -85,3 +85,7 @@ Events belong to a vehicle, not to the user who created them:
 - Remove the `dotenv` dependency, which the backend no longer imports.
 
 Future changes to the authorization rules should be made on the server first, keeping the frontend rules aligned with them, and covered by unit and end-to-end tests.
+
+---
+
+[↑ Back to top](#adr-0004-backend-authorization-rules-and-module-boundaries)
