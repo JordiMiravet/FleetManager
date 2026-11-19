@@ -22,3 +22,13 @@ The improvement had to be done without changing routes, methods or the shape of 
 
 Enforce the authorization rules on the server, centralize the access logic in a single module, keep controllers thin and report errors consistently. The changes were made in independent tasks (#640 to #647), each with its own pull request.
 
+### Authorization rules
+
+The rules documented in the README are enforced by the backend:
+
+- **Owner:** can edit every field of the vehicle, share it and delete it.
+- **Shared user:** can see the vehicle, update only its `location` and remove themselves from it. Changing the name, model, plate or image returns 403, but resending the stored values is accepted, so a client that sends the whole vehicle when moving it keeps working. Sharing the vehicle returns 403.
+- **User without access:** receives 404, so the existence of the vehicle or the event is not revealed.
+- **Deleting a vehicle:** the ownership is part of the deletion filter, so nothing is deleted when the user is not the owner. A shared user receives 403. When the vehicle is deleted, all its events are deleted, whoever created them.
+- **Sharing and unsharing:** adding and removing a shared user are single atomic updates (`$push` with a "not already shared" condition, and `$pull`) instead of reading the vehicle, checking it and saving it.
+
