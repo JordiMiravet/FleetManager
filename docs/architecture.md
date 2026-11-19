@@ -193,41 +193,85 @@ The following tree shows the main modules and configuration files of the NestJS 
 ```text
 backend/
 ├─ src/
-│  ├─ auth/                    # Authentication and Firebase integration
-│  │  ├─ firebase/             # Firebase Admin setup
+│  ├─ auth/                    # Authentication
+│  │  ├─ firebase/             # Firebase Admin service and module
+│  │  │  ├─ firebase.module.ts
+│  │  │  └─ firebase.service.ts
 │  │  ├─ auth.controller.ts
 │  │  ├─ auth.module.ts
+│  │  ├─ authenticated-request.ts
+│  │  ├─ current-user.decorator.ts
 │  │  └─ firebase-auth.guard.ts
+│  ├─ common/                  # Cross-cutting concerns
+│  │  ├─ errors/               # Global exception filter and error mapping
+│  │  ├─ pipes/                # Mongo id validation pipe
+│  │  ├─ testing/              # Test helper (excluded from the build)
+│  │  └─ validation-pipe-options.ts
+│  ├─ config/                  # Environment variables and their validation
 │  ├─ events/                  # Event management
 │  │  ├─ dtos/                 # Create and update DTOs
 │  │  ├─ schemas/              # MongoDB schema
+│  │  ├─ event-time.ts         # Date and time rules
 │  │  ├─ events.controller.ts
 │  │  ├─ events.module.ts
-│  │  ├─ events.service.ts
-│  │  └─ *.spec.ts             # Unit tests (controller and service)
+│  │  └─ events.service.ts
 │  ├─ vehicle/                 # Vehicle management
-│  │  ├─ dtos/                 # Create and update DTOs
+│  │  ├─ access/               # Shared logic that decides which vehicles a user can access
+│  │  │  ├─ vehicle-access.module.ts
+│  │  │  └─ vehicle-access.service.ts
+│  │  ├─ dtos/                 # Create, update, location and share DTOs
 │  │  ├─ schemas/              # MongoDB schema
+│  │  ├─ vehicle-sharing.service.ts
 │  │  ├─ vehicle.controller.ts
 │  │  ├─ vehicle.module.ts
-│  │  ├─ vehicle.service.ts
-│  │  └─ *.spec.ts             # Unit tests (controller and service)
+│  │  └─ vehicle.service.ts
 │  ├─ app.controller.ts
 │  ├─ app.module.ts
 │  ├─ app.service.ts
 │  └─ main.ts
 │
 ├─ test/                       # End-to-end tests
+│  ├─ support/                 # In-memory database, fake Firebase and helpers
+│  ├─ app.e2e-spec.ts
+│  ├─ auth.e2e-spec.ts
+│  ├─ events.e2e-spec.ts
+│  ├─ vehicles.e2e-spec.ts
+│  ├─ jest-e2e.json
+│  └─ tsconfig.e2e.json
 ├─ .env                        # Local environment variables (not committed)
 ├─ .env.example                # Environment variable template
 ├─ package.json
 ├─ nest-cli.json
+├─ tsconfig.build.json
 └─ tsconfig.json
 ```
 
-Unit tests (`*.spec.ts`) are located next to the code they test, and the tree omits some configuration files for brevity.
+Unit tests (`*.spec.ts`) are located next to the code they test, and the end-to-end tests live in `test/` (see the [Testing Guide](testing.md)). The tree omits the specs and some configuration files for brevity.
 
-The backend follows NestJS's modular architecture, with separate modules for authentication, events, and vehicle management. Each module groups the components required for its functionality, such as controllers, services, DTOs, and schemas.
+The backend follows NestJS's modular architecture, with separate modules for authentication, vehicles and events. Each module groups the components required for its functionality, such as controllers, services, DTOs and schemas. Controllers only delegate to services.
+
+**Module boundaries**
+
+- `FirebaseModule` is global. It initializes Firebase Admin from the validated configuration and exposes token verification and user lookup by email.
+- `VehicleAccessModule` owns the rule that decides which vehicles a user can access (the owner and the users the vehicle is shared with). The vehicle and events services both use it, so the rule exists in a single place.
+- `VehicleModule` depends on `EventsModule` to delete the events of a deleted vehicle. The dependency goes only from vehicles to events, so there are no circular module dependencies.
+- `VehicleSharingService` handles sharing and unsharing a vehicle, keeping that logic out of the controller.
+
+**Request pipeline**
+
+1. The configuration is validated when the application starts. A missing or invalid environment variable stops the startup with an explicit message.
+2. `FirebaseAuthGuard` verifies the Bearer token of every request to the vehicle and events routes.
+3. The global `ValidationPipe` validates and cleans the request bodies, and `ParseMongoIdPipe` rejects invalid ids in the route parameters.
+4. Controllers delegate to services, which apply the authorization rules.
+5. A global exception filter keeps the response of HTTP exceptions, maps database errors to proper status codes (409 and 400) and hides the details of unexpected errors.
+
+**Authorization rules**
+
+- The owner of a vehicle can edit all its fields, share it and delete it.
+- Users the vehicle is shared with can see it, update only its location and remove themselves.
+- Every user with access to a vehicle can create, edit and delete its events. Users without access receive 404.
+
+The decisions behind these rules and the module boundaries are recorded in [ADR 0004](decisions/0004-backend-authorization-and-module-boundaries.md).
 
 The `dist/` directory contains generated build output and is not part of the source structure. The `.env` file contains local environment variables and is excluded from version control, while `.env.example` documents the required environment variables without exposing real credentials.
 

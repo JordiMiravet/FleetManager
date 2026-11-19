@@ -128,7 +128,7 @@ Branches     : 88.36%
 Functions    : 100%
 Lines        : 98.6%
 
-TOTAL: 257 SUCCESS (24 test suites)
+TOTAL: 278 SUCCESS (26 test suites)
 ```
 
 The end-to-end tests are not included in this coverage report. They are run separately:
