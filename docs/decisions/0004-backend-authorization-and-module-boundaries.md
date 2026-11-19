@@ -42,3 +42,9 @@ Events belong to a vehicle, not to the user who created them:
 - When updating, the vehicle, date and times are validated only if they actually change, so editing the title of an existing event is never blocked.
 - Dates use the `YYYY-MM-DD` format and times the `HH:mm` format, the ones the frontend already sends.
 
+### Module boundaries
+
+- **`VehicleAccessModule`:** owns the rule that decides which vehicles a user can access (the owner and the users the vehicle is shared with), the accessible vehicle ids and the ownership check. It exports the access service, and both the vehicle and events services use it, so the query exists in a single place.
+- **Vehicles depend on events, not the other way round:** the vehicle module imports the events module and calls the events service to delete the events of a deleted vehicle. The events module no longer registers the vehicle model and the vehicle module no longer registers the event model. There are no circular module dependencies.
+- **`VehicleSharingService`:** holds the logic of sharing and unsharing a vehicle, so the controller only delegates to services and no longer depends on Firebase.
+- **`FirebaseModule`:** a global module that initializes Firebase Admin from the validated configuration and exposes token verification and user lookup by email. Only Firebase errors that mean the user cannot be found are reported as 404.
