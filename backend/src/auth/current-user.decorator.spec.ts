@@ -14,69 +14,73 @@ interface CustomRouteMetadata {
   data: keyof AuthenticatedUser | undefined;
 }
 
+class TestController {
+  handler(): void {}
+}
+
+const user = {
+  uid: 'user-123',
+  email: 'test@example.com',
+  email_verified: true,
+} as AuthenticatedUser;
+
+const createContext = (
+  authenticatedUser?: AuthenticatedUser,
+): ExecutionContext => {
+  const request: AuthenticatedRequest = {
+    headers: {},
+    user: authenticatedUser,
+  };
+
+  return {
+    switchToHttp: () => ({ getRequest: () => request }),
+  } as ExecutionContext;
+};
+
+const executeDecorator = (
+  field?: keyof AuthenticatedUser,
+  authenticatedUser?: AuthenticatedUser,
+): unknown => {
+  CurrentUser(field)(TestController.prototype, 'handler', 0);
+
+  const metadata = Reflect.getMetadata(
+    ROUTE_ARGS_METADATA,
+    TestController,
+    'handler',
+  ) as Record<string, CustomRouteMetadata>;
+  const { factory, data } = Object.values(metadata)[0];
+
+  return factory(data, createContext(authenticatedUser));
+};
+
 describe('CurrentUser', () => {
-  class TestController {
-    handler(): void {}
-  }
+  describe('without a field', () => {
+    it('returns the authenticated user', () => {
+      expect(executeDecorator(undefined, user)).toBe(user);
+    });
 
-  const user = {
-    uid: 'user-123',
-    email: 'test@example.com',
-    email_verified: true,
-  } as AuthenticatedUser;
-
-  const createContext = (
-    authenticatedUser?: AuthenticatedUser,
-  ): ExecutionContext => {
-    const request: AuthenticatedRequest = {
-      headers: {},
-      user: authenticatedUser,
-    };
-
-    return {
-      switchToHttp: () => ({
-        getRequest: () => request,
-      }),
-    } as ExecutionContext;
-  };
-
-  const executeDecorator = (
-    field?: keyof AuthenticatedUser,
-    authenticatedUser?: AuthenticatedUser,
-  ): unknown => {
-    CurrentUser(field)(TestController.prototype, 'handler', 0);
-
-    const metadata = Reflect.getMetadata(
-      ROUTE_ARGS_METADATA,
-      TestController,
-      'handler',
-    ) as Record<string, CustomRouteMetadata>;
-
-    const routeMetadata = Object.values(metadata)[0];
-
-    return routeMetadata.factory(
-      routeMetadata.data,
-      createContext(authenticatedUser),
-    );
-  };
-
-  it('should return the complete authenticated user', () => {
-    expect(executeDecorator(undefined, user)).toBe(user);
+    it('returns undefined when there is no authenticated user', () => {
+      expect(executeDecorator()).toBeUndefined();
+    });
   });
 
-  it('should return the requested user field', () => {
-    expect(executeDecorator('uid', user)).toBe('user-123');
-  });
+  describe('with a field', () => {
+    const fields: [keyof AuthenticatedUser, unknown][] = [
+      ['uid', 'user-123'],
+      ['email', 'test@example.com'],
+      ['email_verified', true],
+    ];
 
-  it('should return the email when requested', () => {
-    expect(executeDecorator('email', user)).toBe('test@example.com');
-  });
+    it.each(fields)('returns the %s field of the user', (field, expected) => {
+      expect(executeDecorator(field, user)).toBe(expected);
+    });
 
-  it('should return undefined when the user is not authenticated', () => {
-    expect(executeDecorator('uid')).toBeUndefined();
-  });
+    it('returns undefined when the user does not have that field', () => {
+      expect(executeDecorator('name', user)).toBeUndefined();
+    });
 
-  it('should return undefined when requesting the complete user and no user exists', () => {
-    expect(executeDecorator()).toBeUndefined();
+    it('returns undefined when there is no authenticated user', () => {
+      expect(executeDecorator('uid')).toBeUndefined();
+    });
   });
 });
