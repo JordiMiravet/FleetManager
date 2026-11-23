@@ -4,114 +4,116 @@ import {
 } from '../../common/testing/validate-body';
 import { CreateVehicleDto } from './create-vehicle.dto';
 
-describe('CreateVehicleDto', () => {
-  const validVehicle = {
-    name: 'Family car',
-    model: 'Model 3',
-    plate: '1234-ABC',
-    location: { lat: 41.4, lng: 2.2 },
-    imageUrl: 'https://example.com/car.png',
-  };
+const validVehicle = {
+  name: 'Family car',
+  model: 'Model 3',
+  plate: '1234-ABC',
+  location: { lat: 41.4, lng: 2.2 },
+  imageUrl: 'https://example.com/car.png',
+};
 
-  async function messagesFor(changes: object): Promise<string> {
-    const messages = await validationMessages(CreateVehicleDto, {
-      ...validVehicle,
-      ...changes,
+async function expectValid(changes: object = {}): Promise<void> {
+  await expect(
+    validateBody(CreateVehicleDto, { ...validVehicle, ...changes }),
+  ).resolves.toBeInstanceOf(CreateVehicleDto);
+}
+
+async function expectInvalid(changes: object, field: string): Promise<void> {
+  const messages = await validationMessages(CreateVehicleDto, {
+    ...validVehicle,
+    ...changes,
+  });
+
+  expect(messages.join(' | ')).toContain(field);
+}
+
+describe('CreateVehicleDto', () => {
+  it('accepts a valid vehicle', async () => {
+    await expectValid();
+  });
+
+  describe.each<[string, number]>([
+    ['name', 100],
+    ['model', 100],
+    ['plate', 20],
+  ])('%s', (field, maxLength) => {
+    it(`accepts ${maxLength} characters`, async () => {
+      await expectValid({ [field]: 'a'.repeat(maxLength) });
     });
 
-    return messages.join(' | ');
-  }
+    it.each<[string, unknown]>([
+      ['empty', ''],
+      ['missing', undefined],
+      ['not text', 123],
+    ])('rejects a value that is %s', async (_label, value) => {
+      await expectInvalid({ [field]: value }, field);
+    });
 
-  it('accepts a valid vehicle', async () => {
-    const result = await validateBody(CreateVehicleDto, validVehicle);
-
-    expect(result).toBeInstanceOf(CreateVehicleDto);
-    expect(result.location).toEqual(validVehicle.location);
+    it(`rejects more than ${maxLength} characters`, async () => {
+      await expectInvalid({ [field]: 'a'.repeat(maxLength + 1) }, field);
+    });
   });
 
-  it('accepts a vehicle without image', async () => {
-    await expect(
-      validateBody(CreateVehicleDto, { ...validVehicle, imageUrl: undefined }),
-    ).resolves.toBeInstanceOf(CreateVehicleDto);
+  describe('imageUrl', () => {
+    it.each<[string, unknown]>([
+      ['omitted', undefined],
+      ['empty, as the frontend sends it without an image', ''],
+      ['2048 characters long', 'a'.repeat(2048)],
+    ])('accepts an image URL that is %s', async (_label, imageUrl) => {
+      await expectValid({ imageUrl });
+    });
+
+    it.each<[string, unknown]>([
+      ['longer than 2048 characters', 'a'.repeat(2049)],
+      ['not text', 123],
+    ])('rejects an image URL that is %s', async (_label, imageUrl) => {
+      await expectInvalid({ imageUrl }, 'imageUrl');
+    });
   });
 
-  it('accepts the empty image that the frontend sends when no image is set', async () => {
-    await expect(
-      validateBody(CreateVehicleDto, { ...validVehicle, imageUrl: '' }),
-    ).resolves.toBeInstanceOf(CreateVehicleDto);
+  describe('location', () => {
+    it.each<[string, object]>([
+      ['the lowest latitude', { lat: -90, lng: 0 }],
+      ['the highest latitude', { lat: 90, lng: 0 }],
+      [
+        'a longitude beyond 180 produced by a wrapped map',
+        { lat: 41.4, lng: 190 },
+      ],
+      ['the origin', { lat: 0, lng: 0 }],
+    ])('accepts %s', async (_label, location) => {
+      await expectValid({ location });
+    });
+
+    it('rejects a missing location', async () => {
+      await expectInvalid({ location: undefined }, 'location');
+    });
+
+    it.each<[string, object, string]>([
+      ['a latitude above 90', { lat: 91, lng: 2.2 }, 'location.lat'],
+      ['a latitude below -90', { lat: -91, lng: 2.2 }, 'location.lat'],
+      ['a latitude as text', { lat: '41.4', lng: 2.2 }, 'location.lat'],
+      ['a longitude as text', { lat: 41.4, lng: '2.2' }, 'location.lng'],
+      ['a missing longitude', { lat: 41.4 }, 'location.lng'],
+      ['a missing latitude', { lng: 2.2 }, 'location.lat'],
+      ['a null latitude', { lat: null, lng: 2.2 }, 'location.lat'],
+      ['an empty location', {}, 'location.lat'],
+      ['a NaN latitude', { lat: NaN, lng: 2.2 }, 'location.lat'],
+      ['an infinite longitude', { lat: 1, lng: Infinity }, 'location.lng'],
+    ])('rejects %s', async (_label, location, expected) => {
+      await expectInvalid({ location }, expected);
+    });
+
+    it('rejects unknown properties inside the location', async () => {
+      await expectInvalid(
+        { location: { lat: 1, lng: 2, altitude: 3 } },
+        'altitude',
+      );
+    });
   });
 
-  it('accepts the limits of the latitude range', async () => {
-    await expect(
-      validateBody(CreateVehicleDto, {
-        ...validVehicle,
-        location: { lat: -90, lng: 180 },
-      }),
-    ).resolves.toBeInstanceOf(CreateVehicleDto);
-  });
-
-  it('accepts a longitude beyond 180 produced by a wrapped map', async () => {
-    await expect(
-      validateBody(CreateVehicleDto, {
-        ...validVehicle,
-        location: { lat: 41.4, lng: 190 },
-      }),
-    ).resolves.toBeInstanceOf(CreateVehicleDto);
-  });
-
-  it.each(['name', 'model', 'plate'])('rejects an empty %s', async (field) => {
-    expect(await messagesFor({ [field]: '' })).toContain(field);
-  });
-
-  it.each(['name', 'model', 'plate'])('rejects a missing %s', async (field) => {
-    expect(await messagesFor({ [field]: undefined })).toContain(field);
-  });
-
-  it('rejects a name that is not text', async () => {
-    expect(await messagesFor({ name: 123 })).toContain('name');
-  });
-
-  it('rejects a name longer than 100 characters', async () => {
-    expect(await messagesFor({ name: 'a'.repeat(101) })).toContain('name');
-  });
-
-  it('rejects a model longer than 100 characters', async () => {
-    expect(await messagesFor({ model: 'a'.repeat(101) })).toContain('model');
-  });
-
-  it('rejects a plate longer than 20 characters', async () => {
-    expect(await messagesFor({ plate: 'a'.repeat(21) })).toContain('plate');
-  });
-
-  it('rejects an image URL longer than 2048 characters', async () => {
-    expect(await messagesFor({ imageUrl: 'a'.repeat(2049) })).toContain(
-      'imageUrl',
-    );
-  });
-
-  it('rejects a vehicle without location', async () => {
-    expect(await messagesFor({ location: undefined })).toContain('location');
-  });
-
-  it.each([
-    ['latitude above 90', { lat: 91, lng: 2.2 }, 'location.lat'],
-    ['latitude below -90', { lat: -91, lng: 2.2 }, 'location.lat'],
-    ['latitude as text', { lat: '41.4', lng: 2.2 }, 'location.lat'],
-    ['longitude as text', { lat: 41.4, lng: '2.2' }, 'location.lng'],
-    ['a missing longitude', { lat: 41.4 }, 'location.lng'],
-    ['a missing latitude', { lng: 2.2 }, 'location.lat'],
-    ['a null latitude', { lat: null, lng: 2.2 }, 'location.lat'],
-  ])('rejects %s', async (_description, location, expected) => {
-    expect(await messagesFor({ location })).toContain(expected);
-  });
-
-  it('rejects unknown properties', async () => {
-    expect(await messagesFor({ userId: 'someone-else' })).toContain('userId');
-  });
-
-  it('rejects unknown properties inside the location', async () => {
-    expect(
-      await messagesFor({ location: { lat: 1, lng: 2, altitude: 3 } }),
-    ).toContain('altitude');
+  describe('unknown properties', () => {
+    it('rejects a property that is not part of the vehicle', async () => {
+      await expectInvalid({ userId: 'someone-else' }, 'userId');
+    });
   });
 });
