@@ -1,17 +1,22 @@
 import 'reflect-metadata';
 
 import { MongooseModule } from '@nestjs/mongoose';
+import { VehicleAccessModule } from '../vehicle/access/vehicle-access.module';
+import { EventsController } from './events.controller';
+import { EventsModule } from './events.module';
+import { EventsService } from './events.service';
+import { EventSchema } from './schemas/event.schema';
 
 jest.mock('./events.controller', () => ({
-  EventsController: jest.fn(),
+  EventsController: class EventsController {},
 }));
 
 jest.mock('./events.service', () => ({
-  EventsService: jest.fn(),
+  EventsService: class EventsService {},
 }));
 
 jest.mock('../vehicle/access/vehicle-access.module', () => ({
-  VehicleAccessModule: jest.fn(),
+  VehicleAccessModule: class VehicleAccessModule {},
 }));
 
 jest.mock('./schemas/event.schema', () => ({
@@ -25,48 +30,31 @@ jest.mock('@nestjs/mongoose', () => ({
   },
 }));
 
-import { EventsModule } from './events.module';
-import { EventsController } from './events.controller';
-import { EventsService } from './events.service';
-import { VehicleAccessModule } from '../vehicle/access/vehicle-access.module';
+const metadata = (key: string): unknown =>
+  Reflect.getMetadata(key, EventsModule);
 
 describe('EventsModule', () => {
-  it('should be defined', () => {
-    expect(EventsModule).toBeDefined();
+  it('registers EventsController as its only controller', () => {
+    expect(metadata('controllers')).toEqual([EventsController]);
   });
 
-  it('should register the correct controller', () => {
-    expect(Reflect.getMetadata('controllers', EventsModule)).toEqual([
-      EventsController,
-    ]);
+  it('provides EventsService', () => {
+    expect(metadata('providers')).toEqual([EventsService]);
   });
 
-  it('should register EventsService as provider', () => {
-    expect(Reflect.getMetadata('providers', EventsModule)).toContain(
-      EventsService,
-    );
+  it('exports EventsService', () => {
+    expect(metadata('exports')).toEqual([EventsService]);
   });
 
-  it('should export EventsService', () => {
-    expect(Reflect.getMetadata('exports', EventsModule)).toContain(
-      EventsService,
-    );
-  });
+  describe('imports', () => {
+    it('imports VehicleAccessModule', () => {
+      expect(metadata('imports')).toContain(VehicleAccessModule);
+    });
 
-  it('should import VehicleAccessModule', () => {
-    const imports = Reflect.getMetadata('imports', EventsModule) as unknown[];
-
-    expect(imports).toContain(VehicleAccessModule);
-  });
-
-  it('should register the Event schema with Mongoose', () => {
-    expect(jest.mocked(MongooseModule).forFeature).toHaveBeenCalledWith(
-      expect.arrayContaining([
-        expect.objectContaining({
-          name: 'Event',
-          schema: {},
-        }),
-      ]),
-    );
+    it('registers the Event schema with Mongoose', () => {
+      expect(jest.mocked(MongooseModule.forFeature)).toHaveBeenCalledWith([
+        { name: 'Event', schema: EventSchema },
+      ]);
+    });
   });
 });
