@@ -1,32 +1,20 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { HttpStatus } from '@nestjs/common';
 import { FirebaseService } from '../auth/firebase/firebase.service';
+import { buildVehicle } from '../common/testing/builders';
+import { expectHttpError } from '../common/testing/expect-http-error';
 import { VehicleAccessService } from './access/vehicle-access.service';
 import { VehicleService } from './vehicle.service';
 import { VehicleSharingService } from './vehicle-sharing.service';
 
-// The real service imports @nestjs/config, an ES module that Jest cannot load
-// in this CommonJS setup. Only the class is needed here as an injection token.
+// @nestjs/config is an ES module that Jest cannot load in this CommonJS setup.
 jest.mock('../auth/firebase/firebase.service', () => ({
   FirebaseService: class FirebaseService {},
 }));
 
-async function expectHttpError(
-  promise: Promise<unknown>,
-  status: HttpStatus,
-  message: string,
-) {
-  const error = await promise.then(
-    () => undefined,
-    (reason: unknown) => reason,
-  );
-
-  expect(error).toBeInstanceOf(HttpException);
-  expect((error as HttpException).getStatus()).toBe(status);
-  expect((error as HttpException).message).toBe(message);
-}
+const NOT_FOUND = 'Vehicle not found';
 
 describe('VehicleSharingService', () => {
-  const vehicle = { _id: 'vehicle-1', userId: 'owner-1', users: [] };
+  const vehicle = buildVehicle();
 
   let findAccessibleVehicle: jest.Mock;
   let addUserToVehicle: jest.Mock;
@@ -52,158 +40,151 @@ describe('VehicleSharingService', () => {
   });
 
   describe('addUserByEmail', () => {
-    it('adds the user and returns the result', async () => {
-      findAccessibleVehicle.mockResolvedValue(vehicle);
-      getUserByEmail.mockResolvedValue({
-        uid: 'user-2',
-        email: 'user@example.com',
-      });
-      addUserToVehicle.mockResolvedValue(undefined);
+    const add = (email = 'user@example.com', userId = 'owner-1') =>
+      service.addUserByEmail('vehicle-1', email, userId);
 
-      await expect(
-        service.addUserByEmail('vehicle-1', 'user@example.com', 'owner-1'),
-      ).resolves.toEqual({
-        message: 'User added successfully',
-        userId: 'user-2',
-        email: 'user@example.com',
-      });
-      expect(addUserToVehicle).toHaveBeenCalledWith(
-        'vehicle-1',
-        'user-2',
-        'user@example.com',
-      );
-    });
-
-    it('rejects when the vehicle is not accessible', async () => {
-      findAccessibleVehicle.mockResolvedValue(null);
-
-      await expectHttpError(
-        service.addUserByEmail('vehicle-1', 'user@example.com', 'owner-1'),
-        HttpStatus.NOT_FOUND,
-        'Vehicle not found or you are not the owner',
-      );
-      expect(getUserByEmail).not.toHaveBeenCalled();
-    });
-
-    it('rejects a shared user who is not the owner', async () => {
-      findAccessibleVehicle.mockResolvedValue(vehicle);
-
-      await expectHttpError(
-        service.addUserByEmail('vehicle-1', 'user@example.com', 'user-2'),
-        HttpStatus.FORBIDDEN,
-        'Only the owner can share the vehicle',
-      );
-      expect(getUserByEmail).not.toHaveBeenCalled();
-      expect(addUserToVehicle).not.toHaveBeenCalled();
-    });
-
-    it('reports an unknown email as not found', async () => {
-      findAccessibleVehicle.mockResolvedValue(vehicle);
-      getUserByEmail.mockRejectedValue(
-        Object.assign(new Error('no user'), { code: 'auth/user-not-found' }),
-      );
-
-      await expectHttpError(
-        service.addUserByEmail('vehicle-1', 'nobody@example.com', 'owner-1'),
-        HttpStatus.NOT_FOUND,
-        'User not found with this email',
-      );
-      expect(addUserToVehicle).not.toHaveBeenCalled();
-    });
-
-    it('reports an invalid email as not found', async () => {
-      findAccessibleVehicle.mockResolvedValue(vehicle);
-      getUserByEmail.mockRejectedValue(
-        Object.assign(new Error('bad email'), { code: 'auth/invalid-email' }),
-      );
-
-      await expectHttpError(
-        service.addUserByEmail('vehicle-1', 'not-an-email', 'owner-1'),
-        HttpStatus.NOT_FOUND,
-        'User not found with this email',
-      );
-    });
-
-    it('does not hide unexpected Firebase errors', async () => {
-      const error = new Error('network');
-      findAccessibleVehicle.mockResolvedValue(vehicle);
-      getUserByEmail.mockRejectedValue(error);
-
-      await expect(
-        service.addUserByEmail('vehicle-1', 'user@example.com', 'owner-1'),
-      ).rejects.toBe(error);
-    });
-
-    it('rejects adding the owner themselves', async () => {
-      findAccessibleVehicle.mockResolvedValue(vehicle);
-      getUserByEmail.mockResolvedValue({
-        uid: 'owner-1',
-        email: 'owner@example.com',
+    describe('as the owner', () => {
+      beforeEach(() => {
+        findAccessibleVehicle.mockResolvedValue(vehicle);
+        getUserByEmail.mockResolvedValue({
+          uid: 'user-2',
+          email: 'user@example.com',
+        });
       });
 
-      await expectHttpError(
-        service.addUserByEmail('vehicle-1', 'owner@example.com', 'owner-1'),
-        HttpStatus.BAD_REQUEST,
-        'You cannot add yourself',
-      );
-      expect(addUserToVehicle).not.toHaveBeenCalled();
+      it('adds the user and returns the result', async () => {
+        addUserToVehicle.mockResolvedValue(undefined);
+
+        await expect(add()).resolves.toEqual({
+          message: 'User added successfully',
+          userId: 'user-2',
+          email: 'user@example.com',
+        });
+        expect(addUserToVehicle).toHaveBeenCalledWith(
+          'vehicle-1',
+          'user-2',
+          'user@example.com',
+        );
+      });
+
+      it('rejects adding the owner themselves', async () => {
+        getUserByEmail.mockResolvedValue({
+          uid: 'owner-1',
+          email: 'owner@example.com',
+        });
+
+        await expectHttpError(
+          add('owner@example.com'),
+          HttpStatus.BAD_REQUEST,
+          'You cannot add yourself',
+        );
+        expect(addUserToVehicle).not.toHaveBeenCalled();
+      });
+
+      describe('looking up the email in Firebase', () => {
+        it.each([
+          ['an unknown email', 'auth/user-not-found', 'nobody@example.com'],
+          ['an invalid email', 'auth/invalid-email', 'not-an-email'],
+        ])('reports %s as not found', async (_label, code, email) => {
+          getUserByEmail.mockRejectedValue(
+            Object.assign(new Error('Firebase error'), { code }),
+          );
+
+          await expectHttpError(
+            add(email),
+            HttpStatus.NOT_FOUND,
+            'User not found with this email',
+          );
+          expect(addUserToVehicle).not.toHaveBeenCalled();
+        });
+
+        it('does not hide unexpected errors', async () => {
+          const error = new Error('network');
+          getUserByEmail.mockRejectedValue(error);
+
+          await expect(add()).rejects.toBe(error);
+        });
+      });
+
+      it('does not hide unexpected persistence errors', async () => {
+        const error = new Error('database');
+        addUserToVehicle.mockRejectedValue(error);
+
+        await expect(add()).rejects.toBe(error);
+      });
     });
 
-    it('does not hide unexpected persistence errors', async () => {
-      const error = new Error('database');
-      findAccessibleVehicle.mockResolvedValue(vehicle);
-      getUserByEmail.mockResolvedValue({
-        uid: 'user-2',
-        email: 'user@example.com',
-      });
-      addUserToVehicle.mockRejectedValue(error);
+    describe('without being the owner', () => {
+      it('rejects a vehicle the user cannot access', async () => {
+        findAccessibleVehicle.mockResolvedValue(null);
 
-      await expect(
-        service.addUserByEmail('vehicle-1', 'user@example.com', 'owner-1'),
-      ).rejects.toBe(error);
+        await expectHttpError(
+          add(),
+          HttpStatus.NOT_FOUND,
+          'Vehicle not found or you are not the owner',
+        );
+        expect(getUserByEmail).not.toHaveBeenCalled();
+      });
+
+      it('rejects a shared user', async () => {
+        findAccessibleVehicle.mockResolvedValue(vehicle);
+
+        await expectHttpError(
+          add('user@example.com', 'user-2'),
+          HttpStatus.FORBIDDEN,
+          'Only the owner can share the vehicle',
+        );
+        expect(getUserByEmail).not.toHaveBeenCalled();
+        expect(addUserToVehicle).not.toHaveBeenCalled();
+      });
     });
   });
 
   describe('removeUser', () => {
-    it('rejects when the vehicle is not accessible', async () => {
+    const remove = (userIdToRemove: string, currentUserId: string) =>
+      service.removeUser('vehicle-1', userIdToRemove, currentUserId);
+
+    it('rejects a vehicle the user cannot access', async () => {
       findAccessibleVehicle.mockResolvedValue(null);
 
       await expectHttpError(
-        service.removeUser('vehicle-1', 'user-2', 'owner-1'),
+        remove('user-2', 'owner-1'),
         HttpStatus.NOT_FOUND,
-        'Vehicle not found',
+        NOT_FOUND,
       );
       expect(removeUserFromVehicle).not.toHaveBeenCalled();
     });
 
-    it('lets the owner remove another user', async () => {
-      findAccessibleVehicle.mockResolvedValue(vehicle);
-      removeUserFromVehicle.mockResolvedValue(undefined);
+    describe('with access to the vehicle', () => {
+      beforeEach(() => {
+        findAccessibleVehicle.mockResolvedValue(vehicle);
+        removeUserFromVehicle.mockResolvedValue(undefined);
+      });
 
-      await expect(
-        service.removeUser('vehicle-1', 'user-2', 'owner-1'),
-      ).resolves.toEqual({ message: 'User removed successfully' });
-      expect(removeUserFromVehicle).toHaveBeenCalledWith('vehicle-1', 'user-2');
-    });
+      it('lets the owner remove another user', async () => {
+        await expect(remove('user-2', 'owner-1')).resolves.toEqual({
+          message: 'User removed successfully',
+        });
+        expect(removeUserFromVehicle).toHaveBeenCalledWith(
+          'vehicle-1',
+          'user-2',
+        );
+      });
 
-    it('lets a shared user remove themselves', async () => {
-      findAccessibleVehicle.mockResolvedValue(vehicle);
-      removeUserFromVehicle.mockResolvedValue(undefined);
+      it('lets a shared user remove themselves', async () => {
+        await expect(remove('user-2', 'user-2')).resolves.toEqual({
+          message: 'User removed successfully',
+        });
+      });
 
-      await expect(
-        service.removeUser('vehicle-1', 'user-2', 'user-2'),
-      ).resolves.toEqual({ message: 'User removed successfully' });
-    });
-
-    it('rejects removing someone else when not the owner', async () => {
-      findAccessibleVehicle.mockResolvedValue(vehicle);
-
-      await expectHttpError(
-        service.removeUser('vehicle-1', 'user-3', 'user-2'),
-        HttpStatus.FORBIDDEN,
-        'You can only remove yourself or be the vehicle owner',
-      );
-      expect(removeUserFromVehicle).not.toHaveBeenCalled();
+      it('rejects a shared user who removes someone else', async () => {
+        await expectHttpError(
+          remove('user-3', 'user-2'),
+          HttpStatus.FORBIDDEN,
+          'You can only remove yourself or be the vehicle owner',
+        );
+        expect(removeUserFromVehicle).not.toHaveBeenCalled();
+      });
     });
   });
 });
