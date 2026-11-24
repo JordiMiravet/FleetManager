@@ -95,6 +95,7 @@ The tests are organized by resource:
 
 Shared helpers live in `test/support/`. The e2e tests run serially (`maxWorkers: 1`) and use their own TypeScript configuration (`test/tsconfig.e2e.json`).
 
+
 ## Coverage
 
 Backend and frontend coverage are measured and reported separately.
@@ -118,18 +119,20 @@ TOTAL: 1017 SUCCESS
 
 Coverage is collected from the unit tests with `npm run test:cov` and written to `backend/coverage/backend/`. The command fails if the global coverage drops below the configured threshold. Test helpers (`**/testing/**`), spec files and `main.ts` are excluded from the measurement.
 
-Minimum threshold (global): statements 90%, branches 80%, functions 90%, lines 90%.
+Minimum threshold (global): statements, branches, functions and lines 95%.
 
 Current unit test coverage:
 
 ```text
-Statements   : 97.91%
-Branches     : 88.36%
+Statements   : 100%
+Branches     : 100%
 Functions    : 100%
-Lines        : 98.6%
+Lines        : 100%
 
-TOTAL: 278 SUCCESS (26 test suites)
+TOTAL: 430 SUCCESS (28 test suites)
 ```
+
+The branch coverage was reported as 88.36% before the unit tests were compiled without `isolatedModules`. The difference comes from that compiler setting and not from the tests, so the figures before and after are not comparable.
 
 The end-to-end tests are not included in this coverage report. They are run separately:
 
