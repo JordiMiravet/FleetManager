@@ -34,4 +34,13 @@ Changing only the compiler configuration, without adding tests, raised the branc
 - **Use another transformer such as SWC:** it adds a dependency and a second compiler that has to stay consistent with the build. It was rejected.
 - **Set the threshold at 100%:** any new uncovered line would fail the check. A 95% threshold keeps a margin.
 
+## Consequences
+
+- The branch coverage now measures real logic. The unit tests reach 100% in every metric, with 430 tests in 28 suites.
+- The branch figures before and after this change are not comparable, because the difference comes from the compiler configuration and not from the tests.
+- ts-jest type-checks the specs with the whole program, so type errors in the tests surface, and the run takes somewhat longer.
+- There are now three TypeScript configurations to keep aligned when the compilation options change: `tsconfig.json` for the build, `tsconfig.spec.json` for the unit tests and `test/tsconfig.e2e.json` for the end-to-end tests.
+- Some specs assert Nest metadata (routes, methods, guards and module declarations). They pin the contract of the API and cover declarative code, but they do not replace the end-to-end tests.
+- The coverage report still measures only the unit tests.
+
 
