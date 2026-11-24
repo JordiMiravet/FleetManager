@@ -22,7 +22,7 @@ Compile the unit tests with their own TypeScript configuration, keep the product
 - Moved the shared mocks, the HTTP error assertion and the data builders to `src/common/testing/`, which is excluded from the coverage and from the production build.
 - Made the controller specs check the route, the HTTP method and the guard of every endpoint, and the module specs check the metadata of each module.
 
-Changing only the compiler configuration, without adding tests, raised the branch coverage from 88.36% to 97.14%. The branches that remained were real: the exception filter and the exception mapper, which were covered with new cases.
+Changing the compiler configuration raised the branch coverage from 88.36% to 97.14% before any test was added for the remaining gaps.
 
 ## Alternatives considered
 
