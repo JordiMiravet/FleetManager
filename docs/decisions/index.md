@@ -16,6 +16,7 @@ For a broader explanation of the system structure, see the [Architecture Guide](
 | [0002](0002-angular-21-upgrade.md) | Upgrade the frontend to Angular 21 | Accepted | 2026-11-02 |
 | [0003](0003-angular-22-upgrade.md) | Upgrade the frontend to Angular 22 | Accepted | 2026-11-03 |
 | [0004](0004-backend-authorization-and-module-boundaries.md) | Backend authorization rules and module boundaries | Accepted | 2026-11-08 |
+| [0005](0005-backend-unit-test-compilation-and-coverage.md) | Backend unit test compilation and coverage | Accepted | 2026-11-24 |
 
 ---
 
