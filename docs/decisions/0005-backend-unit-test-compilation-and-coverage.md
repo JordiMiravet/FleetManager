@@ -23,3 +23,15 @@ Compile the unit tests with their own TypeScript configuration, keep the product
 - Made the controller specs check the route, the HTTP method and the guard of every endpoint, and the module specs check the metadata of each module.
 
 Changing only the compiler configuration, without adding tests, raised the branch coverage from 88.36% to 97.14%. The branches that remained were real: the exception filter and the exception mapper, which were covered with new cases.
+
+## Alternatives considered
+
+- **Keep the previous configuration and thresholds:** the branch figure would stay at 88% and would keep mixing real gaps with branches that cannot run, so the number would not say where the missing tests are. It was rejected.
+- **Write tests for those branches:** they cannot be reached, because the fallback only exists in the generated code.
+- **Add `istanbul ignore` comments or exclude files with `coveragePathIgnorePatterns`:** the comments pollute the production code, and excluding files removes real logic from the measurement. It was rejected.
+- **Use the `v8` coverage provider:** it does not generate those branches, but it reported lower figures (94.09% statements and 92.13% functions), because it counted module and schema files as mostly uncovered, and it kept gaps in the controllers. It was rejected.
+- **Disable `isolatedModules` in `tsconfig.json`:** it changes how the production build and the tools compile the code, which is outside the scope of a testing task. It was rejected.
+- **Use another transformer such as SWC:** it adds a dependency and a second compiler that has to stay consistent with the build. It was rejected.
+- **Set the threshold at 100%:** any new uncovered line would fail the check. A 95% threshold keeps a margin.
+
+
