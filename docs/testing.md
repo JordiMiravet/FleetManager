@@ -11,7 +11,8 @@ Back to the [README](../README.md#tests).
     - [Frontend Tests](#frontend-tests)
     - [Backend Tests](#backend-tests)
     - [Backend End-to-End Tests](#backend-end-to-end-tests)
-  - [Backend Unit Test Conventions](#backend-unit-test-conventions)
+  - [Test Conventions](#test-conventions)
+    - [Backend Unit Test Conventions](#backend-unit-test-conventions)
   - [Coverage](#coverage)
     - [Frontend Coverage](#frontend-coverage)
     - [Backend Coverage](#backend-coverage)
@@ -26,7 +27,7 @@ Tests cover component rendering, user interactions, business logic, validation r
 The backend has two levels of tests:
 
 - **Unit tests** (`src/**/*.spec.ts`): controllers, services, DTOs, pipes and configuration in isolation.
-- **End-to-end tests** (`test/*.e2e-spec.ts`): the real HTTP routes, going through the global validation pipe, the authentication guard, the services and a real MongoDB.
+- **End-to-end tests** (`test/*.e2e-spec.ts`): the real HTTP routes, going through the global validation pipe, the authentication guard and the services, using an in-memory MongoDB.
 
 ## Running Tests
 
@@ -70,13 +71,15 @@ Run unit tests with coverage:
 npm run test:cov
 ```
 
+### Backend End-to-End Tests
+
+All commands in this section must be run from the `backend/` folder.
+
 Run end-to-end tests:
 
 ```bash
 npm run test:e2e
 ```
-
-### Backend End-to-End Tests
 
 The end-to-end tests boot the real `AppModule` and replace only the external dependencies:
 
@@ -96,7 +99,9 @@ The tests are organized by resource:
 
 Shared helpers live in `test/support/`. The e2e tests run serially (`maxWorkers: 1`) and use their own TypeScript configuration (`test/tsconfig.e2e.json`).
 
-## Backend Unit Test Conventions
+## Test Conventions
+
+### Backend Unit Test Conventions
 
 The backend unit tests share the same structure, so they are easy to read and extend:
 
