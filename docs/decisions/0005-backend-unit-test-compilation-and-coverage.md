@@ -43,4 +43,11 @@ Changing only the compiler configuration, without adding tests, raised the branc
 - Some specs assert Nest metadata (routes, methods, guards and module declarations). They pin the contract of the API and cover declarative code, but they do not replace the end-to-end tests.
 - The coverage report still measures only the unit tests.
 
+### Follow-ups
+
+- Evaluate collecting the coverage of the end-to-end tests and reporting both figures together.
+- Review whether the threshold should be higher or applied per directory.
+- Revisit `isolatedModules` in `tsconfig.json` when the build configuration is reviewed.
+
+Specs must keep being compiled with `tsconfig.spec.json`, and uncovered code must not be hidden with ignore comments.
 
