@@ -1,5 +1,6 @@
 # ADR 0005: Backend unit test compilation and coverage
 
+Back to the [ADR index](index.md).
 
 - **Status:** Accepted
 - **Date:** 2026-11-24
