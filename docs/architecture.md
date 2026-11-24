@@ -205,7 +205,7 @@ backend/
 │  ├─ common/                  # Cross-cutting concerns
 │  │  ├─ errors/               # Global exception filter and error mapping
 │  │  ├─ pipes/                # Mongo id validation pipe
-│  │  ├─ testing/              # Test helper (excluded from the build)
+│  │  ├─ testing/              # Shared test helpers (excluded from the build)
 │  │  └─ validation-pipe-options.ts
 │  ├─ config/                  # Environment variables and their validation
 │  ├─ events/                  # Event management
@@ -243,7 +243,8 @@ backend/
 ├─ package.json
 ├─ nest-cli.json
 ├─ tsconfig.build.json
-└─ tsconfig.json
+├─ tsconfig.json
+└─ tsconfig.spec.json
 ```
 
 Unit tests (`*.spec.ts`) are located next to the code they test, and the end-to-end tests live in `test/` (see the [Testing Guide](testing.md)). The tree omits the specs and some configuration files for brevity.
