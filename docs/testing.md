@@ -11,6 +11,7 @@ Back to the [README](../README.md#tests).
     - [Frontend Tests](#frontend-tests)
     - [Backend Tests](#backend-tests)
     - [Backend End-to-End Tests](#backend-end-to-end-tests)
+  - [Backend Unit Test Conventions](#backend-unit-test-conventions)
   - [Coverage](#coverage)
     - [Frontend Coverage](#frontend-coverage)
     - [Backend Coverage](#backend-coverage)
@@ -95,6 +96,17 @@ The tests are organized by resource:
 
 Shared helpers live in `test/support/`. The e2e tests run serially (`maxWorkers: 1`) and use their own TypeScript configuration (`test/tsconfig.e2e.json`).
 
+## Backend Unit Test Conventions
+
+The backend unit tests share the same structure, so they are easy to read and extend:
+
+- One `describe` per class, a nested `describe` per method, and nested blocks for each scenario (for example the owner, a shared user and a user without access).
+- Tests that only change their data are written once with `it.each`.
+- Shared mocks, the HTTP error assertion and the data builders live in `src/common/testing/`. They are excluded from the coverage and from the production build.
+- Controller specs also check the route, the HTTP method and the guard of every endpoint, so the contract of the API is covered.
+- Module specs check the metadata declared by each module.
+- Specs whose code imports `@nestjs/config` mock it, because it is published as an ES module that Jest cannot load in this CommonJS setup.
+- The unit tests are compiled with `tsconfig.spec.json`, where `isolatedModules` is disabled. With it enabled, TypeScript generates a branch that can never run for every decorated constructor parameter, and the coverage reports it as uncovered code. The reasons and the alternatives are recorded in [ADR 0005](decisions/0005-backend-unit-test-compilation-and-coverage.md).
 
 ## Coverage
 
