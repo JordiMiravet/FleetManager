@@ -13,41 +13,40 @@ const checkDBHandler = (
 
 describe('AppController', () => {
   let controller: AppController;
-  let appService: jest.Mocked<AppService>;
+  let checkConnection: jest.Mock;
 
   beforeEach(async () => {
+    checkConnection = jest.fn();
+
     const moduleRef = await Test.createTestingModule({
       controllers: [AppController],
-      providers: [
-        { provide: AppService, useValue: { checkConnection: jest.fn() } },
-      ],
+      providers: [{ provide: AppService, useValue: { checkConnection } }],
     }).compile();
 
     controller = moduleRef.get(AppController);
-    appService = moduleRef.get(AppService);
   });
 
   describe('checkDB', () => {
     it.each(['Connected', 'Disconnected'])(
       'returns the "%s" status reported by the service',
       async (status) => {
-        appService.checkConnection.mockResolvedValue(status);
+        checkConnection.mockResolvedValue(status);
 
         await expect(controller.checkDB()).resolves.toBe(status);
       },
     );
 
     it('queries the connection state once', async () => {
-      appService.checkConnection.mockResolvedValue('Connected');
+      checkConnection.mockResolvedValue('Connected');
 
       await controller.checkDB();
 
-      expect(appService.checkConnection).toHaveBeenCalledTimes(1);
+      expect(checkConnection).toHaveBeenCalledTimes(1);
     });
 
     it('propagates the error of the service', async () => {
       const error = new Error('Connection failed');
-      appService.checkConnection.mockRejectedValue(error);
+      checkConnection.mockRejectedValue(error);
 
       await expect(controller.checkDB()).rejects.toBe(error);
     });
