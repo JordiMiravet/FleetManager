@@ -75,7 +75,11 @@ describe('FirebaseService', () => {
 
         expect(firebaseMock.initializeApp).toHaveBeenCalledTimes(1);
         expect(firebaseMock.initializeApp).toHaveBeenCalledWith({
-          credential: expect.objectContaining({ projectId: 'project-id' }),
+          credential: {
+            projectId: 'project-id',
+            clientEmail: 'client@example.com',
+            privateKey: 'line1\nline2',
+          },
         });
       });
     });
