@@ -52,7 +52,7 @@ describe('EventsModule', () => {
     });
 
     it('registers the Event schema with Mongoose', () => {
-      expect(jest.mocked(MongooseModule.forFeature)).toHaveBeenCalledWith([
+      expect(jest.mocked(MongooseModule).forFeature).toHaveBeenCalledWith([
         { name: 'Event', schema: EventSchema },
       ]);
     });
