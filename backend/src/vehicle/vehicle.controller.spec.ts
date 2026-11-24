@@ -1,4 +1,12 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { RequestMethod } from '@nestjs/common';
+import {
+  GUARDS_METADATA,
+  METHOD_METADATA,
+  PATH_METADATA,
+} from '@nestjs/common/constants';
+import { Test } from '@nestjs/testing';
+import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
+import { buildCreateVehicleDto } from '../common/testing/builders';
 import { VehicleController } from './vehicle.controller';
 import { VehicleService } from './vehicle.service';
 import { VehicleSharingService } from './vehicle-sharing.service';
@@ -11,10 +19,20 @@ jest.mock('../auth/firebase-auth.guard', () => ({
   FirebaseAuthGuard: class FirebaseAuthGuard {},
 }));
 
-describe('VehicleController', () => {
-  let controller: VehicleController;
+const ROUTES: [keyof VehicleController, RequestMethod, string][] = [
+  ['getAll', RequestMethod.GET, '/'],
+  ['getOne', RequestMethod.GET, ':id'],
+  ['create', RequestMethod.POST, '/'],
+  ['update', RequestMethod.PUT, ':id'],
+  ['delete', RequestMethod.DELETE, ':id'],
+  ['addUserByEmail', RequestMethod.POST, ':id/users'],
+  ['removeUser', RequestMethod.DELETE, ':id/users/:userId'],
+];
 
-  const mockVehicleService = {
+describe('VehicleController', () => {
+  const failure = new Error('Service failure');
+
+  const vehicleService = {
     findAll: jest.fn(),
     findOne: jest.fn(),
     create: jest.fn(),
@@ -22,136 +40,201 @@ describe('VehicleController', () => {
     delete: jest.fn(),
   };
 
-  const mockVehicleSharingService = {
+  const sharingService = {
     addUserByEmail: jest.fn(),
     removeUser: jest.fn(),
   };
 
-  beforeEach(async () => {
-    jest.clearAllMocks();
+  let controller: VehicleController;
 
-    const module: TestingModule = await Test.createTestingModule({
+  beforeEach(async () => {
+    jest.resetAllMocks();
+
+    const moduleRef = await Test.createTestingModule({
       controllers: [VehicleController],
       providers: [
-        { provide: VehicleService, useValue: mockVehicleService },
-        {
-          provide: VehicleSharingService,
-          useValue: mockVehicleSharingService,
-        },
+        { provide: VehicleService, useValue: vehicleService },
+        { provide: VehicleSharingService, useValue: sharingService },
       ],
     }).compile();
 
-    controller = module.get<VehicleController>(VehicleController);
+    controller = moduleRef.get(VehicleController);
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+  describe('routing', () => {
+    it('is mounted under the vehicles path', () => {
+      expect(Reflect.getMetadata(PATH_METADATA, VehicleController)).toBe(
+        'vehicles',
+      );
+    });
+
+    it('is protected with FirebaseAuthGuard', () => {
+      expect(Reflect.getMetadata(GUARDS_METADATA, VehicleController)).toEqual([
+        FirebaseAuthGuard,
+      ]);
+    });
+
+    it.each(ROUTES)(
+      'exposes %s with the method %s on the path "%s"',
+      (name, method, path) => {
+        const handler = VehicleController.prototype[name] as object;
+
+        expect(Reflect.getMetadata(METHOD_METADATA, handler)).toBe(method);
+        expect(Reflect.getMetadata(PATH_METADATA, handler)).toBe(path);
+      },
+    );
   });
 
   describe('getAll', () => {
-    it('should return vehicles belonging to the user', async () => {
+    it('returns the vehicles of the user', async () => {
       const vehicles = [{ id: 'vehicle-1' }];
-      mockVehicleService.findAll.mockResolvedValue(vehicles);
+      vehicleService.findAll.mockResolvedValue(vehicles);
 
-      await expect(controller.getAll('user-1')).resolves.toEqual(vehicles);
-      expect(mockVehicleService.findAll.mock.calls).toEqual([['user-1']]);
+      await expect(controller.getAll('user-1')).resolves.toBe(vehicles);
+      expect(vehicleService.findAll).toHaveBeenCalledWith('user-1');
+    });
+
+    it('propagates the error of the service', async () => {
+      vehicleService.findAll.mockRejectedValue(failure);
+
+      await expect(controller.getAll('user-1')).rejects.toBe(failure);
     });
   });
 
   describe('getOne', () => {
-    it('should return a vehicle belonging to the user', async () => {
+    it('returns a vehicle of the user', async () => {
       const vehicle = { id: 'vehicle-1' };
-      mockVehicleService.findOne.mockResolvedValue(vehicle);
+      vehicleService.findOne.mockResolvedValue(vehicle);
 
-      await expect(controller.getOne('vehicle-1', 'user-1')).resolves.toEqual(
+      await expect(controller.getOne('vehicle-1', 'user-1')).resolves.toBe(
         vehicle,
       );
+      expect(vehicleService.findOne).toHaveBeenCalledWith(
+        'vehicle-1',
+        'user-1',
+      );
+    });
 
-      expect(mockVehicleService.findOne.mock.calls).toEqual([
-        ['vehicle-1', 'user-1'],
-      ]);
+    it('propagates the error of the service', async () => {
+      vehicleService.findOne.mockRejectedValue(failure);
+
+      await expect(controller.getOne('vehicle-1', 'user-1')).rejects.toBe(
+        failure,
+      );
     });
   });
 
   describe('create', () => {
-    it('should create a vehicle for the user', async () => {
-      const dto = {
-        name: 'My Toyota',
-        brand: 'Toyota',
-        model: 'Corolla',
-        plate: '1234ABC',
-        location: { lat: 41.3851, lng: 2.1734 },
-      };
+    const dto = buildCreateVehicleDto();
+
+    it('creates a vehicle for the user', async () => {
       const vehicle = { id: 'vehicle-1', ...dto };
-      mockVehicleService.create.mockResolvedValue(vehicle);
+      vehicleService.create.mockResolvedValue(vehicle);
 
-      await expect(controller.create(dto, 'user-1')).resolves.toEqual(vehicle);
+      await expect(controller.create(dto, 'user-1')).resolves.toBe(vehicle);
+      expect(vehicleService.create).toHaveBeenCalledWith(dto, 'user-1');
+    });
 
-      expect(mockVehicleService.create.mock.calls).toEqual([[dto, 'user-1']]);
+    it('propagates the error of the service', async () => {
+      vehicleService.create.mockRejectedValue(failure);
+
+      await expect(controller.create(dto, 'user-1')).rejects.toBe(failure);
     });
   });
 
   describe('update', () => {
-    it('should update a vehicle belonging to the user', async () => {
-      const dto = { model: 'Yaris' };
+    const dto = { model: 'Yaris' };
+
+    it('updates a vehicle of the user', async () => {
       const vehicle = { id: 'vehicle-1', ...dto };
-      mockVehicleService.update.mockResolvedValue(vehicle);
+      vehicleService.update.mockResolvedValue(vehicle);
 
-      await expect(
-        controller.update('vehicle-1', dto, 'user-1'),
-      ).resolves.toEqual(vehicle);
+      await expect(controller.update('vehicle-1', dto, 'user-1')).resolves.toBe(
+        vehicle,
+      );
+      expect(vehicleService.update).toHaveBeenCalledWith(
+        'vehicle-1',
+        dto,
+        'user-1',
+      );
+    });
 
-      expect(mockVehicleService.update.mock.calls).toEqual([
-        ['vehicle-1', dto, 'user-1'],
-      ]);
+    it('propagates the error of the service', async () => {
+      vehicleService.update.mockRejectedValue(failure);
+
+      await expect(controller.update('vehicle-1', dto, 'user-1')).rejects.toBe(
+        failure,
+      );
     });
   });
 
   describe('delete', () => {
-    it('should delete a vehicle belonging to the user', async () => {
-      mockVehicleService.delete.mockResolvedValue(undefined);
+    it('deletes a vehicle of the user', async () => {
+      const vehicle = { id: 'vehicle-1' };
+      vehicleService.delete.mockResolvedValue(vehicle);
 
-      await expect(
-        controller.delete('vehicle-1', 'user-1'),
-      ).resolves.toBeUndefined();
+      await expect(controller.delete('vehicle-1', 'user-1')).resolves.toBe(
+        vehicle,
+      );
+      expect(vehicleService.delete).toHaveBeenCalledWith('vehicle-1', 'user-1');
+    });
 
-      expect(mockVehicleService.delete.mock.calls).toEqual([
-        ['vehicle-1', 'user-1'],
-      ]);
+    it('propagates the error of the service', async () => {
+      vehicleService.delete.mockRejectedValue(failure);
+
+      await expect(controller.delete('vehicle-1', 'user-1')).rejects.toBe(
+        failure,
+      );
     });
   });
 
   describe('addUserByEmail', () => {
-    it('should add a user to a vehicle', async () => {
-      const result = { success: true };
-      mockVehicleSharingService.addUserByEmail.mockResolvedValue(result);
+    const body = { email: 'user@example.com' };
+
+    it('shares the vehicle with the user of that email', async () => {
+      const result = { message: 'User added successfully' };
+      sharingService.addUserByEmail.mockResolvedValue(result);
 
       await expect(
-        controller.addUserByEmail(
-          'vehicle-1',
-          { email: 'user@example.com' },
-          'owner-1',
-        ),
-      ).resolves.toEqual(result);
+        controller.addUserByEmail('vehicle-1', body, 'owner-1'),
+      ).resolves.toBe(result);
+      expect(sharingService.addUserByEmail).toHaveBeenCalledWith(
+        'vehicle-1',
+        'user@example.com',
+        'owner-1',
+      );
+    });
 
-      expect(mockVehicleSharingService.addUserByEmail.mock.calls).toEqual([
-        ['vehicle-1', 'user@example.com', 'owner-1'],
-      ]);
+    it('propagates the error of the service', async () => {
+      sharingService.addUserByEmail.mockRejectedValue(failure);
+
+      await expect(
+        controller.addUserByEmail('vehicle-1', body, 'owner-1'),
+      ).rejects.toBe(failure);
     });
   });
 
   describe('removeUser', () => {
-    it('should remove a user from a vehicle', async () => {
-      const result = { success: true };
-      mockVehicleSharingService.removeUser.mockResolvedValue(result);
+    it('removes the user from the vehicle', async () => {
+      const result = { message: 'User removed successfully' };
+      sharingService.removeUser.mockResolvedValue(result);
 
       await expect(
         controller.removeUser('vehicle-1', 'user-2', 'owner-1'),
-      ).resolves.toEqual(result);
+      ).resolves.toBe(result);
+      expect(sharingService.removeUser).toHaveBeenCalledWith(
+        'vehicle-1',
+        'user-2',
+        'owner-1',
+      );
+    });
 
-      expect(mockVehicleSharingService.removeUser.mock.calls).toEqual([
-        ['vehicle-1', 'user-2', 'owner-1'],
-      ]);
+    it('propagates the error of the service', async () => {
+      sharingService.removeUser.mockRejectedValue(failure);
+
+      await expect(
+        controller.removeUser('vehicle-1', 'user-2', 'owner-1'),
+      ).rejects.toBe(failure);
     });
   });
 });

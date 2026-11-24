@@ -1,12 +1,16 @@
-import {
-  BadRequestException,
-  ConflictException,
-  NotFoundException,
-} from '@nestjs/common';
+import { HttpStatus } from '@nestjs/common';
 import { Model } from 'mongoose';
-import { Event } from './schemas/event.schema';
+import {
+  buildCreateEventDto,
+  buildEvent,
+  buildVehicle,
+} from '../common/testing/builders';
+import { expectHttpError } from '../common/testing/expect-http-error';
+import { resolvingQuery } from '../common/testing/mongoose-mocks';
 import { VehicleAccessService } from '../vehicle/access/vehicle-access.service';
+import { UpdateEventDto } from './dtos/update-event.dto';
 import { EventsService } from './events.service';
+import { Event } from './schemas/event.schema';
 
 interface EventModelMock extends jest.Mock {
   find: jest.Mock;
@@ -18,42 +22,29 @@ interface EventModelMock extends jest.Mock {
   deleteMany: jest.Mock;
 }
 
-function resolvingQuery<T>(value: T) {
-  return { exec: jest.fn().mockResolvedValue(value) };
-}
+const OVERLAP_MESSAGE = 'The vehicle already has an event in that time range';
+const TIME_RANGE_MESSAGE = 'The end time must be after the start time';
 
-async function expectRejection(
-  promise: Promise<unknown>,
-  type: new (message?: string) => Error,
-  message: string,
-) {
-  const error = await promise.then(
-    () => undefined,
-    (reason: unknown) => reason,
+const eventNotFound = (id: string) => `Event with ID ${id} not found`;
+
+const createEventModelMock = (save: jest.Mock): EventModelMock =>
+  Object.assign(
+    jest.fn().mockImplementation((data: object) => ({ ...data, save })),
+    {
+      find: jest.fn(),
+      findOne: jest.fn(),
+      exists: jest.fn(),
+      findById: jest.fn(),
+      findByIdAndUpdate: jest.fn(),
+      deleteOne: jest.fn(),
+      deleteMany: jest.fn(),
+    },
   );
 
-  expect(error).toBeInstanceOf(type);
-  expect((error as Error).message).toBe(message);
-}
-
 describe('EventsService', () => {
-  const ownerVehicle = { _id: 'vehicle-1', userId: 'owner-1' };
-  const createDto = {
-    title: 'Trip',
-    date: '2026-11-10',
-    hourStart: '09:00',
-    hourEnd: '10:00',
-    vehicleId: 'vehicle-1',
-  };
-  const storedEvent = {
-    _id: 'event-1',
-    userId: 'user-2',
-    vehicleId: 'vehicle-1',
-    title: 'Trip',
-    date: '2026-11-10',
-    hourStart: '09:00',
-    hourEnd: '10:00',
-  };
+  const vehicle = buildVehicle();
+  const storedEvent = buildEvent();
+  const createDto = buildCreateEventDto();
 
   let save: jest.Mock;
   let eventModel: EventModelMock;
@@ -63,19 +54,7 @@ describe('EventsService', () => {
 
   beforeEach(() => {
     save = jest.fn();
-    eventModel = Object.assign(
-      jest.fn().mockImplementation((data: object) => ({ ...data, save })),
-      {
-        find: jest.fn(),
-        findOne: jest.fn(),
-        exists: jest.fn(),
-        findById: jest.fn(),
-        findByIdAndUpdate: jest.fn(),
-        deleteOne: jest.fn(),
-        deleteMany: jest.fn(),
-      },
-    );
-
+    eventModel = createEventModelMock(save);
     findAccessibleVehicle = jest.fn();
     findAccessibleVehicleIds = jest.fn();
 
@@ -89,13 +68,11 @@ describe('EventsService', () => {
   });
 
   describe('findAll', () => {
-    it('returns only events belonging to vehicles accessible by the user', async () => {
-      const events = [storedEvent];
-
+    it('returns the events of the vehicles accessible by the user', async () => {
       findAccessibleVehicleIds.mockResolvedValue(['vehicle-1']);
-      eventModel.find.mockReturnValue(resolvingQuery(events));
+      eventModel.find.mockReturnValue(resolvingQuery([storedEvent]));
 
-      await expect(service.findAll('user-2')).resolves.toEqual(events);
+      await expect(service.findAll('user-2')).resolves.toEqual([storedEvent]);
 
       expect(findAccessibleVehicleIds).toHaveBeenCalledWith('user-2');
       expect(eventModel.find).toHaveBeenCalledWith({
@@ -103,20 +80,18 @@ describe('EventsService', () => {
       });
     });
 
-    it('returns an empty array when the user has no accessible vehicles', async () => {
+    it('returns an empty list when the user has no accessible vehicles', async () => {
       findAccessibleVehicleIds.mockResolvedValue([]);
       eventModel.find.mockReturnValue(resolvingQuery([]));
 
       await expect(service.findAll('stranger')).resolves.toEqual([]);
 
-      expect(eventModel.find).toHaveBeenCalledWith({
-        vehicleId: { $in: [] },
-      });
+      expect(eventModel.find).toHaveBeenCalledWith({ vehicleId: { $in: [] } });
     });
   });
 
   describe('findOne', () => {
-    it('returns an event belonging to an accessible vehicle', async () => {
+    it('returns an event of an accessible vehicle', async () => {
       findAccessibleVehicleIds.mockResolvedValue(['vehicle-1']);
       eventModel.findOne.mockReturnValue(resolvingQuery(storedEvent));
 
@@ -131,37 +106,39 @@ describe('EventsService', () => {
       });
     });
 
-    it('rejects an event belonging to an inaccessible vehicle', async () => {
-      findAccessibleVehicleIds.mockResolvedValue(['vehicle-2']);
+    it.each<[string, string, string, string[]]>([
+      [
+        'an event of an inaccessible vehicle',
+        'event-1',
+        'stranger',
+        ['vehicle-2'],
+      ],
+      [
+        'an event that does not exist',
+        'unknown-event',
+        'user-2',
+        ['vehicle-1'],
+      ],
+    ])('rejects %s', async (_label, id, userId, vehicleIds) => {
+      findAccessibleVehicleIds.mockResolvedValue(vehicleIds);
       eventModel.findOne.mockReturnValue(resolvingQuery(null));
 
-      await expectRejection(
-        service.findOne('event-1', 'stranger'),
-        NotFoundException,
-        'Event with ID event-1 not found',
-      );
-    });
-
-    it('rejects an event that does not exist', async () => {
-      findAccessibleVehicleIds.mockResolvedValue(['vehicle-1']);
-      eventModel.findOne.mockReturnValue(resolvingQuery(null));
-
-      await expectRejection(
-        service.findOne('unknown-event', 'user-2'),
-        NotFoundException,
-        'Event with ID unknown-event not found',
+      await expectHttpError(
+        service.findOne(id, userId),
+        HttpStatus.NOT_FOUND,
+        eventNotFound(id),
       );
     });
   });
 
   describe('create', () => {
     beforeEach(() => {
-      findAccessibleVehicle.mockResolvedValue(ownerVehicle);
+      findAccessibleVehicle.mockResolvedValue(vehicle);
       eventModel.exists.mockReturnValue(resolvingQuery(null));
       save.mockResolvedValue({ _id: 'event-1' });
     });
 
-    it('creates the event with the user as creator after checking the access and the overlaps', async () => {
+    it('creates the event with the user as creator after checking access and overlaps', async () => {
       await expect(service.create(createDto, 'user-2')).resolves.toEqual({
         _id: 'event-1',
       });
@@ -179,56 +156,67 @@ describe('EventsService', () => {
       });
     });
 
-    it('rejects a vehicle the user cannot access', async () => {
-      findAccessibleVehicle.mockResolvedValue(null);
+    describe('access to the vehicle', () => {
+      it('rejects a vehicle the user cannot access', async () => {
+        findAccessibleVehicle.mockResolvedValue(null);
 
-      await expectRejection(
-        service.create(createDto, 'stranger'),
-        NotFoundException,
-        'Vehicle not found',
-      );
-      expect(eventModel.exists).not.toHaveBeenCalled();
-      expect(save).not.toHaveBeenCalled();
+        await expectHttpError(
+          service.create(createDto, 'stranger'),
+          HttpStatus.NOT_FOUND,
+          'Vehicle not found',
+        );
+        expect(eventModel.exists).not.toHaveBeenCalled();
+        expect(save).not.toHaveBeenCalled();
+      });
     });
 
-    it.each(['08:30', '09:00'])(
-      'rejects the end time %s when the start time is 09:00',
-      async (hourEnd) => {
-        await expectRejection(
-          service.create({ ...createDto, hourEnd }, 'user-2'),
-          BadRequestException,
-          'The end time must be after the start time',
+    describe('time range', () => {
+      it.each(['08:30', '09:00'])(
+        'rejects the end time %s when the start time is 09:00',
+        async (hourEnd) => {
+          await expectHttpError(
+            service.create({ ...createDto, hourEnd }, 'user-2'),
+            HttpStatus.BAD_REQUEST,
+            TIME_RANGE_MESSAGE,
+          );
+          expect(save).not.toHaveBeenCalled();
+        },
+      );
+
+      it('rejects an invalid time format', async () => {
+        await expectHttpError(
+          service.create({ ...createDto, hourStart: '9:00' }, 'user-2'),
+          HttpStatus.BAD_REQUEST,
+          'Invalid time "9:00". Expected HH:mm',
         );
         expect(save).not.toHaveBeenCalled();
-      },
-    );
-
-    it('rejects an invalid time format', async () => {
-      await expectRejection(
-        service.create({ ...createDto, hourStart: '9:00' }, 'user-2'),
-        BadRequestException,
-        'Invalid time "9:00". Expected HH:mm',
-      );
-      expect(save).not.toHaveBeenCalled();
+      });
     });
 
-    it('rejects an event that overlaps another event of the vehicle', async () => {
-      eventModel.exists.mockReturnValue(resolvingQuery({ _id: 'other-event' }));
+    describe('overlaps', () => {
+      it('rejects an event that overlaps another event of the vehicle', async () => {
+        eventModel.exists.mockReturnValue(
+          resolvingQuery({ _id: 'other-event' }),
+        );
 
-      await expectRejection(
-        service.create(createDto, 'user-2'),
-        ConflictException,
-        'The vehicle already has an event in that time range',
-      );
-      expect(save).not.toHaveBeenCalled();
+        await expectHttpError(
+          service.create(createDto, 'user-2'),
+          HttpStatus.CONFLICT,
+          OVERLAP_MESSAGE,
+        );
+        expect(save).not.toHaveBeenCalled();
+      });
     });
   });
 
   describe('update', () => {
     const updatedEvent = { _id: 'event-1', updated: true };
 
+    const update = (changes: UpdateEventDto, userId = 'user-2') =>
+      service.update('event-1', changes, userId);
+
     beforeEach(() => {
-      findAccessibleVehicle.mockResolvedValue(ownerVehicle);
+      findAccessibleVehicle.mockResolvedValue(vehicle);
       eventModel.findById.mockReturnValue(resolvingQuery(storedEvent));
       eventModel.findByIdAndUpdate.mockReturnValue(
         resolvingQuery(updatedEvent),
@@ -236,197 +224,188 @@ describe('EventsService', () => {
       eventModel.exists.mockReturnValue(resolvingQuery(null));
     });
 
-    it('lets the creator update the event', async () => {
-      await expect(
-        service.update('event-1', { title: 'New' }, 'user-2'),
-      ).resolves.toBe(updatedEvent);
+    describe('permissions', () => {
+      it.each([
+        ['the creator', 'user-2'],
+        ['another user with access to the vehicle', 'user-3'],
+      ])('lets %s update the event', async (_label, userId) => {
+        await expect(update({ title: 'New' }, userId)).resolves.toBe(
+          updatedEvent,
+        );
 
-      expect(findAccessibleVehicle).toHaveBeenCalledWith('vehicle-1', 'user-2');
-      expect(eventModel.findByIdAndUpdate).toHaveBeenCalledWith(
-        'event-1',
-        { title: 'New' },
-        { new: true },
-      );
-    });
+        expect(findAccessibleVehicle).toHaveBeenCalledWith('vehicle-1', userId);
+        expect(eventModel.findByIdAndUpdate).toHaveBeenCalledWith(
+          'event-1',
+          { title: 'New' },
+          { new: true },
+        );
+      });
 
-    it('lets any user with access to the vehicle update an event created by someone else', async () => {
-      await expect(
-        service.update('event-1', { title: 'New' }, 'user-3'),
-      ).resolves.toBe(updatedEvent);
+      it('reports an event that does not exist as not found', async () => {
+        eventModel.findById.mockReturnValue(resolvingQuery(null));
 
-      expect(findAccessibleVehicle).toHaveBeenCalledWith('vehicle-1', 'user-3');
-      expect(eventModel.findByIdAndUpdate).toHaveBeenCalledWith(
-        'event-1',
-        { title: 'New' },
-        { new: true },
-      );
-    });
+        await expectHttpError(
+          update({ title: 'New' }),
+          HttpStatus.NOT_FOUND,
+          eventNotFound('event-1'),
+        );
+      });
 
-    it('reports an event that does not exist as not found', async () => {
-      eventModel.findById.mockReturnValue(resolvingQuery(null));
+      it('reports an event of an inaccessible vehicle as not found', async () => {
+        findAccessibleVehicle.mockResolvedValue(null);
 
-      await expectRejection(
-        service.update('event-1', { title: 'New' }, 'user-2'),
-        NotFoundException,
-        'Event with ID event-1 not found',
-      );
-    });
-
-    it('reports an event of an inaccessible vehicle as not found', async () => {
-      findAccessibleVehicle.mockResolvedValue(null);
-
-      await expectRejection(
-        service.update('event-1', { title: 'New' }, 'stranger'),
-        NotFoundException,
-        'Event with ID event-1 not found',
-      );
-      expect(eventModel.findByIdAndUpdate).not.toHaveBeenCalled();
-    });
-
-    it('rejects moving the event to a vehicle the user cannot access', async () => {
-      findAccessibleVehicle.mockImplementation((vehicleId: string) =>
-        Promise.resolve(vehicleId === 'vehicle-2' ? null : ownerVehicle),
-      );
-
-      await expectRejection(
-        service.update('event-1', { vehicleId: 'vehicle-2' }, 'user-2'),
-        NotFoundException,
-        'Vehicle not found',
-      );
-      expect(eventModel.findByIdAndUpdate).not.toHaveBeenCalled();
-    });
-
-    it('checks the overlaps in the new vehicle when moving the event', async () => {
-      await service.update('event-1', { vehicleId: 'vehicle-2' }, 'user-2');
-
-      expect(eventModel.exists).toHaveBeenCalledWith({
-        vehicleId: 'vehicle-2',
-        date: '2026-11-10',
-        hourStart: { $lt: '10:00' },
-        hourEnd: { $gt: '09:00' },
-        _id: { $ne: 'event-1' },
+        await expectHttpError(
+          update({ title: 'New' }, 'stranger'),
+          HttpStatus.NOT_FOUND,
+          eventNotFound('event-1'),
+        );
+        expect(eventModel.findByIdAndUpdate).not.toHaveBeenCalled();
       });
     });
 
-    it('validates the new end time against the stored start time', async () => {
-      await expectRejection(
-        service.update('event-1', { hourEnd: '08:00' }, 'user-2'),
-        BadRequestException,
-        'The end time must be after the start time',
-      );
-      expect(eventModel.findByIdAndUpdate).not.toHaveBeenCalled();
-    });
+    describe('moving to another vehicle', () => {
+      it('rejects a vehicle the user cannot access', async () => {
+        findAccessibleVehicle.mockImplementation((vehicleId: string) =>
+          Promise.resolve(vehicleId === 'vehicle-2' ? null : vehicle),
+        );
 
-    it('ignores the event itself when looking for overlaps', async () => {
-      await service.update('event-1', { hourEnd: '11:00' }, 'user-2');
-
-      expect(eventModel.exists).toHaveBeenCalledWith({
-        vehicleId: 'vehicle-1',
-        date: '2026-11-10',
-        hourStart: { $lt: '11:00' },
-        hourEnd: { $gt: '09:00' },
-        _id: { $ne: 'event-1' },
+        await expectHttpError(
+          update({ vehicleId: 'vehicle-2' }),
+          HttpStatus.NOT_FOUND,
+          'Vehicle not found',
+        );
+        expect(eventModel.findByIdAndUpdate).not.toHaveBeenCalled();
       });
-    });
 
-    it('rejects a change that overlaps another event', async () => {
-      eventModel.exists.mockReturnValue(resolvingQuery({ _id: 'other-event' }));
+      it('checks the overlaps in the new vehicle', async () => {
+        await update({ vehicleId: 'vehicle-2' });
 
-      await expectRejection(
-        service.update('event-1', { hourEnd: '11:00' }, 'user-2'),
-        ConflictException,
-        'The vehicle already has an event in that time range',
-      );
-      expect(eventModel.findByIdAndUpdate).not.toHaveBeenCalled();
-    });
-
-    it('does not validate the scheduling when only the title changes', async () => {
-      await service.update('event-1', { title: 'New' }, 'user-2');
-
-      expect(eventModel.exists).not.toHaveBeenCalled();
-    });
-
-    it('does not validate the scheduling when the stored values are resent', async () => {
-      await service.update(
-        'event-1',
-        {
-          title: 'Trip',
+        expect(eventModel.exists).toHaveBeenCalledWith({
+          vehicleId: 'vehicle-2',
           date: '2026-11-10',
-          hourStart: '09:00',
-          hourEnd: '10:00',
-          vehicleId: 'vehicle-1',
-        },
-        'user-2',
-      );
-
-      expect(eventModel.exists).not.toHaveBeenCalled();
-      expect(findAccessibleVehicle).toHaveBeenCalledTimes(1);
+          hourStart: { $lt: '10:00' },
+          hourEnd: { $gt: '09:00' },
+          _id: { $ne: 'event-1' },
+        });
+      });
     });
 
-    it('reports an event that could not be updated as not found', async () => {
-      eventModel.findByIdAndUpdate.mockReturnValue(resolvingQuery(null));
+    describe('scheduling', () => {
+      it('validates the new end time against the stored start time', async () => {
+        await expectHttpError(
+          update({ hourEnd: '08:00' }),
+          HttpStatus.BAD_REQUEST,
+          TIME_RANGE_MESSAGE,
+        );
+        expect(eventModel.findByIdAndUpdate).not.toHaveBeenCalled();
+      });
 
-      await expectRejection(
-        service.update('event-1', { title: 'New' }, 'user-2'),
-        NotFoundException,
-        'Event with ID event-1 not found',
-      );
+      it('ignores the event itself when looking for overlaps', async () => {
+        await update({ hourEnd: '11:00' });
+
+        expect(eventModel.exists).toHaveBeenCalledWith({
+          vehicleId: 'vehicle-1',
+          date: '2026-11-10',
+          hourStart: { $lt: '11:00' },
+          hourEnd: { $gt: '09:00' },
+          _id: { $ne: 'event-1' },
+        });
+      });
+
+      it('rejects a change that overlaps another event', async () => {
+        eventModel.exists.mockReturnValue(
+          resolvingQuery({ _id: 'other-event' }),
+        );
+
+        await expectHttpError(
+          update({ hourEnd: '11:00' }),
+          HttpStatus.CONFLICT,
+          OVERLAP_MESSAGE,
+        );
+        expect(eventModel.findByIdAndUpdate).not.toHaveBeenCalled();
+      });
+
+      it('does not validate the scheduling when only the title changes', async () => {
+        await update({ title: 'New' });
+
+        expect(eventModel.exists).not.toHaveBeenCalled();
+      });
+
+      it('does not validate the scheduling when the stored values are resent', async () => {
+        await update(createDto);
+
+        expect(eventModel.exists).not.toHaveBeenCalled();
+        expect(findAccessibleVehicle).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    describe('when the event cannot be updated', () => {
+      it('reports an event that could not be updated as not found', async () => {
+        eventModel.findByIdAndUpdate.mockReturnValue(resolvingQuery(null));
+
+        await expectHttpError(
+          update({ title: 'New' }),
+          HttpStatus.NOT_FOUND,
+          eventNotFound('event-1'),
+        );
+      });
     });
   });
 
   describe('delete', () => {
     beforeEach(() => {
-      findAccessibleVehicle.mockResolvedValue(ownerVehicle);
+      findAccessibleVehicle.mockResolvedValue(vehicle);
       eventModel.findById.mockReturnValue(resolvingQuery(storedEvent));
       eventModel.deleteOne.mockReturnValue(resolvingQuery({ deletedCount: 1 }));
     });
 
-    it('lets the creator delete the event', async () => {
-      await expect(
-        service.delete('event-1', 'user-2'),
-      ).resolves.toBeUndefined();
+    describe('permissions', () => {
+      it.each([
+        ['the creator', 'user-2'],
+        ['another user with access to the vehicle', 'user-3'],
+      ])('lets %s delete the event', async (_label, userId) => {
+        await expect(
+          service.delete('event-1', userId),
+        ).resolves.toBeUndefined();
 
-      expect(eventModel.deleteOne).toHaveBeenCalledWith({ _id: 'event-1' });
+        expect(findAccessibleVehicle).toHaveBeenCalledWith('vehicle-1', userId);
+        expect(eventModel.deleteOne).toHaveBeenCalledWith({ _id: 'event-1' });
+      });
+
+      it('reports an event that does not exist as not found', async () => {
+        eventModel.findById.mockReturnValue(resolvingQuery(null));
+
+        await expectHttpError(
+          service.delete('event-1', 'user-2'),
+          HttpStatus.NOT_FOUND,
+          eventNotFound('event-1'),
+        );
+      });
+
+      it('reports an event of an inaccessible vehicle as not found', async () => {
+        findAccessibleVehicle.mockResolvedValue(null);
+
+        await expectHttpError(
+          service.delete('event-1', 'stranger'),
+          HttpStatus.NOT_FOUND,
+          eventNotFound('event-1'),
+        );
+        expect(eventModel.deleteOne).not.toHaveBeenCalled();
+      });
     });
 
-    it('lets any user with access to the vehicle delete an event created by someone else', async () => {
-      await expect(
-        service.delete('event-1', 'user-3'),
-      ).resolves.toBeUndefined();
+    describe('when the event cannot be deleted', () => {
+      it('reports an event that was already deleted as not found', async () => {
+        eventModel.deleteOne.mockReturnValue(
+          resolvingQuery({ deletedCount: 0 }),
+        );
 
-      expect(findAccessibleVehicle).toHaveBeenCalledWith('vehicle-1', 'user-3');
-      expect(eventModel.deleteOne).toHaveBeenCalledWith({ _id: 'event-1' });
-    });
-
-    it('reports an event that does not exist as not found', async () => {
-      eventModel.findById.mockReturnValue(resolvingQuery(null));
-
-      await expectRejection(
-        service.delete('event-1', 'user-2'),
-        NotFoundException,
-        'Event with ID event-1 not found',
-      );
-    });
-
-    it('reports an event of an inaccessible vehicle as not found', async () => {
-      findAccessibleVehicle.mockResolvedValue(null);
-
-      await expectRejection(
-        service.delete('event-1', 'stranger'),
-        NotFoundException,
-        'Event with ID event-1 not found',
-      );
-      expect(eventModel.deleteOne).not.toHaveBeenCalled();
-    });
-
-    it('reports as not found an event that was already deleted', async () => {
-      eventModel.deleteOne.mockReturnValue(resolvingQuery({ deletedCount: 0 }));
-
-      await expectRejection(
-        service.delete('event-1', 'user-2'),
-        NotFoundException,
-        'Event with ID event-1 not found',
-      );
+        await expectHttpError(
+          service.delete('event-1', 'user-2'),
+          HttpStatus.NOT_FOUND,
+          eventNotFound('event-1'),
+        );
+      });
     });
   });
 

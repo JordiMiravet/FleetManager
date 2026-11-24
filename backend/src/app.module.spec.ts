@@ -1,28 +1,28 @@
 import 'reflect-metadata';
 
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_FILTER } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AppModule } from './app.module';
-import { FirebaseModule } from './auth/firebase/firebase.module';
 import { AppController } from './app.controller';
+import { AppModule } from './app.module';
 import { AppService } from './app.service';
-import { VehicleModule } from './vehicle/vehicle.module';
 import { AuthModule } from './auth/auth.module';
-import { EventsModule } from './events/events.module';
-import { validateEnvironment } from './config/validate-environment';
+import { FirebaseModule } from './auth/firebase/firebase.module';
+import { AllExceptionsFilter } from './common/errors/all-exceptions.filter';
 import type { EnvironmentVariables } from './config/environment-variables';
+import { validateEnvironment } from './config/validate-environment';
+import { EventsModule } from './events/events.module';
+import { VehicleModule } from './vehicle/vehicle.module';
 
 interface MongooseAsyncOptions {
   inject: unknown[];
   useFactory: (configService: ConfigService<EnvironmentVariables, true>) => {
-    uri: string | undefined;
+    uri: string;
   };
 }
 
 jest.mock('@nestjs/config', () => ({
-  ConfigModule: {
-    forRoot: jest.fn(() => class MockConfigModule {}),
-  },
+  ConfigModule: { forRoot: jest.fn(() => class MockConfigModule {}) },
   ConfigService: jest.fn(),
 }));
 
@@ -56,102 +56,77 @@ jest.mock('./events/events.module', () => ({
   EventsModule: class EventsModule {},
 }));
 
+jest.mock('./common/errors/all-exceptions.filter', () => ({
+  AllExceptionsFilter: class AllExceptionsFilter {},
+}));
+
 jest.mock('./config/validate-environment', () => ({
   validateEnvironment: jest.fn(),
 }));
 
+const [mongooseOptions] = jest.mocked(MongooseModule).forRootAsync.mock
+  .calls[0] as unknown as [MongooseAsyncOptions];
+
 describe('AppModule', () => {
-  it('should be defined', () => {
-    expect(AppModule).toBeDefined();
-  });
+  describe('imports', () => {
+    it('imports the feature modules', () => {
+      const imports = Reflect.getMetadata('imports', AppModule) as unknown[];
 
-  it('should register all application imports', () => {
-    const imports = Reflect.getMetadata('imports', AppModule) as unknown[];
+      expect(imports).toHaveLength(6);
+      expect(imports).toEqual(
+        expect.arrayContaining([
+          FirebaseModule,
+          AuthModule,
+          VehicleModule,
+          EventsModule,
+        ]),
+      );
+    });
 
-    expect(imports).toHaveLength(6);
-    expect(imports).toContain(FirebaseModule);
-    expect(imports).toContain(AuthModule);
-    expect(imports).toContain(VehicleModule);
-    expect(imports).toContain(EventsModule);
-  });
+    it('configures ConfigModule globally with the environment validation', () => {
+      expect(jest.mocked(ConfigModule).forRoot).toHaveBeenCalledWith({
+        isGlobal: true,
+        validate: validateEnvironment,
+      });
+    });
 
-  it('should configure ConfigModule globally with environment validation', () => {
-    const configMock = Reflect.get(
-      ConfigModule,
-      'forRoot',
-    ) as unknown as jest.Mock<
-      unknown,
-      [
-        {
-          isGlobal: boolean;
-          validate: typeof validateEnvironment;
-        },
-      ]
-    >;
-
-    const config = configMock.mock.calls[0]?.[0];
-
-    expect(config).toEqual({
-      isGlobal: true,
-      validate: validateEnvironment,
+    it('configures MongooseModule asynchronously with ConfigService', () => {
+      expect(mongooseOptions.inject).toEqual([ConfigService]);
+      expect(mongooseOptions.useFactory).toEqual(expect.any(Function));
     });
   });
 
-  it('should register MongooseModule with ConfigService injection', () => {
-    const mongooseMock = Reflect.get(
-      MongooseModule,
-      'forRootAsync',
-    ) as unknown as jest.Mock<unknown, [MongooseAsyncOptions]>;
+  describe('Mongoose factory', () => {
+    it('returns the MongoDB URI read from the configuration', () => {
+      const get = jest.fn().mockReturnValue('mongodb://localhost:27017/test');
 
-    const options = mongooseMock.mock.calls[0]?.[0];
+      const options = mongooseOptions.useFactory({
+        get,
+      } as unknown as ConfigService<EnvironmentVariables, true>);
 
-    expect(options).toBeDefined();
-    expect(options?.inject).toEqual([ConfigService]);
-    expect(options?.useFactory).toEqual(expect.any(Function));
+      expect(get).toHaveBeenCalledWith('MONGO_URI', { infer: true });
+      expect(options).toEqual({ uri: 'mongodb://localhost:27017/test' });
+    });
   });
 
-  it('should register AppController', () => {
-    const controllers = Reflect.getMetadata(
-      'controllers',
-      AppModule,
-    ) as unknown[];
-
-    expect(controllers).toEqual([AppController]);
+  describe('controllers', () => {
+    it('registers AppController as its only controller', () => {
+      expect(Reflect.getMetadata('controllers', AppModule)).toEqual([
+        AppController,
+      ]);
+    });
   });
 
-  it('should register AppService', () => {
-    const providers = Reflect.getMetadata('providers', AppModule) as unknown[];
-
-    expect(providers).toContain(AppService);
-  });
-
-  it('should return MongoDB URI from ConfigService', () => {
-    const mongooseMock = Reflect.get(
-      MongooseModule,
-      'forRootAsync',
-    ) as unknown as jest.Mock<unknown, [MongooseAsyncOptions]>;
-
-    const options = mongooseMock.mock.calls[0]?.[0];
-
-    if (!options) {
-      throw new Error('Mongoose options were not configured');
-    }
-
-    const get = jest.fn((key: string, config: { infer: true }): string => {
-      expect(key).toBe('MONGO_URI');
-      expect(config).toEqual({ infer: true });
-
-      return 'mongodb://localhost:27017/test';
+  describe('providers', () => {
+    it('provides AppService', () => {
+      expect(Reflect.getMetadata('providers', AppModule)).toContain(AppService);
     });
 
-    const result = options.useFactory({
-      get,
-    } as unknown as ConfigService<EnvironmentVariables, true>);
-
-    expect(get).toHaveBeenCalledTimes(1);
-
-    expect(result).toEqual({
-      uri: 'mongodb://localhost:27017/test',
+    it('registers AllExceptionsFilter as the global exception filter', () => {
+      expect(Reflect.getMetadata('providers', AppModule)).toContainEqual({
+        provide: APP_FILTER,
+        useClass: AllExceptionsFilter,
+      });
     });
   });
 });

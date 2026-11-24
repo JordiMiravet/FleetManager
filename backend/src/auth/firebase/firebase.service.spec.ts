@@ -30,16 +30,19 @@ interface FirebaseAdminMock {
 }
 
 const firebaseMock = jest.requireMock<FirebaseAdminMock>('firebase-admin');
+const { authMocks } = firebaseMock;
 
-const configValues: Record<string, string> = {
+const CONFIG: Record<string, string> = {
   FIREBASE_PROJECT_ID: 'project-id',
   FIREBASE_CLIENT_EMAIL: 'client@example.com',
   FIREBASE_PRIVATE_KEY: 'line1\\nline2',
 };
 
 const configService = {
-  get: jest.fn((key: string) => configValues[key]),
+  get: jest.fn((key: string) => CONFIG[key]),
 } as unknown as ConfigService<EnvironmentVariables, true>;
+
+const createService = () => new FirebaseService(configService);
 
 describe('FirebaseService', () => {
   beforeEach(() => {
@@ -47,78 +50,97 @@ describe('FirebaseService', () => {
     firebaseMock.apps.length = 0;
   });
 
-  describe('initialization', () => {
-    it('initializes Firebase Admin with the configured credentials', () => {
-      new FirebaseService(configService);
+  describe('constructor', () => {
+    describe('when Firebase Admin is not initialized yet', () => {
+      it('builds the service account from the configuration', () => {
+        createService();
 
-      expect(firebaseMock.credential.cert).toHaveBeenCalledWith({
-        projectId: 'project-id',
-        clientEmail: 'client@example.com',
-        privateKey: 'line1\nline2',
+        expect(firebaseMock.credential.cert).toHaveBeenCalledWith({
+          projectId: 'project-id',
+          clientEmail: 'client@example.com',
+          privateKey: 'line1\nline2',
+        });
       });
-      expect(firebaseMock.initializeApp).toHaveBeenCalledTimes(1);
+
+      it('restores the line breaks of the private key', () => {
+        createService();
+
+        expect(firebaseMock.credential.cert).toHaveBeenCalledWith(
+          expect.objectContaining({ privateKey: 'line1\nline2' }),
+        );
+      });
+
+      it('initializes Firebase Admin once with those credentials', () => {
+        createService();
+
+        expect(firebaseMock.initializeApp).toHaveBeenCalledTimes(1);
+        expect(firebaseMock.initializeApp).toHaveBeenCalledWith({
+          credential: {
+            projectId: 'project-id',
+            clientEmail: 'client@example.com',
+            privateKey: 'line1\nline2',
+          },
+        });
+      });
     });
 
-    it('reuses the Firebase app when it is already initialized', () => {
-      firebaseMock.apps.push({});
+    describe('when Firebase Admin is already initialized', () => {
+      beforeEach(() => {
+        firebaseMock.apps.push({});
+      });
 
-      new FirebaseService(configService);
+      it('reuses the existing app', () => {
+        createService();
 
-      expect(firebaseMock.initializeApp).not.toHaveBeenCalled();
-      expect(firebaseMock.app).toHaveBeenCalledTimes(1);
+        expect(firebaseMock.app).toHaveBeenCalledTimes(1);
+        expect(firebaseMock.initializeApp).not.toHaveBeenCalled();
+      });
+
+      it('does not build new credentials', () => {
+        createService();
+
+        expect(firebaseMock.credential.cert).not.toHaveBeenCalled();
+      });
     });
   });
 
   describe('verifyIdToken', () => {
-    it('verifies an ID token', async () => {
-      firebaseMock.authMocks.verifyIdToken.mockResolvedValue({ uid: 'user-1' });
-      const service = new FirebaseService(configService);
+    it('returns the decoded token', async () => {
+      authMocks.verifyIdToken.mockResolvedValue({ uid: 'user-1' });
 
-      await expect(service.verifyIdToken('token')).resolves.toEqual({
+      await expect(createService().verifyIdToken('token')).resolves.toEqual({
         uid: 'user-1',
       });
-      expect(firebaseMock.authMocks.verifyIdToken).toHaveBeenCalledWith(
-        'token',
-      );
+      expect(authMocks.verifyIdToken).toHaveBeenCalledWith('token');
     });
 
-    it('propagates errors when verifying an ID token', async () => {
+    it('propagates the verification error', async () => {
       const error = new Error('Invalid token');
-      firebaseMock.authMocks.verifyIdToken.mockRejectedValue(error);
+      authMocks.verifyIdToken.mockRejectedValue(error);
 
-      const service = new FirebaseService(configService);
-
-      await expect(service.verifyIdToken('invalid-token')).rejects.toThrow(
+      await expect(createService().verifyIdToken('invalid')).rejects.toBe(
         error,
       );
     });
   });
 
   describe('getUserByEmail', () => {
-    it('gets a user by email', async () => {
-      firebaseMock.authMocks.getUserByEmail.mockResolvedValue({
-        uid: 'user-2',
-      });
-      const service = new FirebaseService(configService);
-
-      await expect(service.getUserByEmail('user@example.com')).resolves.toEqual(
-        { uid: 'user-2' },
-      );
-
-      expect(firebaseMock.authMocks.getUserByEmail).toHaveBeenCalledWith(
-        'user@example.com',
-      );
-    });
-
-    it('propagates errors when getting a user by email', async () => {
-      const error = new Error('User not found');
-      firebaseMock.authMocks.getUserByEmail.mockRejectedValue(error);
-
-      const service = new FirebaseService(configService);
+    it('returns the user record', async () => {
+      authMocks.getUserByEmail.mockResolvedValue({ uid: 'user-2' });
 
       await expect(
-        service.getUserByEmail('unknown@example.com'),
-      ).rejects.toThrow(error);
+        createService().getUserByEmail('user@example.com'),
+      ).resolves.toEqual({ uid: 'user-2' });
+      expect(authMocks.getUserByEmail).toHaveBeenCalledWith('user@example.com');
+    });
+
+    it('propagates the lookup error', async () => {
+      const error = new Error('User not found');
+      authMocks.getUserByEmail.mockRejectedValue(error);
+
+      await expect(
+        createService().getUserByEmail('unknown@example.com'),
+      ).rejects.toBe(error);
     });
   });
 });

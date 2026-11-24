@@ -4,53 +4,64 @@ import {
 } from '../../common/testing/validate-body';
 import { UpdateEventDto } from './update-event.dto';
 
+async function expectValid(payload: object): Promise<void> {
+  await expect(validateBody(UpdateEventDto, payload)).resolves.toBeInstanceOf(
+    UpdateEventDto,
+  );
+}
+
+async function expectInvalid(payload: object, field: string): Promise<void> {
+  const messages = await validationMessages(UpdateEventDto, payload);
+
+  expect(messages.join(' | ')).toContain(field);
+}
+
 describe('UpdateEventDto', () => {
-  async function messagesFor(payload: object): Promise<string> {
-    const messages = await validationMessages(UpdateEventDto, payload);
+  describe('valid updates', () => {
+    it.each<[string, unknown]>([
+      ['title', 'New title'],
+      ['date', '2026-11-10'],
+      ['hourStart', '09:00'],
+      ['hourEnd', '10:00'],
+      ['vehicleId', '507f1f77bcf86cd799439011'],
+      ['comment', 'Note'],
+    ])('accepts an update with only the %s', async (field, value) => {
+      await expectValid({ [field]: value });
+    });
 
-    return messages.join(' | ');
-  }
+    it('accepts an empty update', async () => {
+      await expectValid({});
+    });
 
-  it('accepts an update with only the title', async () => {
-    await expect(
-      validateBody(UpdateEventDto, { title: 'New title' }),
-    ).resolves.toBeInstanceOf(UpdateEventDto);
-  });
-
-  it('accepts the whole event resent by the frontend', async () => {
-    await expect(
-      validateBody(UpdateEventDto, {
+    it('accepts the whole event resent by the frontend', async () => {
+      await expectValid({
         title: 'Trip',
         date: '2026-11-10',
         hourStart: '09:00',
         hourEnd: '10:00',
         vehicleId: '507f1f77bcf86cd799439011',
         comment: '',
-      }),
-    ).resolves.toBeInstanceOf(UpdateEventDto);
+      });
+    });
   });
 
-  it('rejects an invalid date', async () => {
-    expect(await messagesFor({ date: '2026-02-30' })).toContain('date');
+  describe('invalid updates', () => {
+    it.each<[string, string, unknown]>([
+      ['an invalid date', 'date', '2026-02-30'],
+      ['an invalid start time', 'hourStart', '9:00'],
+      ['an invalid end time', 'hourEnd', '25:00'],
+      ['an invalid vehicle id', 'vehicleId', 'vehicle-1'],
+      ['an empty title', 'title', ''],
+      ['a title longer than 200 characters', 'title', 'a'.repeat(201)],
+      ['a comment longer than 2000 characters', 'comment', 'a'.repeat(2001)],
+    ])('rejects %s', async (_label, field, value) => {
+      await expectInvalid({ [field]: value }, field);
+    });
   });
 
-  it('rejects an invalid time', async () => {
-    expect(await messagesFor({ hourEnd: '25:00' })).toContain('hourEnd');
-  });
-
-  it('rejects an invalid vehicle id', async () => {
-    expect(await messagesFor({ vehicleId: 'vehicle-1' })).toContain(
-      'vehicleId',
-    );
-  });
-
-  it('rejects an empty title', async () => {
-    expect(await messagesFor({ title: '' })).toContain('title');
-  });
-
-  it('rejects unknown properties', async () => {
-    expect(await messagesFor({ _id: '507f1f77bcf86cd799439011' })).toContain(
-      '_id',
-    );
+  describe('unknown properties', () => {
+    it.each(['_id', 'userId'])('rejects "%s"', async (property) => {
+      await expectInvalid({ [property]: 'value' }, property);
+    });
   });
 });

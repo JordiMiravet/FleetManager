@@ -11,6 +11,8 @@ Back to the [README](../README.md#tests).
     - [Frontend Tests](#frontend-tests)
     - [Backend Tests](#backend-tests)
     - [Backend End-to-End Tests](#backend-end-to-end-tests)
+  - [Test Conventions](#test-conventions)
+    - [Backend Unit Test Conventions](#backend-unit-test-conventions)
   - [Coverage](#coverage)
     - [Frontend Coverage](#frontend-coverage)
     - [Backend Coverage](#backend-coverage)
@@ -25,7 +27,7 @@ Tests cover component rendering, user interactions, business logic, validation r
 The backend has two levels of tests:
 
 - **Unit tests** (`src/**/*.spec.ts`): controllers, services, DTOs, pipes and configuration in isolation.
-- **End-to-end tests** (`test/*.e2e-spec.ts`): the real HTTP routes, going through the global validation pipe, the authentication guard, the services and a real MongoDB.
+- **End-to-end tests** (`test/*.e2e-spec.ts`): the real HTTP routes, going through the global validation pipe, the authentication guard and the services, using an in-memory MongoDB.
 
 ## Running Tests
 
@@ -69,13 +71,15 @@ Run unit tests with coverage:
 npm run test:cov
 ```
 
+### Backend End-to-End Tests
+
+All commands in this section must be run from the `backend/` folder.
+
 Run end-to-end tests:
 
 ```bash
 npm run test:e2e
 ```
-
-### Backend End-to-End Tests
 
 The end-to-end tests boot the real `AppModule` and replace only the external dependencies:
 
@@ -94,6 +98,20 @@ The tests are organized by resource:
 | `test/events.e2e-spec.ts` | Event CRUD, access through shared vehicles, time-range validation, overlap rules |
 
 Shared helpers live in `test/support/`. The e2e tests run serially (`maxWorkers: 1`) and use their own TypeScript configuration (`test/tsconfig.e2e.json`).
+
+## Test Conventions
+
+### Backend Unit Test Conventions
+
+The backend unit tests share the same structure, so they are easy to read and extend:
+
+- One `describe` per class, a nested `describe` per method, and nested blocks for each scenario (for example the owner, a shared user and a user without access).
+- Tests that only change their data are written once with `it.each`.
+- Shared mocks, the HTTP error assertion and the data builders live in `src/common/testing/`. They are excluded from the coverage and from the production build.
+- Controller specs also check the route, the HTTP method and the guard of every endpoint, so the contract of the API is covered.
+- Module specs check the metadata declared by each module.
+- Specs whose code imports `@nestjs/config` mock it, because it is published as an ES module that Jest cannot load in this CommonJS setup.
+- The unit tests are compiled with `tsconfig.spec.json`, where `isolatedModules` is disabled. With it enabled, TypeScript generates a branch that can never run for every decorated constructor parameter, and the coverage reports it as uncovered code. The reasons and the alternatives are recorded in [ADR 0005](decisions/0005-backend-unit-test-compilation-and-coverage.md).
 
 ## Coverage
 
@@ -118,18 +136,20 @@ TOTAL: 1017 SUCCESS
 
 Coverage is collected from the unit tests with `npm run test:cov` and written to `backend/coverage/backend/`. The command fails if the global coverage drops below the configured threshold. Test helpers (`**/testing/**`), spec files and `main.ts` are excluded from the measurement.
 
-Minimum threshold (global): statements 90%, branches 80%, functions 90%, lines 90%.
+Minimum threshold (global): statements, branches, functions and lines 95%.
 
 Current unit test coverage:
 
 ```text
-Statements   : 97.91%
-Branches     : 88.36%
+Statements   : 100%
+Branches     : 100%
 Functions    : 100%
-Lines        : 98.6%
+Lines        : 100%
 
-TOTAL: 278 SUCCESS (26 test suites)
+TOTAL: 430 SUCCESS (28 test suites)
 ```
+
+The branch coverage was reported as 88.36% before the unit tests were compiled without `isolatedModules`. The difference comes from that compiler setting and not from the tests, so the figures before and after are not comparable.
 
 The end-to-end tests are not included in this coverage report. They are run separately:
 
