@@ -51,3 +51,6 @@ Changing only the compiler configuration, without adding tests, raised the branc
 
 Specs must keep being compiled with `tsconfig.spec.json`, and uncovered code must not be hidden with ignore comments.
 
+---
+
+[↑ Back to top](#adr-0005-backend-unit-test-compilation-and-coverage)
