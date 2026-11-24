@@ -55,7 +55,7 @@ describe('VehicleModule', () => {
     });
 
     it('registers the Vehicle schema with Mongoose', () => {
-      expect(jest.mocked(MongooseModule.forFeature)).toHaveBeenCalledWith([
+      expect(jest.mocked(MongooseModule).forFeature).toHaveBeenCalledWith([
         { name: 'Vehicle', schema: VehicleSchema },
       ]);
     });
